@@ -10,6 +10,18 @@
 // #######################################################################################################################
 // This is the test build. Heavily under work in progress. Numbers will be changed.
 //
+function setSlot() {
+    var startTime = new Date().getTime() / 1000;
+    var endTime = startTime + 60;
+    var box = Value;
+};
+function updateSlot () {
+    var updateSlotTimer = {
+        PlayFabId: currentPlayerId,
+        Data: { "box": JSON.stringify(box) }
+    }
+    server.UpdateUserReadOnlyData(updateSlotTimer);
+};
 handlers.BoxToSlot = function (args) {
 
     args.Slot = !args.Slot ? {} : args.Slot;
@@ -18,32 +30,21 @@ handlers.BoxToSlot = function (args) {
     var currentPlayerData = server.GetUserReadOnlyData({
         PlayFabId: currentPlayerId
     });
+    
     if (currentPlayerData.Data.box === undefined) {
+        //if first time login
+        var defSlot = {
+            "isReady": 0,
+            "isAvailable": 1,
+            "startTime": 0,
+            "currentTime": "0",
+            "endTime": 0,
+        };
         currentPlayerData.Data.box = {
-            "slot1": {
-                "isReady": 0,
-                "isAvailable": 1,
-                "startTime": 0,
-                "currentTime": "0",
-                "endTime": 0,
-
-            },
-            "slot2": {
-                "isReady": 0,
-                "isAvailable": 1,
-                "startTime": 0,
-                "currentTime": "0",
-                "endTime": 0
-            },
-            "slot3": {
-                "isReady": 0,
-                "isAvailable": 1,
-                "startTime": 0,
-                "currentTime": "0",
-                "endTime": 0
-            }
+            "slot1": defSlot,
+            "slot2": defSlot,
+            "slot3": defSlot
         }
-
         var Value = currentPlayerData.Data.box;
     }
     else {
@@ -70,50 +71,33 @@ handlers.BoxToSlot = function (args) {
     if (boxCount <= 0) {
         log.debug("There is no cake!")
     }
+
     switch (whichSlot) {
         case "0":
             if ((isAvailable0 == 1) && (boxCount >= 1)) {
-                var startTime = new Date().getTime() / 1000;
-                var endTime = startTime + 60;
-                var box = Value;
+                setSlot;
                 box.slot1.isAvailable = 0;
                 box.slot1.startTime = startTime;
                 box.slot1.endTime = endTime;
-                var updateSlotTimer = {
-                    PlayFabId: currentPlayerId,
-                    Data: { "box": JSON.stringify(box) }
-                }
-                server.UpdateUserReadOnlyData(updateSlotTimer);
+                updateSlot;
             }
             break;
         case "1":
             if ((isAvailable1 == 1) && (boxCount >= 1)) {
-                var startTime = new Date().getTime() / 1000;
-                var endTime = startTime + 300;
-                var box = Value;
+                setSlot;
                 box.slot2.isAvailable = 0;
                 box.slot2.startTime = startTime;
                 box.slot2.endTime = endTime;
-                var updateSlotTimer = {
-                    PlayFabId: currentPlayerId,
-                    Data: { "box": JSON.stringify(box) }
-                }
-                server.UpdateUserReadOnlyData(updateSlotTimer);
+                updateSlot;
             }
             break;
         case "2":
             if ((isAvailable2 == 1) && (boxCount >= 1)) {
-                var startTime = new Date().getTime() / 1000;
-                var endTime = startTime + 900;
-                var box = Value;
+                setSlot;
                 box.slot3.isAvailable = 0;
                 box.slot3.startTime = startTime;
                 box.slot3.endTime = endTime;
-                var updateSlotTimer = {
-                    PlayFabId: currentPlayerId,
-                    Data: { "box": JSON.stringify(box) }
-                }
-                server.UpdateUserReadOnlyData(updateSlotTimer);
+                updateSlot;
             }
             break;
     }
@@ -200,7 +184,18 @@ handlers.PayToReadySlot = function (args) {
     //open instantly with ruby TBA
 
 }
-
+function boxOpener() {
+    var updateSlotTimer = {
+        PlayFabId: currentPlayerId,
+        Data: { "box": JSON.stringify(box) }
+    }
+    server.UpdateUserReadOnlyData(updateSlotTimer);
+    var openBox = {
+        PlayFabId: currentPlayerId,
+        ContainerItemId: "BasicBox"
+    }
+    server.UnlockContainerItem(openBox);
+}
 handlers.OpenBox = function (args) {
 
     args.Slot = !args.Slot ? {} : args.Slot;
@@ -219,16 +214,7 @@ handlers.OpenBox = function (args) {
                 box.slot1.isAvailable = 1;
                 box.slot1.startTime = 0;
                 box.slot1.endTime = 0;
-                var updateSlotTimer = {
-                    PlayFabId: currentPlayerId,
-                    Data: { "box": JSON.stringify(box) }
-                }
-                server.UpdateUserReadOnlyData(updateSlotTimer);
-                var openBox = {
-                    PlayFabId: currentPlayerId,
-                    ContainerItemId: "BasicBox"
-                }
-                server.UnlockContainerItem(openBox);
+                boxOpener;
             }
             break;
 
@@ -240,16 +226,7 @@ handlers.OpenBox = function (args) {
                 box.slot2.isAvailable = 1;
                 box.slot2.startTime = 0;
                 box.slot2.endTime = 0;
-                var updateSlotTimer = {
-                    PlayFabId: currentPlayerId,
-                    Data: { "box": JSON.stringify(box) }
-                }
-                server.UpdateUserReadOnlyData(updateSlotTimer);
-                var openBox = {
-                    PlayFabId: currentPlayerId,
-                    ContainerItemId: "BasicBox"
-                }
-                server.UnlockContainerItem(openBox);
+                boxOpener;
             }
             break;
 
@@ -261,16 +238,7 @@ handlers.OpenBox = function (args) {
                 box.slot3.isAvailable = 1;
                 box.slot3.startTime = 0;
                 box.slot3.endTime = 0;
-                var updateSlotTimer = {
-                    PlayFabId: currentPlayerId,
-                    Data: { "box": JSON.stringify(box) }
-                }
-                server.UpdateUserReadOnlyData(updateSlotTimer);
-                var openBox = {
-                    PlayFabId: currentPlayerId,
-                    ContainerItemId: "BasicBox"
-                }
-                server.UnlockContainerItem(openBox);
+                boxOpener;
             }
             break;
     }
@@ -309,11 +277,6 @@ handlers.EquipItem = function (args) {
             },
             "SharkBot": {
                 "itemId": "SharkBot",
-                "level": 1,
-                "XP": 0
-            },
-            "IronBull": {
-                "itemId": "IronBull",
                 "level": 1,
                 "XP": 0
             },
@@ -527,9 +490,10 @@ handlers.GetUserGameConfig = function (args) {
                 "WeaponSkinId": currentEquipment.mekaScorp.primary.costume,
                 "HP": itemData.robotValues.MekaScorp.HP[itemLevel.MekaScorp.level - 1],
                 "MoveScale": itemData.robotValues.MekaScorp.MoveScale,
-                "DMG": itemData.weaponValues.Hammer.DMG[itemLevel.Hammer.level - 1],
+                "DMG": itemData.robotValues.MekaScorp.DMG[itemLevel.MekaScorp.level - 1]*itemData.weaponValues.Hammer.DMG[itemLevel.Hammer.level-1],
                 "CD": itemData.weaponValues.Hammer.CD,
-                "CastTime": itemData.weaponValues.Hammer.CastTime,
+                "EnergyCost": ,
+                "EnergyCharge": itemData.weaponValues.Hammer.CastTime,
                 "UltDMGScale": itemData.weaponValues.Hammer.UltDMGScale,
                 "UltCharge": itemData.weaponValues.Hammer.UltCharge
             }

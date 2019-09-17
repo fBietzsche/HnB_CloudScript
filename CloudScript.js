@@ -488,9 +488,9 @@ handlers.GetUserGameConfig = function (args) {
                 "RobotSkinId": currentEquipment.mekaScorp.costume,
                 "WeaponId": currentEquipment.mekaScorp.primary.ItemId,
                 "WeaponSkinId": currentEquipment.mekaScorp.primary.costume,
-                "HP": itemData.robotValues.MekaScorp.HP[itemLevel.MekaScorp.level - 1],
+                "HP": itemData.robotValues[0][1][itemLevel[1].level],
                 "MoveScale": itemData.robotValues.MekaScorp.MoveScale,
-                "DMG": itemData.robotValues.MekaScorp.DMG[itemLevel.MekaScorp.level - 1]*itemData.weaponValues.Hammer.DMG[itemLevel.Hammer.level-1],
+                "DMG": itemData.robotValues.MekaScorp.DMG[itemLevel.MekaScorp.level - 1]*itemData.weaponValues.Hammer.DMG,
                 "CD": itemData.weaponValues.Hammer.CD,
                 "EnergyCost": ,
                 "EnergyCharge": itemData.weaponValues.Hammer.CastTime,
@@ -512,22 +512,6 @@ handlers.GetUserGameConfig = function (args) {
                 "CastTime": itemData.weaponValues.Saw.CastTime,
                 "UltDMGScale": itemData.weaponValues.Saw.UltDMGScale,
                 "UltCharge": itemData.weaponValues.Saw.UltCharge
-            }
-            break;
-        case "IronBull":
-            var gameplayParams = {
-                "DisplayName": titleInfo.DisplayName,
-                "RobotId": currentEquipment.equipped,
-                "RobotSkinId": currentEquipment.ironBull.costume,
-                "WeaponId": currentEquipment.ironBull.primary.ItemId,
-                "WeaponSkinId": currentEquipment.ironBull.primary.costume,
-                "HP": itemData.robotValues.IronBull.HP[itemLevel.IronBull.level - 1],
-                "MoveScale": itemData.robotValues.IronBull.MoveScale,
-                "DMG": itemData.weaponValues.Drill.DMG[itemLevel.Drill.level - 1],
-                "CD": itemData.weaponValues.Drill.CD,
-                "CastTime": itemData.weaponValues.Drill.CastTime,
-                "UltDMGScale": itemData.weaponValues.Drill.UltDMGScale,
-                "UltCharge": itemData.weaponValues.Drill.UltCharge
             }
             break;
         case "RoboMantis":

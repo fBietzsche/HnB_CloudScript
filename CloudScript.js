@@ -10,18 +10,49 @@
 // #######################################################################################################################
 // This is the test build. Heavily under work in progress. Numbers will be changed.
 //
+function getBoombot(boombot) {
+    var boombots = {
+        'MekaScorp': 0,
+        'SharkBot': 1,
+        'RoboMantis': 2
+    };
+    return boombots[boombot]
+}
+function getWeapon(weapon) {
+    var weapons = {
+        'Axe': 0,
+        'Scythe': 1,
+        'Drill': 2,
+        'Jawz': 3,
+        'Stinger': 4,
+        'Hammer': 5
+    };
+    return weapons[weapon]
+}
 function setSlot() {
     var startTime = new Date().getTime() / 1000;
     var endTime = startTime + 60;
     var box = Value;
-};
-function updateSlot () {
+}
+function updateSlot() {
     var updateSlotTimer = {
         PlayFabId: currentPlayerId,
         Data: { "box": JSON.stringify(box) }
     }
     server.UpdateUserReadOnlyData(updateSlotTimer);
-};
+}
+function boxOpener() {
+    var updateSlotTimer = {
+        PlayFabId: currentPlayerId,
+        Data: { "box": JSON.stringify(box) }
+    }
+    server.UpdateUserReadOnlyData(updateSlotTimer);
+    var openBox = {
+        PlayFabId: currentPlayerId,
+        ContainerItemId: "BasicBox"
+    }
+    server.UnlockContainerItem(openBox);
+}
 handlers.BoxToSlot = function (args) {
 
     args.Slot = !args.Slot ? {} : args.Slot;
@@ -30,7 +61,7 @@ handlers.BoxToSlot = function (args) {
     var currentPlayerData = server.GetUserReadOnlyData({
         PlayFabId: currentPlayerId
     });
-    
+
     if (currentPlayerData.Data.box === undefined) {
         //if first time login
         var defSlot = {
@@ -184,18 +215,7 @@ handlers.PayToReadySlot = function (args) {
     //open instantly with ruby TBA
 
 }
-function boxOpener() {
-    var updateSlotTimer = {
-        PlayFabId: currentPlayerId,
-        Data: { "box": JSON.stringify(box) }
-    }
-    server.UpdateUserReadOnlyData(updateSlotTimer);
-    var openBox = {
-        PlayFabId: currentPlayerId,
-        ContainerItemId: "BasicBox"
-    }
-    server.UnlockContainerItem(openBox);
-}
+
 handlers.OpenBox = function (args) {
 
     args.Slot = !args.Slot ? {} : args.Slot;
@@ -248,212 +268,113 @@ handlers.EquipItem = function (args) {
     /*args must be in this format:
     
         {   
-            "Boombot":"boomBot",
-            "BoombotCostume":"XXX",
-            "Primary":"XXX",
-            "PrimaryCostume":"XXX",
-            "Secondary":"XXX",
-            "SecondaryCostume":"XXX"
+            "boombot":"BoomBot",
+            "costume":"BoomBotDefault",
+            "weaponId":"Weapon",
+            "weaponCostume":"WeaponDefault"
         }
     */
-    args.Boombot = !args.Boombot ? {} : args.Boombot;
-    args.BoombotCostume = !args.BoombotCostume ? {} : args.BoombotCostume;
-    args.Primary = !args.Primary ? {} : args.Primary;
-    args.PrimaryCostume = !args.PrimaryCostume ? {} : args.PrimaryCostume;
-    args.Secondary = !args.Secondary ? {} : args.Secondary;
-    args.SecondaryCostume = !args.SecondaryCostume ? {} : args.SecondaryCostume;
+    args.boombot = !args.boombot ? {} : args.boombot;
+    args.costume = !args.costume ? {} : args.costume;
+    args.weaponId = !args.weaponId ? {} : args.weaponId;
+    args.weaponCostume = !args.weaponCostume ? {} : args.weaponCostume;
 
-    var whichBot = args.Boombot;
     //get player info
     var currentPlayerData = server.GetUserReadOnlyData({
         PlayFabId: currentPlayerId
     });
     if (currentPlayerData.Data.itemLevel === undefined) {
-        currentPlayerData.Data.itemLevel = {
-            "MekaScorp": {
+        var isFirstTime = 1;
+        currentPlayerData.Data.itemLevel = [
+            {
                 "itemId": "MekaScorp",
                 "level": 1,
                 "XP": 0
             },
-            "SharkBot": {
+            {
                 "itemId": "SharkBot",
                 "level": 1,
                 "XP": 0
             },
-            "RoboMantis": {
+            {
                 "itemId": "RoboMantis",
                 "level": 1,
                 "XP": 0
-            },
-            "Axe": {
-                "itemId": "Axe",
-                "level": 1,
-                "XP": 0
-            },
-            "Blazer": {
-                "itemId": "Blazer",
-                "level": 1,
-                "XP": 0
-            },
-            "Cutter": {
-                "itemId": "Cutter",
-                "level": 1,
-                "XP": 0
-            },
-            "Drill": {
-                "itemId": "Drill",
-                "level": 1,
-                "XP": 0
-            },
-            "Flail": {
-                "itemId": "Flail",
-                "level": 1,
-                "XP": 0
-            },
-            "Freezer": {
-                "itemId": "Freezer",
-                "level": 1,
-                "XP": 0
-            },
-            "Grinder": {
-                "itemId": "Grinder",
-                "level": 1,
-                "XP": 0
-            },
-            "Hammer": {
-                "itemId": "Hammer",
-                "level": 1,
-                "XP": 0
-            },
-            "Saw": {
-                "itemId": "Saw",
-                "level": 1,
-                "XP": 0
-            },
-            "Shocker": {
-                "itemId": "Shocker",
-                "level": 1,
-                "XP": 0
-            },
-            "Stinger": {
-                "itemId": "Stinger",
-                "level": 1,
-                "XP": 0
-            },
-            "Striker": {
-                "itemId": "Striker",
-                "level": 1,
-                "XP": 0
             }
-        }
+        ]
 
         var itemLevel = currentPlayerData.Data.itemLevel;
     }
-    //   else{
-    //       var itemLevel = JSON.parse(currentPlayerData.Data.itemLevel.Value);
-    //   }
     if (currentPlayerData.Data.equipment === undefined) {
         currentPlayerData.Data.equipment = {
-            "equipped": "MekaScorp",
+            "equipped": [
+                "MekaScorp",
+                "MekaScorpDefault",
+                "Stinger",
+                "StingerDefault"
+            ],
             "mekaScorp": {
                 "costume": "MekaScorpDefault",
-                "primary": {
-                    "ItemId": "Hammer",
-                    "costume": "HammerDefault"
-                },
-                "secondary": {
-                    "ItemId": "Magnet",
-                    "costume": "MagnetDefault"
-                }
+                "weaponId": "Stinger",
+                "weaponCostume": "StingerDefault"
             },
             "sharkBot": {
                 "costume": "SharkBotDefault",
-                "primary": {
-                    "ItemId": "Saw",
-                    "costume": "SawDefault"
-                },
-                "secondary": {
-                    "ItemId": "Thruster",
-                    "costume": "ThrusterDefault"
-                }
-            },
-            "ironBull": {
-                "costume": "IronBullDefault",
-                "primary": {
-                    "ItemId": "Drill",
-                    "costume": "DrillDefault"
-                },
-                "secondary": {
-                    "ItemId": "bull",
-                    "costume": "bullDefault"
-                }
+                "weaponId": "Jawz",
+                "weaponCostume": "JawzDefault"
             },
             "roboMantis": {
                 "costume": "RoboMantisDefault",
-                "primary": {
-                    "ItemId": "Axe",
-                    "costume": "AxeDefault"
-                },
-                "secondary": {
-                    "ItemId": "Grinder",
-                    "costume": "GrinderDefault"
-                }
+                "weaponId": "Scythe",
+                "weaponCostume": "ScytheDefault"
             }
         }
 
-        var Value = currentPlayerData.Data.equipment;
+        var equipment = currentPlayerData.Data.equipment;
     }
     else {
-        var Value = JSON.parse(currentPlayerData.Data.equipment.Value);
+        var equipment = JSON.parse(currentPlayerData.Data.equipment.Value);
     }
     //select boombot values
     //Write a check code (is player got item? is this item compatible with robot etc.)
-    switch (whichBot) {
-        case "mekaScorp":
-            var equipment = Value;
-            equipment.equipped = "MekaScorp";
-            equipment.mekaScorp.costume = args.BoombotCostume;
-            equipment.mekaScorp.primary.ItemId = args.Primary;
-            equipment.mekaScorp.primary.costume = args.PrimaryCostume;
-            equipment.mekaScorp.secondary.ItemId = args.Secondary;
-            equipment.mekaScorp.secondary.costume = args.SecondaryCostume;
+    equipment.equipped[0] = args.boombot;
+    equipment.equipped[1] = args.costume;
+    equipment.equipped[2] = args.weaponId;
+    equipment.equipped[3] = args.weaponCostume;
+    switch (args.boombot) {
+        case "MekaScorp":
+            equipment.mekaScorp.costume = args.costume;
+            equipment.mekaScorp.weaponId = args.weaponId;
+            equipment.mekaScorp.weaponCostume = args.weaponCostume;
             break;
 
-        case "sharkBot":
-            var equipment = Value;
-            equipment.equipped = "SharkBot";
-            equipment.sharkBot.costume = args.BoombotCostume;
-            equipment.sharkBot.primary.ItemId = args.Primary;
-            equipment.sharkBot.primary.costume = args.PrimaryCostume;
-            equipment.sharkBot.secondary.ItemId = args.Secondary;
-            equipment.sharkBot.secondary.costume = args.SecondaryCostume;
+        case "SharkBot":
+            equipment.sharkBot.costume = args.costume;
+            equipment.sharkBot.weaponId = args.weaponId;
+            equipment.sharkBot.weaponCostume = args.weaponCostume;
             break;
 
-        case "ironBull":
-            var equipment = Value;
-            equipment.equipped = "IronBull";
-            equipment.ironBull.costume = args.BoombotCostume;
-            equipment.ironBull.primary.ItemId = args.Primary;
-            equipment.ironBull.primary.costume = args.PrimaryCostume;
-            equipment.ironBull.secondary.ItemId = args.Secondary;
-            equipment.ironBull.secondary.costume = args.SecondaryCostume;
-            break;
-
-        case "roboMantis":
-            var equipment = Value;
-            equipment.equipped = "RoboMantis"
-            equipment.roboMantis.costume = args.BoombotCostume;
-            equipment.roboMantis.primary.ItemId = args.Primary;
-            equipment.roboMantis.primary.costume = args.PrimaryCostume;
-            equipment.roboMantis.secondary.ItemId = args.Secondary;
-            equipment.roboMantis.secondary.costume = args.SecondaryCostume;
+        case "RoboMantis":
+            equipment.roboMantis.costume = args.costume;
+            equipment.roboMantis.weaponId = args.weaponId;
+            equipment.roboMantis.weaponCostume = args.weaponCostume;
             break;
     }
-    var updateEquippedItems = {
-        PlayFabId: currentPlayerId,
-        Data: {
-            "equipment": JSON.stringify(equipment),
-            "itemLevel": JSON.stringify(itemLevel)
+    if (isFirstTime == 1) {
+        var updateEquippedItems = {
+            PlayFabId: currentPlayerId,
+            Data: {
+                "equipment": JSON.stringify(equipment),
+                "itemLevel": JSON.stringify(itemLevel)
+            }
+        }
+    }
+    else {
+        var updateEquippedItems = {
+            PlayFabId: currentPlayerId,
+            Data: {
+                "equipment": JSON.stringify(equipment)
+            }
         }
     }
     server.UpdateUserReadOnlyData(updateEquippedItems);
@@ -480,56 +401,22 @@ handlers.GetUserGameConfig = function (args) {
     var itemLevel = JSON.parse(userData.Data.itemLevel.Value);
     var itemData = JSON.parse(titleData.Data.itemData);
     var currentEquipment = JSON.parse(userData.Data.equipment.Value);
-    switch (currentEquipment.equipped) {
-        case "MekaScorp":
-            var gameplayParams = {
-                "DisplayName": titleInfo.DisplayName,
-                "RobotId": currentEquipment.equipped,
-                "RobotSkinId": currentEquipment.mekaScorp.costume,
-                "WeaponId": currentEquipment.mekaScorp.primary.ItemId,
-                "WeaponSkinId": currentEquipment.mekaScorp.primary.costume,
-                "HP": itemData.robotValues[0][1][itemLevel[1].level],
-                "MoveScale": itemData.robotValues.MekaScorp.MoveScale,
-                "DMG": itemData.robotValues.MekaScorp.DMG[itemLevel.MekaScorp.level - 1]*itemData.weaponValues.Hammer.DMG,
-                "CD": itemData.weaponValues.Hammer.CD,
-                "EnergyCost": ,
-                "EnergyCharge": itemData.weaponValues.Hammer.CastTime,
-                "UltDMGScale": itemData.weaponValues.Hammer.UltDMGScale,
-                "UltCharge": itemData.weaponValues.Hammer.UltCharge
-            }
-            break;
-        case "SharkBot":
-            var gameplayParams = {
-                "DisplayName": titleInfo.DisplayName,
-                "RobotId": currentEquipment.equipped,
-                "RobotSkinId": currentEquipment.sharkBot.costume,
-                "WeaponId": currentEquipment.sharkBot.primary.ItemId,
-                "WeaponSkinId": currentEquipment.sharkBot.primary.costume,
-                "HP": itemData.robotValues.SharkBot.HP[itemLevel.SharkBot.level - 1],
-                "MoveScale": itemData.robotValues.SharkBot.MoveScale,
-                "DMG": itemData.weaponValues.Saw.DMG[itemLevel.Saw.level - 1],
-                "CD": itemData.weaponValues.Saw.CD,
-                "CastTime": itemData.weaponValues.Saw.CastTime,
-                "UltDMGScale": itemData.weaponValues.Saw.UltDMGScale,
-                "UltCharge": itemData.weaponValues.Saw.UltCharge
-            }
-            break;
-        case "RoboMantis":
-            var gameplayParams = {
-                "DisplayName": titleInfo.DisplayName,
-                "RobotId": currentEquipment.equipped,
-                "RobotSkinId": currentEquipment.roboMantis.costume,
-                "WeaponId": currentEquipment.roboMantis.primary.ItemId,
-                "WeaponSkinId": currentEquipment.roboMantis.primary.costume,
-                "HP": itemData.robotValues.RoboMantis.HP[itemLevel.RoboMantis.level - 1],
-                "MoveScale": itemData.robotValues.RoboMantis.MoveScale,
-                "DMG": itemData.weaponValues.Axe.DMG[itemLevel.Axe.level - 1],
-                "CD": itemData.weaponValues.Axe.CD,
-                "CastTime": itemData.weaponValues.Axe.CastTime,
-                "UltDMGScale": itemData.weaponValues.Axe.UltDMGScale,
-                "UltCharge": itemData.weaponValues.Axe.UltCharge
-            }
-            break;
+    var boomBotId = getBoombot(currentEquipment.equipped[0])
+    var weaponId = getWeapon(currentEquipment.equipped[1])
+    var gameplayParams = {
+        "DisplayName": titleInfo.DisplayName,
+        "RobotId": currentEquipment.equipped[0],
+        "RobotSkinId": currentEquipment.equipped[1],
+        "WeaponId": currentEquipment.equipped[2],
+        "WeaponSkinId": currentEquipment.equipped[3],
+        "HP": itemData.robotValues[boomBotId][1][itemLevel[1].level],
+        "MoveScale": itemData.robotValues[boomBotId][2],
+        "DMG": itemData.robotValues[boomBotId][1][itemLevel[1].level] * itemData.weaponValues[weaponId][0],
+        "CD": itemData.weaponValues[weaponId][1],
+        "EnergyCharge": itemData.weaponValues[weaponId][2],
+        "EnergyCost": itemData.weaponValues[weaponId][3],
+        "UltDMGScale": itemData.weaponValues[weaponId][4],
+        "UltCharge": itemData.weaponValues[weaponId][5]
     }
     return gameplayParams;
 }

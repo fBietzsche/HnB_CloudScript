@@ -18,6 +18,7 @@ function getBoombot(boombot) {
     };
     return boombots[boombot]
 }
+
 function getWeapon(weapon) {
     var weapons = {
         'Axe': 0,
@@ -29,22 +30,25 @@ function getWeapon(weapon) {
     };
     return weapons[weapon]
 }
+
 function setSlot() {
     var startTime = new Date().getTime() / 1000;
-    var endTime = startTime + 60;
-    var box = Value;
+    var endTime = startTime + 300;
+    var slots = Value;
 }
+
 function updateSlot() {
     var updateSlotTimer = {
         PlayFabId: currentPlayerId,
-        Data: { "box": JSON.stringify(box) }
+        Data: { "slots": JSON.stringify(slots) }
     }
     server.UpdateUserReadOnlyData(updateSlotTimer);
 }
+
 function boxOpener() {
     var updateSlotTimer = {
         PlayFabId: currentPlayerId,
-        Data: { "box": JSON.stringify(box) }
+        Data: { "slots": JSON.stringify(slots) }
     }
     server.UpdateUserReadOnlyData(updateSlotTimer);
     var openBox = {
@@ -53,165 +57,85 @@ function boxOpener() {
     }
     server.UnlockContainerItem(openBox);
 }
-handlers.BoxToSlot = function (args) {
 
-    args.Slot = !args.Slot ? {} : args.Slot;
-    var whichSlot = args.Slot;
+handlers.BoxToSlot = function () {
+
     //get player info
     var currentPlayerData = server.GetUserReadOnlyData({
         PlayFabId: currentPlayerId
     });
 
-    if (currentPlayerData.Data.box === undefined) {
+    if (currentPlayerData.Data.slots === undefined) {
         //if first time login
         var defSlot = {
             "isReady": 0,
             "isAvailable": 1,
             "startTime": 0,
-            "currentTime": "0",
-            "endTime": 0,
+            "currentTime": 0,
+            "endTime": 0
         };
-        currentPlayerData.Data.box = {
-            "slot1": defSlot,
-            "slot2": defSlot,
-            "slot3": defSlot
-        }
-        var Value = currentPlayerData.Data.box;
+        currentPlayerData.Data.slots = [
+            defSlot,
+            defSlot,
+            defSlot
+        ]
+        var slots = currentPlayerData.Data.slots;
     }
     else {
-        var Value = JSON.parse(currentPlayerData.Data.box.Value);
+        var slots = JSON.parse(currentPlayerData.Data.slots.Value);
     }
-    //count basic boxes
-    var getInventoryData = server.GetUserInventory({
-        PlayFabId: currentPlayerId
-    });
-    var currentInventoryData = getInventoryData.Inventory;
-    for (i = 0; i < currentInventoryData.length; i++) {
-        var invCount = currentInventoryData[i];
-        if (invCount.ItemId == "BasicBox") {
-            var boxCount = invCount.RemainingUses;
-            i = currentInventoryData.length;
+    //check for slot availability, give box, start timer and record set time
+    if (slots[0].isAvailable == 1 || slots[1].isAvailable == 1 || slots[2].isAvailable == 1) {
+        var grantBasicBox = {
+            PlayFabId: currentPlayerId,
+            ItemIds: "BasicBox"
+        }
+        server.GrantItemsToUser(grantBasicBox);
+    }
+    for (i = 0; i <= slots.length; i++) {
+        if (slots[i].isAvailable == 1) {
+            setSlot();
+            slots[i].isAvailable = 0;
+            slots[i].startTime = startTime;
+            slots[i].endTime = endTime;
+            updateSlot();
         }
     }
-    //check for box and slot availability, start timer and record set time
-    var isAvailable0 = parseInt(Value.slot1.isAvailable, 10);
-    var isAvailable1 = parseInt(Value.slot2.isAvailable, 10);
-    var isAvailable2 = parseInt(Value.slot3.isAvailable, 10);
-    boxCount = parseInt(boxCount, 10) - 3 + isAvailable0 + isAvailable1 + isAvailable2;
-    log.debug("available boxCount =  " + boxCount);
-    if (boxCount <= 0) {
-        log.debug("There is no cake!")
-    }
-
-    switch (whichSlot) {
-        case "0":
-            if ((isAvailable0 == 1) && (boxCount >= 1)) {
-                setSlot;
-                box.slot1.isAvailable = 0;
-                box.slot1.startTime = startTime;
-                box.slot1.endTime = endTime;
-                updateSlot;
-            }
-            break;
-        case "1":
-            if ((isAvailable1 == 1) && (boxCount >= 1)) {
-                setSlot;
-                box.slot2.isAvailable = 0;
-                box.slot2.startTime = startTime;
-                box.slot2.endTime = endTime;
-                updateSlot;
-            }
-            break;
-        case "2":
-            if ((isAvailable2 == 1) && (boxCount >= 1)) {
-                setSlot;
-                box.slot3.isAvailable = 0;
-                box.slot3.startTime = startTime;
-                box.slot3.endTime = endTime;
-                updateSlot;
-            }
-            break;
-    }
-
-
 
 }
 
-handlers.CheckSlot = function (args) {
+handlers.CheckSlots = function () {
 
-    args.Slot = !args.Slot ? {} : args.Slot;
-    var whichSlot = args.Slot;
     //get player info
     var currentPlayerData = server.GetUserReadOnlyData({
         PlayFabId: currentPlayerId
     });
-    var Value = JSON.parse(currentPlayerData.Data.box.Value);
-    switch (whichSlot) {
-        case "0":
-            //check for remaining time and give key
-            var remainingTime = Value.slot1.endTime - (new Date().getTime() / 1000);
-            if ((remainingTime <= 0) && (Value.slot1.isReady == 0)) {
-                log.debug("Slot 1 Ready")
-                var box = Value;
-                box.slot1.isReady = 1;
-                var updateSlotTimer = {
-                    PlayFabId: currentPlayerId,
-                    Data: { "box": JSON.stringify(box) }
-                }
-                server.UpdateUserReadOnlyData(updateSlotTimer);
-                var grantBasicKey = {
-                    PlayFabId: currentPlayerId,
-                    ItemIds: "BasicBoxKey"
-                }
-                server.GrantItemsToUser(grantBasicKey);
-            }
-            break;
-        case "1":
-            //check for remaining time and give key
-            var remainingTime = Value.slot2.endTime - (new Date().getTime() / 1000);
-            if ((remainingTime <= 0) && (Value.slot2.isReady == 0)) {
-                log.debug("Slot 2 Ready")
-                var box = Value;
-                box.slot2.isReady = 1;
-                var updateSlotTimer = {
-                    PlayFabId: currentPlayerId,
-                    Data: { "box": JSON.stringify(box) }
-                }
-                server.UpdateUserReadOnlyData(updateSlotTimer);
-                var grantBasicKey = {
-                    PlayFabId: currentPlayerId,
-                    ItemIds: "BasicBoxKey"
-                }
-                server.GrantItemsToUser(grantBasicKey);
-            }
-            break;
-        case "2":
-            //check for remaining time and give key
-            var remainingTime = Value.slot3.endTime - (new Date().getTime() / 1000);
-            if ((remainingTime <= 0) && (Value.slot3.isReady == 0)) {
-                log.debug("Slot 3 Ready")
-                var box = Value;
-                box.slot3.isReady = 1;
-                var updateSlotTimer = {
-                    PlayFabId: currentPlayerId,
-                    Data: { "box": JSON.stringify(box) }
-                }
-                server.UpdateUserReadOnlyData(updateSlotTimer);
-                var grantBasicKey = {
-                    PlayFabId: currentPlayerId,
-                    ItemIds: "BasicBoxKey"
-                }
-                server.GrantItemsToUser(grantBasicKey);
-            }
-            break;
+    var slots = JSON.parse(currentPlayerData.Data.slots.Value);
+    var grantBasicKey = {
+        PlayFabId: currentPlayerId,
+        ItemIds: "BasicBoxKey"
+    }
+    //check for remaining time and give key
+    for (i = 0; i <= slots.length; i++) {
+        var remainingTime = slots[i].endTime - (new Date().getTime() / 1000);
+        if ((remainingTime <= 0) && (slots[i].isReady == 0)) {
+            slots[i].isReady = 1;
+            updateSlot();
+            server.GrantItemsToUser(grantBasicKey);
+            return 0
+        }
+        else if ((remainingTime <= 0) && (slots[i].isReady == 1)) {
+            return 0
+        }
+        return remainingTime;
     }
 }
 
-handlers.WatchAdsSlot = function (args) {
+handlers.SpendBoosterSlot = function (args) {
     //reduce timer with ads TBA
 }
 
-handlers.PayToReadySlot = function (args) {
+handlers.SpendRubySlot = function (args) {
     //open instantly with ruby TBA
 
 }
@@ -224,44 +148,16 @@ handlers.OpenBox = function (args) {
     var currentPlayerData = server.GetUserReadOnlyData({
         PlayFabId: currentPlayerId
     });
-    var Value = JSON.parse(currentPlayerData.Data.box.Value);
-    switch (whichSlot) {
-        case "0":
-            //if ready open box and reset slot
-            if (Value.slot1.isReady == 1) {
-                var box = Value;
-                box.slot1.isReady = 0;
-                box.slot1.isAvailable = 1;
-                box.slot1.startTime = 0;
-                box.slot1.endTime = 0;
-                boxOpener;
-            }
-            break;
+    var slots = JSON.parse(currentPlayerData.Data.slots.Value);
 
-        case "1":
-            // if ready open box and reset slot
-            if (Value.slot2.isReady == 1) {
-                var box = Value;
-                box.slot2.isReady = 0;
-                box.slot2.isAvailable = 1;
-                box.slot2.startTime = 0;
-                box.slot2.endTime = 0;
-                boxOpener;
-            }
-            break;
-
-        case "2":
-            // if ready open box and reset slot
-            if (Value.slot3.isReady == 1) {
-                var box = Value;
-                box.slot3.isReady = 0;
-                box.slot3.isAvailable = 1;
-                box.slot3.startTime = 0;
-                box.slot3.endTime = 0;
-                boxOpener;
-            }
-            break;
+    if (slots[whichSlot].isReady == 1) {
+        slots[whichSlot].isReady = 0;
+        slots[whichSlot].isAvailable = 1;
+        slots[whichSlot].startTime = 0;
+        slots[whichSlot].endTime = 0;
+        boxOpener();
     }
+
 }
 
 handlers.EquipItem = function (args) {
@@ -409,9 +305,9 @@ handlers.GetUserGameConfig = function (args) {
         "RobotSkinId": currentEquipment.equipped[1],
         "WeaponId": currentEquipment.equipped[2],
         "WeaponSkinId": currentEquipment.equipped[3],
-        "HP": itemData.robotValues[boomBotId][1][itemLevel[1].level],
+        "HP": itemData.robotValues[boomBotId][1][itemLevel[boomBotId].level],
         "MoveScale": itemData.robotValues[boomBotId][2],
-        "DMG": itemData.robotValues[boomBotId][1][itemLevel[1].level] * itemData.weaponValues[weaponId][0],
+        "DMG": itemData.robotValues[boomBotId][1][itemLevel[boomBotId].level] * itemData.weaponValues[weaponId][0],
         "CD": itemData.weaponValues[weaponId][1],
         "EnergyCharge": itemData.weaponValues[weaponId][2],
         "EnergyCost": itemData.weaponValues[weaponId][3],
@@ -421,12 +317,12 @@ handlers.GetUserGameConfig = function (args) {
     return gameplayParams;
 }
 
-handlers.UpgradeItem = function (args) {
+handlers.UpgradeBoombot = function (args) {
 
-    args.Item = !args.Item ? {} : args.Item;
-
+    args.whichBoombot = !args.whichBoombot ? {} : args.whichBoombot;
+    var whichBoombot = args.whichBoombot;
     //get user item info and VC
-
+    var boombotId = getBoombot(whichBoombot);
     var currentPlayerData = server.GetUserReadOnlyData({
         PlayFabId: currentPlayerId
     });
@@ -437,34 +333,22 @@ handlers.UpgradeItem = function (args) {
         PlayFabId: currentPlayerId,
         "Keys": "itemData"
     });
-    var whichitem = args.Item;
+
     var itemLevels = JSON.parse(currentPlayerData.Data.itemLevel.Value);
     var playerCoin = JSON.parse(currentPlayerInventory.VirtualCurrency.CN);
     var itemData = JSON.parse(titleData.Data.itemData);
-    var levelRamp = itemData.levelRamp
+    var levelRamp = itemData.levelRamp;
     var levelCoin = itemData.levelCoin;
-    log.debug("itemLevels.length  " + Object.keys(itemLevels).length);
+    var currentLevel = itemLevels[boombotId].level;
+    var currentExp = itemLevels[boombotId].XP;
+    var requiredExp = levelRamp[itemLevels[boombotId].level]
+    var requiredCoin = levelCoin[itemLevels[boombotId].level]
 
-    for (i = 0; i < Object.keys(itemLevels).length; i++) {
-        var invCount = Object.keys(itemLevels)[i];
-        log.debug("itemLevels[i]  " + Object.values(itemLevels)[i].level);
-        log.debug("invCount  " + invCount);
-        if (invCount === whichitem) {
-            var currentItemLevel = Object.values(itemLevels)[i].level;
-            var currentItemExp = Object.values(itemLevels)[i].XP;
-            var requiredExp = levelRamp[Object.values(itemLevels)[i].level - 1]
-            var requiredCoin = levelCoin[Object.values(itemLevels)[i].level - 1]
-            var itemCount = i;
-            i = itemLevels.length;
-        }
-    }
-    // IMPORTANT!!!!!!!!!
-    // REQUIRED COIN SHOULD BE ARRANGED
 
     //if OK level up
-    if ((playerCoin >= requiredCoin) && (currentItemExp >= requiredExp)) {
-        Object.values(itemLevels)[itemCount].XP = Object.values(itemLevels)[itemCount].XP - requiredExp
-        Object.values(itemLevels)[itemCount].level = currentItemLevel + 1;
+    if ((playerCoin >= requiredCoin) && (currentExp >= requiredExp)) {
+        itemLevels[boombotId].XP = itemLevels[boombotId].XP - requiredExp
+        itemLevels[boombotId].level = currentLevel + 1;
         var upgradeItem = {
             PlayFabId: currentPlayerId,
             Data: { "itemLevel": JSON.stringify(itemLevels) }

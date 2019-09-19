@@ -1,0 +1,23 @@
+[
+    {
+        "isReady": 0,
+        "isAvailable": 1,
+        "startTime": 0,
+        "currentTime": 0,
+        "endTime": 0
+    },
+    {
+        "isReady": 0,
+        "isAvailable": 1,
+        "startTime": 0,
+        "currentTime": 0,
+        "endTime": 0
+    },
+    {
+        "isReady": 0,
+        "isAvailable": 1,
+        "startTime": 0,
+        "currentTime": 0,
+        "endTime": 0
+    }
+]

@@ -1,0 +1,23 @@
+{
+    "equipped": [
+        "MekaScorp",
+        "MekaScorpDefault",
+        "Stinger",
+        "StingerDefault"
+    ],
+    "mekaScorp": {
+        "costume": "MekaScorpDefault",
+        "weaponId": "Stinger",
+        "weaponCostume": "StingerDefault"
+    },
+    "sharkBot": {
+        "costume": "SharkBotDefault",
+        "weaponId": "Jawz",
+        "weaponCostume": "JawzDefault"
+    },
+    "roboMantis": {
+        "costume": "RoboMantisDefault",
+        "weaponId": "Scythe",
+        "weaponCostume": "ScytheDefault"
+    }
+}

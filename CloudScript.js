@@ -83,6 +83,7 @@ handlers.BoxToSlot = function () {
         }
         server.GrantItemsToUser(grantBasicBox);
     }
+    log.debug("slots 1"  + JSON.stringify(slots))
     for (i = 0; i <= slots.length; i++) {
         log.debug("i =   " + i);
         log.debug("slots[i].isAvailable =  "  + slots[i].isAvailable)
@@ -94,9 +95,9 @@ handlers.BoxToSlot = function () {
             slots[i].endTime = endTime;
             var updateSlotTimer = {
                 PlayFabId: currentPlayerId,
-                Data: { "slots": JSON.stringify(slots) }
+                Data: { "slots 2": JSON.stringify(slots) }
             }
-            log.debug("slots"  + slots)
+            log.debug("slots 3"  + JSON.stringify(slots))
             server.UpdateUserReadOnlyData(updateSlotTimer);
             break;
         }

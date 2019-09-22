@@ -96,7 +96,7 @@ handlers.BoxToSlot = function () {
                 PlayFabId: currentPlayerId,
                 Data: { "slots": JSON.stringify(slots) }
             }
-            log.debug("slots[i].isAvailable =  "  + slots[i].isAvailable)
+            log.debug("slots"  + slots)
             server.UpdateUserReadOnlyData(updateSlotTimer);
             break;
         }

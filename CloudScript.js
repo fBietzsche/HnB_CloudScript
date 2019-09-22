@@ -34,7 +34,6 @@ function getWeapon(weapon) {
 function setSlot() {
     var startTime = new Date().getTime() / 1000;
     var endTime = startTime + 300;
-    var slots = Value;
 }
 
 function updateSlot() {

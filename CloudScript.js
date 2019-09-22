@@ -31,17 +31,9 @@ function getWeapon(weapon) {
     return weapons[weapon]
 }
 
-function setSlot() {
-    var startTime = new Date().getTime() / 1000;
-    var endTime = startTime + 300;
-}
 
 function updateSlot() {
-    var updateSlotTimer = {
-        PlayFabId: currentPlayerId,
-        Data: { "slots": JSON.stringify(slots) }
-    }
-    server.UpdateUserReadOnlyData(updateSlotTimer);
+   
 }
 
 function boxOpener() {
@@ -93,11 +85,17 @@ handlers.BoxToSlot = function () {
     }
     for (i = 0; i <= slots.length; i++) {
         if (slots[i].isAvailable == 1) {
-            setSlot();
+            var startTime = new Date().getTime() / 1000;
+            var endTime = startTime + 300;
             slots[i].isAvailable = 0;
             slots[i].startTime = startTime;
             slots[i].endTime = endTime;
-            updateSlot();
+            var updateSlotTimer = {
+                PlayFabId: currentPlayerId,
+                Data: { "slots": JSON.stringify(slots) }
+            }
+            server.UpdateUserReadOnlyData(updateSlotTimer);
+            i = slots.length;
         }
     }
 
@@ -119,7 +117,11 @@ handlers.CheckSlots = function () {
         var remainingTime = slots[i].endTime - (new Date().getTime() / 1000);
         if ((remainingTime <= 0) && (slots[i].isReady == 0)) {
             slots[i].isReady = 1;
-            updateSlot();
+            var updateSlotTimer = {
+                PlayFabId: currentPlayerId,
+                Data: { "slots": JSON.stringify(slots) }
+            }
+            server.UpdateUserReadOnlyData(updateSlotTimer);
             server.GrantItemsToUser(grantBasicKey);
             return 0
         }

@@ -299,6 +299,9 @@ handlers.GetUserGameConfig = function (args) {
     var currentEquipment = JSON.parse(userData.Data.equipment.Value);
     var boomBotId = getBoombot(currentEquipment.equipped[0])
     var weaponId = getWeapon(currentEquipment.equipped[1])
+    log.debug("itemData:  " + itemData)
+    log.debug("weaponValues:   " + itemData.weaponValues)
+    log.debug("itemData.weaponValues[weaponId]" + itemData.weaponValues[weaponId])
     var gameplayParams = {
         "DisplayName": titleInfo.DisplayName,
         "RobotId": currentEquipment.equipped[0],
@@ -306,7 +309,7 @@ handlers.GetUserGameConfig = function (args) {
         "WeaponId": currentEquipment.equipped[2],
         "WeaponSkinId": currentEquipment.equipped[3],
         "HP": itemData.robotValues[boomBotId][1][itemLevel[boomBotId].level],
-        "MoveScale": itemData.robotValues[boomBotId][2],
+        "MoveScale": itemData.robotValues[boomBotId][2],        
         "DMG": itemData.robotValues[boomBotId][1][itemLevel[boomBotId].level] * itemData.weaponValues[weaponId][1],
         "CD": itemData.weaponValues[weaponId][2],
         "EnergyCharge": itemData.weaponValues[weaponId][3],

@@ -307,12 +307,12 @@ handlers.GetUserGameConfig = function (args) {
         "WeaponSkinId": currentEquipment.equipped[3],
         "HP": itemData.robotValues[boomBotId][1][itemLevel[boomBotId].level],
         "MoveScale": itemData.robotValues[boomBotId][2],
-        "DMG": itemData.robotValues[boomBotId][1][itemLevel[boomBotId].level] * itemData.weaponValues[weaponId][0],
-        "CD": itemData.weaponValues[weaponId][1],
-        "EnergyCharge": itemData.weaponValues[weaponId][2],
-        "EnergyCost": itemData.weaponValues[weaponId][3],
-        "UltDMGScale": itemData.weaponValues[weaponId][4],
-        "UltCharge": itemData.weaponValues[weaponId][5]
+        "DMG": itemData.robotValues[boomBotId][1][itemLevel[boomBotId].level] * itemData.weaponValues[weaponId][1],
+        "CD": itemData.weaponValues[weaponId][2],
+        "EnergyCharge": itemData.weaponValues[weaponId][3],
+        "EnergyCost": itemData.weaponValues[weaponId][4],
+        "UltDMGScale": itemData.weaponValues[weaponId][5],
+        "UltCharge": itemData.weaponValues[weaponId][6]
     }
     return gameplayParams;
 }

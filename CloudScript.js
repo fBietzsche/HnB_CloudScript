@@ -84,6 +84,8 @@ handlers.BoxToSlot = function () {
         server.GrantItemsToUser(grantBasicBox);
     }
     for (i = 0; i <= slots.length; i++) {
+        log.debug("i =   " + i);
+        log.debug("slots[i].isAvailable =  "  + slots[i].isAvailable)
         if (slots[i].isAvailable == 1) {
             var startTime = new Date().getTime() / 1000;
             var endTime = startTime + 300;

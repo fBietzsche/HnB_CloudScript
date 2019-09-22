@@ -95,7 +95,7 @@ handlers.BoxToSlot = function () {
                 Data: { "slots": JSON.stringify(slots) }
             }
             server.UpdateUserReadOnlyData(updateSlotTimer);
-            i = slots.length;
+            break;
         }
     }
 

@@ -122,7 +122,7 @@ handlers.CheckSlots = function () {
         else if ((remainingTime <= 0) && (slots[i].isReady == 1)) {
             timer[i] = 0
         }
-        timer[i] = remainingTime;
+        else timer[i] = remainingTime;
     }
     return timer;
 }

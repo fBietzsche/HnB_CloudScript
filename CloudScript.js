@@ -31,11 +31,6 @@ function getWeapon(weapon) {
     return weapons[weapon]
 }
 
-
-function updateSlot() {
-   
-}
-
 function boxOpener() {
     var updateSlotTimer = {
         PlayFabId: currentPlayerId,
@@ -58,17 +53,28 @@ handlers.BoxToSlot = function () {
 
     if (currentPlayerData.Data.slots === undefined) {
         //if first time login
-        var defSlot = {
-            "isReady": 0,
-            "isAvailable": 1,
-            "startTime": 0,
-            "currentTime": 0,
-            "endTime": 0
-        };
         currentPlayerData.Data.slots = [
-            defSlot,
-            defSlot,
-            defSlot
+            {
+                "isReady": 0,
+                "isAvailable": 1,
+                "startTime": 0,
+                "currentTime": 0,
+                "endTime": 0
+            },
+            {
+                "isReady": 0,
+                "isAvailable": 1,
+                "startTime": 0,
+                "currentTime": 0,
+                "endTime": 0
+            },
+            {
+                "isReady": 0,
+                "isAvailable": 1,
+                "startTime": 0,
+                "currentTime": 0,
+                "endTime": 0
+            }
         ]
         var slots = currentPlayerData.Data.slots;
     }
@@ -83,10 +89,8 @@ handlers.BoxToSlot = function () {
         }
         server.GrantItemsToUser(grantBasicBox);
     }
-    log.debug("slots 1"  + JSON.stringify(slots))
-    for (i = 0; i <= slots.length; i++) {
-        log.debug("i =   " + i);
-        log.debug("slots[i].isAvailable =  "  + slots[i].isAvailable)
+    log.debug("slots 1" + JSON.stringify(slots))
+    for (i = 0; i < slots.length; i++) {
         if (slots[i].isAvailable == 1) {
             var startTime = new Date().getTime() / 1000;
             var endTime = startTime + 300;
@@ -97,7 +101,6 @@ handlers.BoxToSlot = function () {
                 PlayFabId: currentPlayerId,
                 Data: { "slots": JSON.stringify(slots) }
             }
-            log.debug("slots 2"  + JSON.stringify(slots))
             server.UpdateUserReadOnlyData(updateSlotTimer);
             break;
         }
@@ -317,7 +320,7 @@ handlers.GetUserGameConfig = function (args) {
         "WeaponId": currentEquipment.equipped[2],
         "WeaponSkinId": currentEquipment.equipped[3],
         "HP": itemData.robotValues[boomBotId][1][itemLevel[boomBotId].level],
-        "MoveScale": itemData.robotValues[boomBotId][3],        
+        "MoveScale": itemData.robotValues[boomBotId][3],
         "DMG": itemData.robotValues[boomBotId][2][itemLevel[boomBotId].level] * itemData.weaponValues[weaponId][1],
         "CD": itemData.weaponValues[weaponId][2],
         "EnergyCharge": itemData.weaponValues[weaponId][3],

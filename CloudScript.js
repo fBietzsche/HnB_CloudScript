@@ -95,9 +95,9 @@ handlers.BoxToSlot = function () {
             slots[i].endTime = endTime;
             var updateSlotTimer = {
                 PlayFabId: currentPlayerId,
-                Data: { "slots 2": JSON.stringify(slots) }
+                Data: { "slots": JSON.stringify(slots) }
             }
-            log.debug("slots 3"  + JSON.stringify(slots))
+            log.debug("slots 2"  + JSON.stringify(slots))
             server.UpdateUserReadOnlyData(updateSlotTimer);
             break;
         }

@@ -97,7 +97,7 @@ handlers.BoxToSlot = function () {
 handlers.CheckSlots = function () {
 
     //get player info
-    var timer
+    var timer = [0,0,0]
     var currentPlayerData = server.GetUserReadOnlyData({
         PlayFabId: currentPlayerId
     });

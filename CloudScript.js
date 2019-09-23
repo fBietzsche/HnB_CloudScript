@@ -32,16 +32,7 @@ function getWeapon(weapon) {
 }
 
 function boxOpener() {
-    var updateSlotTimer = {
-        PlayFabId: currentPlayerId,
-        Data: { "slots": JSON.stringify(slots) }
-    }
-    server.UpdateUserReadOnlyData(updateSlotTimer);
-    var openBox = {
-        PlayFabId: currentPlayerId,
-        ContainerItemId: "BasicBox"
-    }
-    server.UnlockContainerItem(openBox);
+    
 }
 
 handlers.BoxToSlot = function () {
@@ -120,7 +111,7 @@ handlers.CheckSlots = function () {
         ItemIds: "BasicBoxKey"
     }
     //check for remaining time and give key
-    for (i = 0; i <= slots.length; i++) {
+    for (i = 0; i < slots.length; i++) {
         var remainingTime = slots[i].endTime - (new Date().getTime() / 1000);
         if ((remainingTime <= 0) && (slots[i].isReady == 0)) {
             slots[i].isReady = 1;
@@ -163,7 +154,16 @@ handlers.OpenBox = function (args) {
         slots[whichSlot].isAvailable = 1;
         slots[whichSlot].startTime = 0;
         slots[whichSlot].endTime = 0;
-        boxOpener();
+        var updateSlotTimer = {
+            PlayFabId: currentPlayerId,
+            Data: { "slots": JSON.stringify(slots) }
+        }
+        server.UpdateUserReadOnlyData(updateSlotTimer);
+        var openBox = {
+            PlayFabId: currentPlayerId,
+            ContainerItemId: "BasicBox"
+        }
+        server.UnlockContainerItem(openBox);
     }
 
 }

@@ -97,7 +97,7 @@ handlers.BoxToSlot = function () {
 handlers.CheckSlots = function () {
 
     //get player info
-    var timer = [0,0,0]
+    var timer = [0, 0, 0]
     var currentPlayerData = server.GetUserReadOnlyData({
         PlayFabId: currentPlayerId
     });
@@ -128,7 +128,32 @@ handlers.CheckSlots = function () {
 }
 
 handlers.SpendBoosterSlot = function (args) {
-    //reduce timer with ads TBA
+    //reduce timer with booster TBA
+    args.Slot = !args.Slot ? {} : args.Slot;
+    var whichSlot = args.Slot;
+    var currentPlayerData = server.GetUserReadOnlyData({
+        PlayFabId: currentPlayerId
+    });
+    var currentPlayerInventory = server.GetUserInventory({
+        PlayFabId: currentPlayerId
+    });
+    var playerBooster = JSON.parse(currentPlayerInventory.VirtualCurrency.TB);
+    var slots = JSON.parse(currentPlayerData.Data.slots.Value);
+    var reqBooster = Math.ceil((slots[whichSlot].endTime - slots[whichSlot].startTime) / 1000);
+    if (slots[whichSlot].isReady == 0 && playerBooster >= reqBooster) {
+        slots[whichSlot].endTime = slots[whichSlot].startTime;
+        var subBooster = {
+            PlayFabId: currentPlayerId,
+            VirtualCurrency: "TB",
+            Amount: reqBooster
+        }
+        server.SubtractUserVirtualCurrency(subBooster);
+        var updateSlotTimer = {
+            PlayFabId: currentPlayerId,
+            Data: { "slots": JSON.stringify(slots) }
+        }
+        server.UpdateUserReadOnlyData(updateSlotTimer);
+    }
 }
 
 handlers.SpendRubySlot = function (args) {
@@ -150,11 +175,6 @@ handlers.OpenBox = function (args) {
         slots[whichSlot].isAvailable = 1;
         slots[whichSlot].startTime = 0;
         slots[whichSlot].endTime = 0;
-        //  var updateSlotTimer = {
-        //      PlayFabId: currentPlayerId,
-        //      Data: { "slots": JSON.stringify(slots) }
-        //  }
-        //server.UpdateUserReadOnlyData(updateSlotTimer);
         var openBox = {
             PlayFabId: currentPlayerId,
             ContainerItemId: "BasicBox"

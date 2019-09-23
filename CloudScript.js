@@ -80,7 +80,6 @@ handlers.BoxToSlot = function () {
         }
         server.GrantItemsToUser(grantBasicBox);
     }
-    log.debug("slots 1" + JSON.stringify(slots))
     for (i = 0; i < slots.length; i++) {
         if (slots[i].isAvailable == 1) {
             var startTime = new Date().getTime() / 1000;
@@ -150,7 +149,7 @@ handlers.OpenBox = function (args) {
     var slots = JSON.parse(currentPlayerData.Data.slots.Value);
 
     if (slots[whichSlot].isReady == 1) {
-        slots[whichSlot].isReady = 0;
+     //   slots[whichSlot].isReady = 0;
         slots[whichSlot].isAvailable = 1;
         slots[whichSlot].startTime = 0;
         slots[whichSlot].endTime = 0;

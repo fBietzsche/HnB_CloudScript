@@ -147,7 +147,7 @@ handlers.OpenBox = function (args) {
         PlayFabId: currentPlayerId
     });
     var slots = JSON.parse(currentPlayerData.Data.slots.Value);
-
+log.debug("whichSlot   " +  whichSlot)
     if (slots[whichSlot].isReady == 1) {
      //   slots[whichSlot].isReady = 0;
         slots[whichSlot].isAvailable = 1;

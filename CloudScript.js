@@ -148,16 +148,36 @@ handlers.OpenBox = function (args) {
         slots[whichSlot].isAvailable = 1;
         slots[whichSlot].startTime = 0;
         slots[whichSlot].endTime = 0;
-        var updateSlotTimer = {
-            PlayFabId: currentPlayerId,
-            Data: { "slots": JSON.stringify(slots) }
-        }
+        //  var updateSlotTimer = {
+        //      PlayFabId: currentPlayerId,
+        //      Data: { "slots": JSON.stringify(slots) }
+        //  }
         server.UpdateUserReadOnlyData(updateSlotTimer);
         var openBox = {
             PlayFabId: currentPlayerId,
             ContainerItemId: "BasicBox"
         }
         server.UnlockContainerItem(openBox);
+        //Give randomized upgrade shards
+        var itemLevels = JSON.parse(currentPlayerData.Data.itemLevel.Value);
+        //Math.floor(Math.random() * (max - min + 1) ) + min;
+        boomBotId = Math.floor(Math.random() * 3);
+        expAmount = Math.floor(Math.random() * (36 - 24 + 1)) + 24;
+
+        itemLevels[boomBotId].XP = itemLevels[boomBotId].XP + expAmount;
+
+        var giveExp = {
+            PlayFabId: currentPlayerId,
+            Data: {
+                "itemLevel": JSON.stringify(itemLevels),
+                "slots": JSON.stringify(slots)
+            }
+        }
+        server.UpdateUserReadOnlyData(giveExp);
+        return {
+            "whichBoombot": getBoombot(boomBotId),
+            "expAmount": expAmount
+        }
     }
 
 }

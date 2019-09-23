@@ -175,7 +175,7 @@ handlers.OpenBox = function (args) {
         }
         server.UpdateUserReadOnlyData(giveExp);
         return {
-            "whichBoombot": getBoombot(boomBotId),
+            "whichBoombot": boomBotId,
             "expAmount": expAmount
         }
     }

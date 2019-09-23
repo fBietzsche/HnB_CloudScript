@@ -116,13 +116,14 @@ handlers.CheckSlots = function () {
             }
             server.UpdateUserReadOnlyData(updateSlotTimer);
             server.GrantItemsToUser(grantBasicKey);
-            return 0
+            timer[i] = 0
         }
         else if ((remainingTime <= 0) && (slots[i].isReady == 1)) {
-            return 0
+            timer[i] = 0
         }
-        return remainingTime;
+        timer[i] = remainingTime;
     }
+    return timer;
 }
 
 handlers.SpendBoosterSlot = function (args) {

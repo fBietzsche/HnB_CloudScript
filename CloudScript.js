@@ -347,12 +347,21 @@ handlers.UpgradeBoombot = function (args) {
     var currentExp = itemLevels[boombotId].XP;
     var requiredExp = levelRamp[itemLevels[boombotId].level]
     var requiredCoin = levelCoin[itemLevels[boombotId].level]
-
+    log.debug("itemLevels   =   " + itemLevels)
+    log.debug("playerCoin   =   " + playerCoin)
+    log.debug("itemData   =   " + itemData)
+    log.debug("levelRamp   =   " + levelRamp)
+    log.debug("levelCoin   =   " + levelCoin)
+    log.debug("currentLevel   =   " + currentLevel)
+    log.debug("currentExp   =   " + currentExp)
+    log.debug("requiredExp   =   " + requiredExp)
+    log.debug("requiredCoin   =   " + requiredCoin)
 
     //if OK level up
     if ((playerCoin >= requiredCoin) && (currentExp >= requiredExp)) {
         itemLevels[boombotId].XP = itemLevels[boombotId].XP - requiredExp
         itemLevels[boombotId].level = currentLevel + 1;
+        log.debug("itemLevels   =   " + itemLevels)        
         var upgradeItem = {
             PlayFabId: currentPlayerId,
             Data: { "itemLevel": JSON.stringify(itemLevels) }

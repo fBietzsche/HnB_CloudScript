@@ -152,7 +152,7 @@ handlers.OpenBox = function (args) {
         //      PlayFabId: currentPlayerId,
         //      Data: { "slots": JSON.stringify(slots) }
         //  }
-        server.UpdateUserReadOnlyData(updateSlotTimer);
+        //server.UpdateUserReadOnlyData(updateSlotTimer);
         var openBox = {
             PlayFabId: currentPlayerId,
             ContainerItemId: "BasicBox"

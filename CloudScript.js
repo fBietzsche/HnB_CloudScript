@@ -31,10 +31,6 @@ function getWeapon(weapon) {
     return weapons[weapon]
 }
 
-function boxOpener() {
-    
-}
-
 handlers.BoxToSlot = function () {
 
     //get player info
@@ -147,9 +143,8 @@ handlers.OpenBox = function (args) {
         PlayFabId: currentPlayerId
     });
     var slots = JSON.parse(currentPlayerData.Data.slots.Value);
-log.debug("whichSlot   " +  whichSlot)
     if (slots[whichSlot].isReady == 1) {
-     //   slots[whichSlot].isReady = 0;
+        slots[whichSlot].isReady = 0;
         slots[whichSlot].isAvailable = 1;
         slots[whichSlot].startTime = 0;
         slots[whichSlot].endTime = 0;
@@ -306,12 +301,7 @@ handlers.GetUserGameConfig = function (args) {
     var currentEquipment = JSON.parse(userData.Data.equipment.Value);
     var boomBotId = getBoombot(currentEquipment.equipped[0])
     var weaponId = getWeapon(currentEquipment.equipped[2])
-    log.debug("currentEquipment.equipped:  " + currentEquipment.equipped)
-    log.debug("boomBotId:  " + boomBotId)
-    log.debug("weaponId:  " + weaponId)
-    log.debug("itemData:  " + itemData)
-    log.debug("weaponValues:   " + itemData.weaponValues)
-    log.debug("itemData.weaponValues[weaponId]   " + itemData.weaponValues[weaponId])
+
     var gameplayParams = {
         "DisplayName": titleInfo.DisplayName,
         "RobotId": currentEquipment.equipped[0],
@@ -325,7 +315,8 @@ handlers.GetUserGameConfig = function (args) {
         "EnergyCharge": itemData.weaponValues[weaponId][3],
         "EnergyCost": itemData.weaponValues[weaponId][4],
         "UltDMGScale": itemData.weaponValues[weaponId][5],
-        "UltCharge": itemData.weaponValues[weaponId][6]
+        "UltCharge": itemData.weaponValues[weaponId][6],
+        "SecDMG": itemData.robotValues[boomBotId][2][itemLevel[boomBotId].level] * itemData.weaponValues[weaponId][7]
     }
     return gameplayParams;
 }

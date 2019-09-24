@@ -79,12 +79,12 @@ handlers.BoxToSlot = function () {
     else { var tradedBooster = reserveBooster }
     var subBooster = {
         PlayFabId: currentPlayerId,
-        VirtualCurrency: "TB",
+        VirtualCurrency: "BR",
         Amount: tradedBooster
     }
     var addBooster = {
         PlayFabId: currentPlayerId,
-        VirtualCurrency: "BR",
+        VirtualCurrency: "TB",
         Amount: tradedBooster
     }
     server.SubtractUserVirtualCurrency(subBooster);
@@ -95,8 +95,10 @@ handlers.BoxToSlot = function () {
             PlayFabId: currentPlayerId,
             ItemIds: "BasicBox"
         }
+        var isBoxGiven = 1;
         server.GrantItemsToUser(grantBasicBox);
     }
+    else { var isBoxGiven = 0 }
     for (i = 0; i < slots.length; i++) {
         if (slots[i].isAvailable == 1) {
             var startTime = new Date().getTime() / 1000;
@@ -112,7 +114,10 @@ handlers.BoxToSlot = function () {
             break;
         }
     }
-
+    return {
+        "givenBooster": tradedBooster,
+        "isBoxGiven": isBoxGiven
+    }
 }
 
 handlers.CheckSlots = function () {

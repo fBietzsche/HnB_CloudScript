@@ -32,7 +32,7 @@ function getWeapon(weapon) {
 }
 
 handlers.BoxToSlot = function () {
-
+    //After win match
     //get player info
     var currentPlayerData = server.GetUserReadOnlyData({
         PlayFabId: currentPlayerId
@@ -68,6 +68,27 @@ handlers.BoxToSlot = function () {
     else {
         var slots = JSON.parse(currentPlayerData.Data.slots.Value);
     }
+    //give booster if available
+    var currentPlayerInventory = server.GetUserInventory({
+        PlayFabId: currentPlayerId
+    });
+    var reserveBooster = JSON.parse(currentPlayerInventory.VirtualCurrency.BR);
+    if (reserveBooster >= 10) {
+        var tradedBooster = 10;
+    }
+    else { var tradedBooster = reserveBooster }
+    var subBooster = {
+        PlayFabId: currentPlayerId,
+        VirtualCurrency: "TB",
+        Amount: tradedBooster
+    }
+    var addBooster = {
+        PlayFabId: currentPlayerId,
+        VirtualCurrency: "BR",
+        Amount: tradedBooster
+    }
+    server.SubtractUserVirtualCurrency(subBooster);
+    server.AddUserVirtualCurrency(addBooster);
     //check for slot availability, give box, start timer and record set time
     if (slots[0].isAvailable == 1 || slots[1].isAvailable == 1 || slots[2].isAvailable == 1) {
         var grantBasicBox = {
@@ -79,7 +100,7 @@ handlers.BoxToSlot = function () {
     for (i = 0; i < slots.length; i++) {
         if (slots[i].isAvailable == 1) {
             var startTime = new Date().getTime() / 1000;
-            var endTime = startTime + 300;
+            var endTime = startTime + 900;
             slots[i].isAvailable = 0;
             slots[i].startTime = startTime;
             slots[i].endTime = endTime;
@@ -95,7 +116,7 @@ handlers.BoxToSlot = function () {
 }
 
 handlers.CheckSlots = function () {
-
+    //Every time main screen loaded or booster used for fasten box opening
     //get player info
     var timer = [0, 0, 0]
     var currentPlayerData = server.GetUserReadOnlyData({
@@ -162,7 +183,7 @@ handlers.SpendRubySlot = function (args) {
 }
 
 handlers.OpenBox = function (args) {
-
+    //when box ready, click to open function
     args.Slot = !args.Slot ? {} : args.Slot;
     var whichSlot = args.Slot;
     //get player info
@@ -205,6 +226,7 @@ handlers.OpenBox = function (args) {
 }
 
 handlers.EquipItem = function (args) {
+    //Garage equip item function
     /*args must be in this format:
     
         {   
@@ -321,7 +343,7 @@ handlers.EquipItem = function (args) {
 }
 
 handlers.GetUserGameConfig = function (args) {
-
+    // Gameplay parameters sender function
     args.PlayerId = !args.PlayerId ? {} : args.PlayerId;
 
     var PlayerId = args.PlayerId;
@@ -364,7 +386,7 @@ handlers.GetUserGameConfig = function (args) {
 }
 
 handlers.UpgradeBoombot = function (args) {
-
+    //usable when an boombot can be upgraded
     args.whichBoombot = !args.whichBoombot ? {} : args.whichBoombot;
     var whichBoombot = args.whichBoombot;
     //get user item info and VC

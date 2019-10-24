@@ -1,0 +1,600 @@
+{
+  "CatalogVersion": "Catalog_v1.0",
+  "Catalog": [
+    {
+      "ItemId": "BasicBox",
+      "ItemClass": "box",
+      "CatalogVersion": "Catalog_v1.0",
+      "DisplayName": "Basic Box",
+      "Description": null,
+      "VirtualCurrencyPrices": {},
+      "RealCurrencyPrices": null,
+      "Tags": [
+        "box"
+      ],
+      "CustomData": null,
+      "Consumable": {
+        "UsageCount": 1,
+        "UsagePeriod": null,
+        "UsagePeriodGroup": null
+      },
+      "Container": {
+        "KeyItemId": "BasicBoxKey",
+        "ItemContents": [],
+        "ResultTableContents": [
+          "BasicBoxCoin"
+        ],
+        "VirtualCurrencyContents": null
+      },
+      "Bundle": null,
+      "CanBecomeCharacter": false,
+      "IsStackable": true,
+      "IsTradable": false,
+      "ItemImageUrl": null,
+      "IsLimitedEdition": false,
+      "InitialLimitedEditionCount": 0,
+      "ActivatedMembership": null
+    },
+    {
+      "ItemId": "BasicBoxKey",
+      "ItemClass": "key",
+      "CatalogVersion": "Catalog_v1.0",
+      "DisplayName": "Basic Key",
+      "Description": null,
+      "VirtualCurrencyPrices": {},
+      "RealCurrencyPrices": null,
+      "Tags": [
+        "key"
+      ],
+      "CustomData": null,
+      "Consumable": {
+        "UsageCount": 1,
+        "UsagePeriod": null,
+        "UsagePeriodGroup": null
+      },
+      "Container": null,
+      "Bundle": null,
+      "CanBecomeCharacter": false,
+      "IsStackable": false,
+      "IsTradable": false,
+      "ItemImageUrl": null,
+      "IsLimitedEdition": false,
+      "InitialLimitedEditionCount": 0,
+      "ActivatedMembership": null
+    },
+    {
+      "ItemId": "AlphaBundle",
+      "ItemClass": "bundle",
+      "CatalogVersion": "Catalog_v1.0",
+      "DisplayName": "AlphaBundle",
+      "Description": null,
+      "VirtualCurrencyPrices": {},
+      "RealCurrencyPrices": null,
+      "Tags": [
+        "bundle"
+      ],
+      "CustomData": null,
+      "Consumable": {
+        "UsageCount": null,
+        "UsagePeriod": 3,
+        "UsagePeriodGroup": null
+      },
+      "Container": null,
+      "Bundle": {
+        "BundledItems": [
+          "msw_1",
+          "MekaScorp",
+          "SharkBot",
+          "RoboMantis",
+          "sbw_2",
+          "rmw_2"
+        ],
+        "BundledResultTables": [],
+        "BundledVirtualCurrencies": null
+      },
+      "CanBecomeCharacter": false,
+      "IsStackable": false,
+      "IsTradable": false,
+      "ItemImageUrl": null,
+      "IsLimitedEdition": false,
+      "InitialLimitedEditionCount": 0,
+      "ActivatedMembership": null
+    },
+    {
+      "ItemId": "Coin50",
+      "ItemClass": "coinPack",
+      "CatalogVersion": "Catalog_v1.0",
+      "DisplayName": "Coin 50",
+      "Description": null,
+      "VirtualCurrencyPrices": {},
+      "RealCurrencyPrices": null,
+      "Tags": [
+        "coin",
+        "soft",
+        "currency"
+      ],
+      "CustomData": null,
+      "Consumable": {
+        "UsageCount": null,
+        "UsagePeriod": 3,
+        "UsagePeriodGroup": null
+      },
+      "Container": null,
+      "Bundle": {
+        "BundledItems": [],
+        "BundledResultTables": [],
+        "BundledVirtualCurrencies": {
+          "CN": 50
+        }
+      },
+      "CanBecomeCharacter": false,
+      "IsStackable": false,
+      "IsTradable": false,
+      "ItemImageUrl": null,
+      "IsLimitedEdition": false,
+      "InitialLimitedEditionCount": 0,
+      "ActivatedMembership": null
+    },
+    {
+      "ItemId": "Coin51",
+      "ItemClass": "coinPack",
+      "CatalogVersion": "Catalog_v1.0",
+      "DisplayName": "Coin 51",
+      "Description": null,
+      "VirtualCurrencyPrices": {},
+      "RealCurrencyPrices": null,
+      "Tags": [
+        "coin",
+        "soft",
+        "currency"
+      ],
+      "CustomData": null,
+      "Consumable": {
+        "UsageCount": null,
+        "UsagePeriod": 3,
+        "UsagePeriodGroup": null
+      },
+      "Container": null,
+      "Bundle": {
+        "BundledItems": [],
+        "BundledResultTables": [],
+        "BundledVirtualCurrencies": {
+          "CN": 51
+        }
+      },
+      "CanBecomeCharacter": false,
+      "IsStackable": false,
+      "IsTradable": false,
+      "ItemImageUrl": null,
+      "IsLimitedEdition": false,
+      "InitialLimitedEditionCount": 0,
+      "ActivatedMembership": null
+    },
+    {
+      "ItemId": "Coin52",
+      "ItemClass": "coinPack",
+      "CatalogVersion": "Catalog_v1.0",
+      "DisplayName": "Coin 52",
+      "Description": null,
+      "VirtualCurrencyPrices": {},
+      "RealCurrencyPrices": null,
+      "Tags": [
+        "coin",
+        "soft",
+        "currency"
+      ],
+      "CustomData": null,
+      "Consumable": {
+        "UsageCount": null,
+        "UsagePeriod": 3,
+        "UsagePeriodGroup": null
+      },
+      "Container": null,
+      "Bundle": {
+        "BundledItems": [],
+        "BundledResultTables": [],
+        "BundledVirtualCurrencies": {
+          "CN": 52
+        }
+      },
+      "CanBecomeCharacter": false,
+      "IsStackable": false,
+      "IsTradable": false,
+      "ItemImageUrl": null,
+      "IsLimitedEdition": false,
+      "InitialLimitedEditionCount": 0,
+      "ActivatedMembership": null
+    },
+    {
+      "ItemId": "Coin49",
+      "ItemClass": "coinPack",
+      "CatalogVersion": "Catalog_v1.0",
+      "DisplayName": "Coin 49",
+      "Description": null,
+      "VirtualCurrencyPrices": {},
+      "RealCurrencyPrices": null,
+      "Tags": [
+        "coin",
+        "soft",
+        "currency"
+      ],
+      "CustomData": null,
+      "Consumable": {
+        "UsageCount": null,
+        "UsagePeriod": 3,
+        "UsagePeriodGroup": null
+      },
+      "Container": null,
+      "Bundle": {
+        "BundledItems": [],
+        "BundledResultTables": [],
+        "BundledVirtualCurrencies": {
+          "CN": 49
+        }
+      },
+      "CanBecomeCharacter": false,
+      "IsStackable": false,
+      "IsTradable": false,
+      "ItemImageUrl": null,
+      "IsLimitedEdition": false,
+      "InitialLimitedEditionCount": 0,
+      "ActivatedMembership": null
+    },
+    {
+      "ItemId": "Coin48",
+      "ItemClass": "coinPack",
+      "CatalogVersion": "Catalog_v1.0",
+      "DisplayName": "Coin 48",
+      "Description": null,
+      "VirtualCurrencyPrices": {},
+      "RealCurrencyPrices": null,
+      "Tags": [
+        "coin",
+        "soft",
+        "currency"
+      ],
+      "CustomData": null,
+      "Consumable": {
+        "UsageCount": null,
+        "UsagePeriod": 3,
+        "UsagePeriodGroup": null
+      },
+      "Container": null,
+      "Bundle": {
+        "BundledItems": [],
+        "BundledResultTables": [],
+        "BundledVirtualCurrencies": {
+          "CN": 48
+        }
+      },
+      "CanBecomeCharacter": false,
+      "IsStackable": false,
+      "IsTradable": false,
+      "ItemImageUrl": null,
+      "IsLimitedEdition": false,
+      "InitialLimitedEditionCount": 0,
+      "ActivatedMembership": null
+    },
+    {
+      "ItemId": "Coin2000",
+      "ItemClass": "coinPack",
+      "CatalogVersion": "Catalog_v1.0",
+      "DisplayName": "Coin 2000",
+      "Description": null,
+      "VirtualCurrencyPrices": {},
+      "RealCurrencyPrices": null,
+      "Tags": [
+        "coin",
+        "soft",
+        "currency"
+      ],
+      "CustomData": null,
+      "Consumable": {
+        "UsageCount": null,
+        "UsagePeriod": 3,
+        "UsagePeriodGroup": null
+      },
+      "Container": null,
+      "Bundle": {
+        "BundledItems": [],
+        "BundledResultTables": [],
+        "BundledVirtualCurrencies": {
+          "CN": 2000
+        }
+      },
+      "CanBecomeCharacter": false,
+      "IsStackable": false,
+      "IsTradable": false,
+      "ItemImageUrl": null,
+      "IsLimitedEdition": false,
+      "InitialLimitedEditionCount": 0,
+      "ActivatedMembership": null
+    },
+    {
+      "ItemId": "sbw_1",
+      "ItemClass": "sbw",
+      "CatalogVersion": "Catalog_v1.0",
+      "DisplayName": "Drill",
+      "Description": null,
+      "VirtualCurrencyPrices": {},
+      "RealCurrencyPrices": null,
+      "Tags": [
+        "weapon",
+        "sharkbot"
+      ],
+      "CustomData": "{\"DamageMultiplier\":\"1\",\"Cooldown\":\"1\",\"EnergyCharge\":\"1.2\",\"EnergyCost\":\"33\",\"UltimateMultiplier\":\"0.1\",\"UltimateCharge\":\"600\"}",
+      "Consumable": {
+        "UsageCount": null,
+        "UsagePeriod": null,
+        "UsagePeriodGroup": null
+      },
+      "Container": null,
+      "Bundle": null,
+      "CanBecomeCharacter": false,
+      "IsStackable": false,
+      "IsTradable": false,
+      "ItemImageUrl": null,
+      "IsLimitedEdition": false,
+      "InitialLimitedEditionCount": 0,
+      "ActivatedMembership": null
+    },
+    {
+      "ItemId": "msw_2",
+      "ItemClass": "msw",
+      "CatalogVersion": "Catalog_v1.0",
+      "DisplayName": "Hammer",
+      "Description": null,
+      "VirtualCurrencyPrices": {},
+      "RealCurrencyPrices": null,
+      "Tags": [
+        "weapon",
+        "mekascorp"
+      ],
+      "CustomData": "{\"DamageMultiplier\":\"1\",\"Cooldown\":\"1\",\"EnergyCharge\":\"1.2\",\"EnergyCost\":\"33\",\"UltimateMultiplier\":\"0.1\",\"UltimateCharge\":\"600\"}",
+      "Consumable": {
+        "UsageCount": null,
+        "UsagePeriod": null,
+        "UsagePeriodGroup": null
+      },
+      "Container": null,
+      "Bundle": null,
+      "CanBecomeCharacter": false,
+      "IsStackable": false,
+      "IsTradable": false,
+      "ItemImageUrl": null,
+      "IsLimitedEdition": false,
+      "InitialLimitedEditionCount": 0,
+      "ActivatedMembership": null
+    },
+    {
+      "ItemId": "sbw_2",
+      "ItemClass": "sbw",
+      "CatalogVersion": "Catalog_v1.0",
+      "DisplayName": "Jawz",
+      "Description": null,
+      "VirtualCurrencyPrices": {},
+      "RealCurrencyPrices": null,
+      "Tags": [
+        "weapon",
+        "sharkbot"
+      ],
+      "CustomData": "{\"DamageMultiplier\":\"1\",\"Cooldown\":\"1\",\"EnergyCharge\":\"1.2\",\"EnergyCost\":\"33\",\"UltimateMultiplier\":\"0.1\",\"UltimateCharge\":\"600\"}",
+      "Consumable": {
+        "UsageCount": null,
+        "UsagePeriod": null,
+        "UsagePeriodGroup": null
+      },
+      "Container": null,
+      "Bundle": null,
+      "CanBecomeCharacter": false,
+      "IsStackable": false,
+      "IsTradable": false,
+      "ItemImageUrl": null,
+      "IsLimitedEdition": false,
+      "InitialLimitedEditionCount": 0,
+      "ActivatedMembership": null
+    },
+    {
+      "ItemId": "rmw_2",
+      "ItemClass": "rmw",
+      "CatalogVersion": "Catalog_v1.0",
+      "DisplayName": "Scythe",
+      "Description": null,
+      "VirtualCurrencyPrices": {},
+      "RealCurrencyPrices": null,
+      "Tags": [
+        "weapon",
+        "robomantis"
+      ],
+      "CustomData": "{\"DamageMultiplier\":\"1\",\"Cooldown\":\"1\",\"EnergyCharge\":\"1.2\",\"EnergyCost\":\"33\",\"UltimateMultiplier\":\"0.1\",\"UltimateCharge\":\"600\"}",
+      "Consumable": {
+        "UsageCount": null,
+        "UsagePeriod": null,
+        "UsagePeriodGroup": null
+      },
+      "Container": null,
+      "Bundle": null,
+      "CanBecomeCharacter": false,
+      "IsStackable": false,
+      "IsTradable": false,
+      "ItemImageUrl": null,
+      "IsLimitedEdition": false,
+      "InitialLimitedEditionCount": 0,
+      "ActivatedMembership": null
+    },
+    {
+      "ItemId": "msw_1",
+      "ItemClass": "msw",
+      "CatalogVersion": "Catalog_v1.0",
+      "DisplayName": "Stinger",
+      "Description": null,
+      "VirtualCurrencyPrices": {},
+      "RealCurrencyPrices": null,
+      "Tags": [
+        "weapon",
+        "mekascorp"
+      ],
+      "CustomData": "{\"DamageMultiplier\":\"1\",\"Cooldown\":\"1\",\"EnergyCharge\":\"1.2\",\"EnergyCost\":\"33\",\"UltimateMultiplier\":\"0.1\",\"UltimateCharge\":\"600\"}",
+      "Consumable": {
+        "UsageCount": null,
+        "UsagePeriod": null,
+        "UsagePeriodGroup": null
+      },
+      "Container": null,
+      "Bundle": null,
+      "CanBecomeCharacter": false,
+      "IsStackable": false,
+      "IsTradable": false,
+      "ItemImageUrl": null,
+      "IsLimitedEdition": false,
+      "InitialLimitedEditionCount": 0,
+      "ActivatedMembership": null
+    },
+    {
+      "ItemId": "rmw_1",
+      "ItemClass": "rmw",
+      "CatalogVersion": "Catalog_v1.0",
+      "DisplayName": "Axe",
+      "Description": null,
+      "VirtualCurrencyPrices": {},
+      "RealCurrencyPrices": null,
+      "Tags": [
+        "weapon",
+        "robomantis"
+      ],
+      "CustomData": "{\"DamageMultiplier\":\"1\",\"Cooldown\":\"1\",\"EnergyCharge\":\"1.2\",\"EnergyCost\":\"33\",\"UltimateMultiplier\":\"0.1\",\"UltimateCharge\":\"600\"}",
+      "Consumable": {
+        "UsageCount": null,
+        "UsagePeriod": null,
+        "UsagePeriodGroup": null
+      },
+      "Container": null,
+      "Bundle": null,
+      "CanBecomeCharacter": false,
+      "IsStackable": false,
+      "IsTradable": false,
+      "ItemImageUrl": null,
+      "IsLimitedEdition": false,
+      "InitialLimitedEditionCount": 0,
+      "ActivatedMembership": null
+    },
+    {
+      "ItemId": "RoboMantis",
+      "ItemClass": "boombot",
+      "CatalogVersion": "Catalog_v1.0",
+      "DisplayName": "Robo-Mantis",
+      "Description": null,
+      "VirtualCurrencyPrices": {},
+      "RealCurrencyPrices": null,
+      "Tags": [
+        "boombot"
+      ],
+      "CustomData": "{\"HealthPoint\":{\"1\":\"550\",\"2\":\"670\",\"3\":\"802\",\"4\":\"948\",\"5\":\"1108\",\"6\":\"1284\",\"7\":\"1478\",\"8\":\"1691\",\"9\":\"1926\",\"10\":\"2184\"},\"Damage\":{\"1\":\"150\",\"2\":\"670\",\"3\":\"802\",\"4\":\"948\",\"5\":\"1108\",\"6\":\"1284\",\"7\":\"1478\",\"8\":\"1691\",\"9\":\"1926\",\"10\":\"2184\"},\"MoveScale\":\"1\"}",
+      "Consumable": {
+        "UsageCount": null,
+        "UsagePeriod": null,
+        "UsagePeriodGroup": null
+      },
+      "Container": null,
+      "Bundle": null,
+      "CanBecomeCharacter": false,
+      "IsStackable": false,
+      "IsTradable": false,
+      "ItemImageUrl": null,
+      "IsLimitedEdition": false,
+      "InitialLimitedEditionCount": 0,
+      "ActivatedMembership": null
+    },
+    {
+      "ItemId": "MekaScorp",
+      "ItemClass": "boombot",
+      "CatalogVersion": "Catalog_v1.0",
+      "DisplayName": "Meka-Scorp",
+      "Description": null,
+      "VirtualCurrencyPrices": {},
+      "RealCurrencyPrices": null,
+      "Tags": [
+        "boombot"
+      ],
+      "CustomData": "{\"HealthPoint\":{\"1\":\"550\",\"2\":\"670\",\"3\":\"802\",\"4\":\"948\",\"5\":\"1108\",\"6\":\"1284\",\"7\":\"1478\",\"8\":\"1691\",\"9\":\"1926\",\"10\":\"2184\"},\"Damage\":{\"1\":\"150\",\"2\":\"670\",\"3\":\"802\",\"4\":\"948\",\"5\":\"1108\",\"6\":\"1284\",\"7\":\"1478\",\"8\":\"1691\",\"9\":\"1926\",\"10\":\"2184\"},\"MoveScale\":\"1\"}",
+      "Consumable": {
+        "UsageCount": null,
+        "UsagePeriod": null,
+        "UsagePeriodGroup": null
+      },
+      "Container": null,
+      "Bundle": null,
+      "CanBecomeCharacter": false,
+      "IsStackable": false,
+      "IsTradable": false,
+      "ItemImageUrl": null,
+      "IsLimitedEdition": false,
+      "InitialLimitedEditionCount": 0,
+      "ActivatedMembership": null
+    },
+    {
+      "ItemId": "SharkBot",
+      "ItemClass": "boombot",
+      "CatalogVersion": "Catalog_v1.0",
+      "DisplayName": "Shark-Bot",
+      "Description": null,
+      "VirtualCurrencyPrices": {},
+      "RealCurrencyPrices": null,
+      "Tags": [
+        "boombot"
+      ],
+      "CustomData": "{\"HealthPoint\":{\"1\":\"550\",\"2\":\"670\",\"3\":\"802\",\"4\":\"948\",\"5\":\"1108\",\"6\":\"1284\",\"7\":\"1478\",\"8\":\"1691\",\"9\":\"1926\",\"10\":\"2184\"},\"Damage\":{\"1\":\"150\",\"2\":\"670\",\"3\":\"802\",\"4\":\"948\",\"5\":\"1108\",\"6\":\"1284\",\"7\":\"1478\",\"8\":\"1691\",\"9\":\"1926\",\"10\":\"2184\"},\"MoveScale\":\"1\"}",
+      "Consumable": {
+        "UsageCount": null,
+        "UsagePeriod": null,
+        "UsagePeriodGroup": null
+      },
+      "Container": null,
+      "Bundle": null,
+      "CanBecomeCharacter": false,
+      "IsStackable": false,
+      "IsTradable": false,
+      "ItemImageUrl": null,
+      "IsLimitedEdition": false,
+      "InitialLimitedEditionCount": 0,
+      "ActivatedMembership": null
+    }
+  ],
+  "DropTables": [
+    {
+      "TableId": "BasicBoxCoin",
+      "Nodes": [
+        {
+          "ResultItemType": "ItemId",
+          "ResultItem": "Coin2000",
+          "Weight": 1
+        },
+        {
+          "ResultItemType": "ItemId",
+          "ResultItem": "Coin52",
+          "Weight": 10000
+        },
+        {
+          "ResultItemType": "ItemId",
+          "ResultItem": "Coin48",
+          "Weight": 10000
+        },
+        {
+          "ResultItemType": "ItemId",
+          "ResultItem": "Coin51",
+          "Weight": 10000
+        },
+        {
+          "ResultItemType": "ItemId",
+          "ResultItem": "Coin49",
+          "Weight": 10000
+        },
+        {
+          "ResultItemType": "ItemId",
+          "ResultItem": "Coin50",
+          "Weight": 10000
+        }
+      ]
+    }
+  ]
+}

@@ -12,9 +12,9 @@
 //
 function getBoombot(boombot) {
     var boombots = {
-        'MekaScorp': 0,
-        'SharkBot': 1,
-        'RoboMantis': 2
+        "MekaScorp": 0,
+        "SharkBot": 1,
+        "RoboMantis": 2
     };
     return boombots[boombot]
 }

@@ -377,7 +377,7 @@ handlers.GetUserGameplayConfig = function (args) {
     var titleInfo = accInfo.UserInfo.TitleInfo;
     var itemLevel = JSON.parse(userData.Data.itemLevel.Value);
     log.debug("titleData  +   " + JSON.stringify(titleData))
-    var robotData = JSON.parse(titleData.Data.robotValues.Value);
+    var robotData = titleData.Data.robotValues;
     var currentEquipment = JSON.parse(userData.Data.equipped.Value);
     var boomBotId = getBoombot(currentEquipment[0])
     var weaponId = currentEquipment[2]

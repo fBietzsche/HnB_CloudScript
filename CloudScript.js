@@ -374,7 +374,7 @@ handlers.GetUserGameplayConfig = function (args) {
         PlayFabId: PlayerId,
         "Keys": ["equipped", "itemLevel"]
     });
-    log.debug("userdata   +   "  +  userData)
+    log.debug("userdata   +   "  +  JSON.stringify(userData))
     var titleInfo = accInfo.UserInfo.TitleInfo;
     var itemLevel = JSON.parse(userData.Data.itemLevel.Value);
     //log.debug("titleData  +   " + JSON.stringify(titleData))

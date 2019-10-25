@@ -380,7 +380,7 @@ handlers.GetUserGameplayConfig = function (args) {
     //log.debug("titleData  +   " + JSON.stringify(titleData))
     var robotData = titleData.Data.robotValues;
     log.debug("robotData   +  " + robotData)
-    var currentEquipment = userData.Data.equipped;
+    var currentEquipment = userData.Data.equipped.Value;
     log.debug("currentEquipment   +   " + JSON.stringify(currentEquipment))
     var boomBotId = getBoombot(currentEquipment[0])
     log.debug("getBoombot(currentEquipment[0])  +   " +getBoombot(currentEquipment[0]))
@@ -394,7 +394,7 @@ log.debug("robotData[boomBotId]   +    "   + robotData[boomBotId])
         "RobotSkinId": currentEquipment[1],
         "WeaponId": currentEquipment[2],
         "WeaponSkinId": currentEquipment[3],
-        //"HP": robotData[boomBotId][0][itemLevel[boomBotId][0] - 1],
+        "HP": robotData[boomBotId][0][itemLevel[boomBotId][0] - 1],
         "MoveScale": robotData[boomBotId][2],
         "DMG": robotData[boomBotId][1][itemLevel[boomBotId][0] - 1] * robotData[boomBotId][4][weaponId][1],
         "CD": robotData[boomBotId][4][weaponId][2],

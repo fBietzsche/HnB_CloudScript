@@ -383,6 +383,8 @@ handlers.GetUserGameplayConfig = function (args) {
     var currentEquipment = userData.Data.equipped;
     log.debug("currentEquipment   +   " + currentEquipment)
     var boomBotId = getBoombot(currentEquipment[0])
+    log.debug("getBoombot(currentEquipment[0])  +   " +getBoombot(currentEquipment[0]))
+    log.debug("currentEquipment[0] +   " + currentEquipment[0])
     var weaponId = currentEquipment[2]
     log.debug("boombotid  +  "  + boomBotId)
 log.debug("robotData[boomBotId]   +    "   + robotData[boomBotId])

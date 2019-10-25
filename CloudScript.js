@@ -384,6 +384,7 @@ handlers.GetUserGameplayConfig = function (args) {
     log.debug("currentEquipment   +   " + currentEquipment)
     var boomBotId = getBoombot(currentEquipment[0])
     var weaponId = currentEquipment[2]
+    log.debug("boombotid  +  "  + boomBotId)
 log.debug("robotData[boomBotId]   +    "   + robotData[boomBotId])
     var gameplayParams = {
         "DisplayName": titleInfo.DisplayName,

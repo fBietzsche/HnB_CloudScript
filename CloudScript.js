@@ -391,7 +391,7 @@ handlers.GetUserGameplayConfig = function (args) {
         "RobotSkinId": currentEquipment[1],
         "WeaponId": currentEquipment[2],
         "WeaponSkinId": currentEquipment[3],
-        "HP": robotData[boomBotId][0][itemLevel[boomBotId][0] - 1],
+        //"HP": robotData[boomBotId][0][itemLevel[boomBotId][0] - 1],
         "MoveScale": robotData[boomBotId][2],
         "DMG": robotData[boomBotId][1][itemLevel[boomBotId][0] - 1] * robotData[boomBotId][4][weaponId][1],
         "CD": robotData[boomBotId][4][weaponId][2],

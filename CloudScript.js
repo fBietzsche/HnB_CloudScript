@@ -270,12 +270,12 @@ handlers.EquipItem = function (args) {
         PlayFabId: currentPlayerId,
     });
     var boomBotId = getBoombot(args.boombot)
-            
+
     if (currentPlayerData.Data.itemLevel === undefined) {
         var isFirstTime = 1;
         //itemLevel[boombot] = [level,xp]
         currentPlayerData.Data.itemLevel = [
-            [                
+            [
                 1,
                 0
             ],
@@ -322,18 +322,18 @@ handlers.EquipItem = function (args) {
         var configs = currentPlayerData.Data.configs
     }
     else {
+        //select boombot values
+        //Write a check code (is player got item? is this item compatible with robot etc.)
         var equipped = JSON.parse(currentPlayerData.Data.equipped.Value);
         var configs = JSON.parse(currentPlayerData.Data.configs.Value);
+        equipped[0] = args.boombot;
+        equipped[1] = args.cos;
+        equipped[2] = args.wpn;
+        equipped[3] = args.wpnCos;
+        configs[boomBotId][0] = args.cos;
+        configs[boomBotId][1] = args.wpn;
+        configs[boomBotId][2] = args.wpnCos;
     }
-    //select boombot values
-    //Write a check code (is player got item? is this item compatible with robot etc.)
-    equipped[0] = args.boombot;
-    equipped[1] = args.cos;
-    equipped[2] = args.wpn;
-    equipped[3] = args.wpnCos;
-    configs[boomBotId][0] = args.cos;
-    configs[boomBotId][1] = args.wpn;
-    configs[boomBotId][2] = args.wpnCos;
 
     if (isFirstTime == 1) {
         var updateEquippedItems = {
@@ -374,7 +374,7 @@ handlers.GetUserGameplayConfig = function (args) {
         PlayFabId: PlayerId,
         "Keys": ["equipped", "itemLevel"]
     });
-    
+
     var titleInfo = accInfo.UserInfo.TitleInfo;
     var itemLevel = JSON.parse(userData.Data.itemLevel.Value);
     var robotData = JSON.parse(titleData.Data.robotValues);
@@ -384,18 +384,18 @@ handlers.GetUserGameplayConfig = function (args) {
     var gameplayParams = {
         "DisplayName": titleInfo.DisplayName,
         "RobotId": currentEquipment[0],
-        "RobotSkinId": currentEquipment[1],
+        "RobotCostumeId": currentEquipment[1],
         "WeaponId": currentEquipment[2],
-        "WeaponSkinId": currentEquipment[3],
-        "HP": robotData[boomBotId][0][itemLevel[boomBotId][0] - 1],
-        "MoveScale": robotData[boomBotId][2],        
-        "DMG": robotData[boomBotId][1][itemLevel[boomBotId][0] - 1] * robotData[boomBotId][3][weaponId][0],
-        "CD": robotData[boomBotId][3][weaponId][1],
-        "EnergyCharge": robotData[boomBotId][3][weaponId][2],
+        "WeaponCostumeId": currentEquipment[3],
+        "HealthPoints": robotData[boomBotId][0][itemLevel[boomBotId][0] - 1],
+        "MoveSpeedScale": robotData[boomBotId][2],
+        "Damage": robotData[boomBotId][1][itemLevel[boomBotId][0] - 1] * robotData[boomBotId][3][weaponId][0],
+        "Cooldown": robotData[boomBotId][3][weaponId][1],
+        "EnergyChargeRate": robotData[boomBotId][3][weaponId][2],
         "EnergyCost": robotData[boomBotId][3][weaponId][3],
-        "UltDMGScale": robotData[boomBotId][3][weaponId][4],
+        "UltDamageScale": robotData[boomBotId][3][weaponId][4],
         "UltCharge": robotData[boomBotId][3][weaponId][5],
-        "SecDMG": robotData[boomBotId][1][itemLevel[boomBotId][0] - 1] * robotData[boomBotId][3][weaponId][6]
+        "AltDamage": robotData[boomBotId][1][itemLevel[boomBotId][0] - 1] * robotData[boomBotId][3][weaponId][6]
     }
     return gameplayParams;
 }

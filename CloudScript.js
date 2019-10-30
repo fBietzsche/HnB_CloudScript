@@ -374,19 +374,13 @@ handlers.GetUserGameplayConfig = function (args) {
         PlayFabId: PlayerId,
         "Keys": ["equipped", "itemLevel"]
     });
-    log.debug("userdata   +   "  +  JSON.stringify(userData))
+    
     var titleInfo = accInfo.UserInfo.TitleInfo;
     var itemLevel = JSON.parse(userData.Data.itemLevel.Value);
-    //log.debug("titleData  +   " + JSON.stringify(titleData))
     var robotData = JSON.parse(titleData.Data.robotValues);
-    log.debug("title data +    " + titleData)
-    log.debug("title data data +    " + titleData.Data)
-    log.debug("title data data robot +    " + titleData.Data.robotValues)
-    log.debug("robotData   +  " + robotData)
     var currentEquipment = JSON.parse(userData.Data.equipped.Value);
     var boomBotId = getBoombot(currentEquipment[0])
     var weaponId = currentEquipment[2]
-log.debug("robotData[boomBotId]   +    "   + robotData[boomBotId])
     var gameplayParams = {
         "DisplayName": titleInfo.DisplayName,
         "RobotId": currentEquipment[0],
@@ -394,7 +388,7 @@ log.debug("robotData[boomBotId]   +    "   + robotData[boomBotId])
         "WeaponId": currentEquipment[2],
         "WeaponSkinId": currentEquipment[3],
         "HP": robotData[boomBotId][0][itemLevel[boomBotId][0] - 1],
-        "MoveScale": robotData[boomBotId][2],
+        "MoveScale": robotData[boomBotId][2],        
         "DMG": robotData[boomBotId][1][itemLevel[boomBotId][0] - 1] * robotData[boomBotId][3][weaponId][0],
         "CD": robotData[boomBotId][3][weaponId][1],
         "EnergyCharge": robotData[boomBotId][3][weaponId][2],

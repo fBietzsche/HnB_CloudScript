@@ -395,13 +395,13 @@ log.debug("robotData[boomBotId]   +    "   + robotData[boomBotId])
         "WeaponSkinId": currentEquipment[3],
         "HP": robotData[boomBotId][0][itemLevel[boomBotId][0] - 1],
         "MoveScale": robotData[boomBotId][2],
-        "DMG": robotData[boomBotId][1][itemLevel[boomBotId][0] - 1] * robotData[boomBotId][4][weaponId][1],
+        "DMG": robotData[boomBotId][1][itemLevel[boomBotId][0] - 1] * robotData[boomBotId][3][weaponId][1],
         "CD": robotData[boomBotId][4][weaponId][2],
         "EnergyCharge": robotData[boomBotId][4][weaponId][3],
         "EnergyCost": robotData[boomBotId][4][weaponId][4],
         "UltDMGScale": robotData[boomBotId][4][weaponId][5],
         "UltCharge": robotData[boomBotId][4][weaponId][6],
-        "SecDMG": robotData[boomBotId][1][itemLevel[boomBotId][0] - 1] * robotData[boomBotId][4][weaponId][7]
+        "SecDMG": robotData[boomBotId][1][itemLevel[boomBotId][0] - 1] * robotData[boomBotId][3][weaponId][7]
     }
     return gameplayParams;
 }

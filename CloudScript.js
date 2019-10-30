@@ -400,6 +400,23 @@ handlers.GetUserGameplayConfig = function (args) {
     return gameplayParams;
 }
 
+handlers.GetUserGameParams = function () {
+
+    var userData = server.GetUserReadOnlyData({
+        PlayFabId: currentPlayerId
+    });
+
+    var equipped = JSON.parse(userData.Data.equipped.Value)
+    var configs = JSON.parse(userData.Data.configs.Value)
+    var itemLevel = JSON.parse(userData.Data.itemLevel.Value)
+    var gameParams = {
+        "equipped": equipped,
+        "configs": configs,
+        "itemLevel": itemLevel
+    }
+    return gameParams;
+}
+
 handlers.UpgradeBoombot = function (args) {
     //usable when an boombot can be upgraded
     args.whichBoombot = !args.whichBoombot ? {} : args.whichBoombot;

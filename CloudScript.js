@@ -383,10 +383,10 @@ handlers.GetUserGameplayConfig = function (args) {
     var weaponId = currentEquipment[2]
     var gameplayParams = {
         "DisplayName": titleInfo.DisplayName,
-        "RobotId": currentEquipment[0],
-        "RobotCostumeId": currentEquipment[1],
-        "WeaponId": currentEquipment[2],
-        "WeaponCostumeId": currentEquipment[3],
+        "RobotId": currentEquipment[0]-1,
+        "RobotCostumeId": currentEquipment[1]-1,
+        "WeaponId": currentEquipment[2]-1,
+        "WeaponCostumeId": currentEquipment[3]-1,
         "HealthPoints": robotData[boomBotId][0][itemLevel[boomBotId][0] - 1],
         "MoveSpeedScale": robotData[boomBotId][2],
         "Damage": robotData[boomBotId][1][itemLevel[boomBotId][0] - 1] * robotData[boomBotId][3][weaponId-1][0],

@@ -295,26 +295,26 @@ handlers.EquipItem = function (args) {
         // equipped = ["boombot", boombotcostume, weapon, weaponcostume]
         currentPlayerData.Data.equipped = [
             "MekaScorp",
-            0,
-            0,
-            0
+            1,
+            1,
+            1
         ]
         // configs[boombot] = [costume, weapon, weaponcostume]
         currentPlayerData.Data.configs = [
             [
-                0,
-                0,
-                0
+                1,
+                1,
+                1
             ],
             [
-                0,
-                0,
-                0
+                1,
+                1,
+                1
             ],
             [
-                0,
-                0,
-                0
+                1,
+                1,
+                1
             ]
         ]
 
@@ -389,13 +389,13 @@ handlers.GetUserGameplayConfig = function (args) {
         "WeaponCostumeId": currentEquipment[3],
         "HealthPoints": robotData[boomBotId][0][itemLevel[boomBotId][0] - 1],
         "MoveSpeedScale": robotData[boomBotId][2],
-        "Damage": robotData[boomBotId][1][itemLevel[boomBotId][0] - 1] * robotData[boomBotId][3][weaponId][0],
-        "Cooldown": robotData[boomBotId][3][weaponId][1],
-        "EnergyChargeRate": robotData[boomBotId][3][weaponId][2],
-        "EnergyCost": robotData[boomBotId][3][weaponId][3],
-        "UltDamageScale": robotData[boomBotId][3][weaponId][4],
-        "UltCharge": robotData[boomBotId][3][weaponId][5],
-        "AltDamage": robotData[boomBotId][1][itemLevel[boomBotId][0] - 1] * robotData[boomBotId][3][weaponId][6]
+        "Damage": robotData[boomBotId][1][itemLevel[boomBotId][0] - 1] * robotData[boomBotId][3][weaponId-1][0],
+        "Cooldown": robotData[boomBotId][3][weaponId-1][1],
+        "EnergyChargeRate": robotData[boomBotId][3][weaponId-1][2],
+        "EnergyCost": robotData[boomBotId][3][weaponId-1][3],
+        "UltDamageScale": robotData[boomBotId][3][weaponId-1][4],
+        "UltCharge": robotData[boomBotId][3][weaponId-1][5],
+        "AltDamage": robotData[boomBotId][1][itemLevel[boomBotId][0] - 1] * robotData[boomBotId][3][weaponId-1][6]
     }
     return gameplayParams;
 }

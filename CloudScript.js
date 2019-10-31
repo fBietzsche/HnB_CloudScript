@@ -383,7 +383,7 @@ handlers.GetUserGameplayConfig = function (args) {
     var weaponId = currentEquipment[2]
     var gameplayParams = {
         "DisplayName": titleInfo.DisplayName,
-        "RobotId": currentEquipment[0]-1,
+        "RobotId": currentEquipment[0],
         "RobotCostumeId": currentEquipment[1]-1,
         "WeaponId": currentEquipment[2]-1,
         "WeaponCostumeId": currentEquipment[3]-1,

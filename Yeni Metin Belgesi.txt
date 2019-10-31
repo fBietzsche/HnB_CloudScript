@@ -1,0 +1,16 @@
+Main Menu
+	-4. slot silinecek
+	-booster detaylarý	{
+				-üstte görünen TB
+				-Play tuþu üzerindeki BR
+				-Play tuþu üzerindeki kalan süre miktarý GetUserInventory çaðýrýldýðýnda VirtualCurrencyRechargeTimes.BR.SecondsToRecharge altýnda görünüyor güncelleme yapýlmalý
+				-Play tuþu üzerindeki max deðer VirtualCurrencyRechargeTimes.BR.RechargeMax deðerinden güncellenmeli.
+				}
+	-sol üstteki trophy deðeri GetPlayerStatistics ile güncellenmeli.
+	-Trophy deðerinin altýndaki sarý bar trophy miktarýna göre dolacak þimdilik her 50 trophyde dolacak þekilde ayarlayalým.
+	-slotlar hazýrken týklandýðýnda OpenBox fonksiyonu çalýþmalý.
+	-slotlar hazýr deðilken týklandýðýnda yandaki düðmeler açýlmalý tekrar týklanýðýnda kapanmalý.
+	
+Robot seçim ekraný
+	-Robot seçildiðinde equip fonksiyonu çalýþmamalý sadece detay ekranýna girilmeli.
+	-robotlarýmýz belli olduðu için tekrar catalogdan check yapmaya gerek yok da

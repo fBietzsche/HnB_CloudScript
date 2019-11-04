@@ -384,18 +384,18 @@ handlers.GetUserGameplayConfig = function (args) {
     var gameplayParams = {
         "DisplayName": titleInfo.DisplayName,
         "RobotId": currentEquipment[0],
-        "RobotCostumeId": currentEquipment[1]-1,
-        "WeaponId": currentEquipment[2]-1,
-        "WeaponCostumeId": currentEquipment[3]-1,
+        "RobotCostumeId": currentEquipment[1] - 1,
+        "WeaponId": currentEquipment[2] - 1,
+        "WeaponCostumeId": currentEquipment[3] - 1,
         "HealthPoints": robotData[boomBotId][0][itemLevel[boomBotId][0] - 1],
         "MoveSpeedScale": robotData[boomBotId][2],
-        "Damage": robotData[boomBotId][1][itemLevel[boomBotId][0] - 1] * robotData[boomBotId][3][weaponId-1][0],
-        "Cooldown": robotData[boomBotId][3][weaponId-1][1],
-        "EnergyChargeRate": robotData[boomBotId][3][weaponId-1][2],
-        "EnergyCost": robotData[boomBotId][3][weaponId-1][3],
-        "UltDamageScale": robotData[boomBotId][3][weaponId-1][4],
-        "UltCharge": robotData[boomBotId][3][weaponId-1][5],
-        "AltDamage": robotData[boomBotId][1][itemLevel[boomBotId][0] - 1] * robotData[boomBotId][3][weaponId-1][6]
+        "Damage": robotData[boomBotId][1][itemLevel[boomBotId][0] - 1] * robotData[boomBotId][3][weaponId - 1][0],
+        "Cooldown": robotData[boomBotId][3][weaponId - 1][1],
+        "EnergyChargeRate": robotData[boomBotId][3][weaponId - 1][2],
+        "EnergyCost": robotData[boomBotId][3][weaponId - 1][3],
+        "UltDamageScale": robotData[boomBotId][3][weaponId - 1][4],
+        "UltCharge": robotData[boomBotId][3][weaponId - 1][5],
+        "AltDamage": robotData[boomBotId][1][itemLevel[boomBotId][0] - 1] * robotData[boomBotId][3][weaponId - 1][6]
     }
     return gameplayParams;
 }
@@ -405,14 +405,32 @@ handlers.GetUserGameParams = function () {
     var userData = server.GetUserReadOnlyData({
         PlayFabId: currentPlayerId
     });
-
+    var titleData = server.GetTitleData({
+        PlayFabId: PlayerId,
+        "Keys": ["levelData", "robotValues"]
+    });
+    var robotData = JSON.parse(titleData.Data.robotValues);
+    var boomBotId = 0;
+    var itemLevel = JSON.parse(userData.Data.itemLevel.Value);
+    var HP = [0, 0, 0]
+    var DMG = !DMG ? {} : DMG;
+    for (i = 0; i < robotData.length; i++) {
+        boomBotId = i;
+        HP[i] = robotData[boomBotId][0][itemLevel[boomBotId][0] - 1]
+        for (j = 0; i <4; i++){
+            weaponId = j;
+            DMG = robotData[i][1][itemLevel[i][0] - 1] * robotData[i][3][j][0]
+        }
+    }
     var equipped = JSON.parse(userData.Data.equipped.Value)
     var configs = JSON.parse(userData.Data.configs.Value)
     var itemLevel = JSON.parse(userData.Data.itemLevel.Value)
     var gameParams = {
         "equipped": equipped,
         "configs": configs,
-        "itemLevel": itemLevel
+        "itemLevel": itemLevel,
+        "HealthPoints": HP,
+        "Damage": robotData[boomBotId][1][itemLevel[boomBotId][0] - 1] * robotData[boomBotId][3][weaponId - 1][0]
     }
     return gameParams;
 }

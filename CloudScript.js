@@ -410,19 +410,18 @@ handlers.GetUserGameParams = function () {
         "Keys": ["levelData", "robotValues"]
     });
     var robotData = JSON.parse(titleData.Data.robotValues);
-    var boomBotId = 0;
     var itemLevel = JSON.parse(userData.Data.itemLevel.Value);
     var HP = [0, 0, 0]
     var DMG = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
     log.debug(robotData)
     log.debug(itemLevel)
 
-    for (i = 0; i < robotData.length; i++) {
-        boomBotId = i;
-        HP[i] = robotData[boomBotId][0][itemLevel[boomBotId][0] - 1]
+    for (i = 0; i < 3; i++) {
+        HP[i] = robotData[i][0][itemLevel[i][0] - 1]
+        log.debug("HP +  " + HP)
         for (j = 0; i < 4; i++) {
-            weaponId = j;
             DMG[i][j] = robotData[i][1][itemLevel[i][0] - 1] * robotData[i][3][j][0]
+            log.debug("DMG +  " + DMG)
         }
     }
     var equipped = JSON.parse(userData.Data.equipped.Value)
@@ -433,7 +432,7 @@ handlers.GetUserGameParams = function () {
         "configs": configs,
         "itemLevel": itemLevel,
         "HealthPoints": HP,
-        "Damage": robotData[boomBotId][1][itemLevel[boomBotId][0] - 1] * robotData[boomBotId][3][weaponId - 1][0]
+        "Damage": DMG
     }
     return gameParams;
 }

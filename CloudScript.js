@@ -413,14 +413,14 @@ handlers.GetUserGameParams = function () {
     var boomBotId = 0;
     var itemLevel = JSON.parse(userData.Data.itemLevel.Value);
     var HP = [0, 0, 0]
-    var DMG = !DMG ? {} : DMG;
+    var DMG = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
     log.debug(robotData)
     log.debug(itemLevel)
-    
+
     for (i = 0; i < robotData.length; i++) {
         boomBotId = i;
         HP[i] = robotData[boomBotId][0][itemLevel[boomBotId][0] - 1]
-        for (j = 0; i <4; i++){
+        for (j = 0; i < 4; i++) {
             weaponId = j;
             DMG[i][j] = robotData[i][1][itemLevel[i][0] - 1] * robotData[i][3][j][0]
         }

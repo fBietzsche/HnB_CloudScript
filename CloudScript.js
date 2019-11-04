@@ -406,7 +406,7 @@ handlers.GetUserGameParams = function () {
         PlayFabId: currentPlayerId
     });
     var titleData = server.GetTitleData({
-        PlayFabId: PlayerId,
+        PlayFabId: currentPlayerId,
         "Keys": ["levelData", "robotValues"]
     });
     var robotData = JSON.parse(titleData.Data.robotValues);

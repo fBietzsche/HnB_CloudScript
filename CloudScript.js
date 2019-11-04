@@ -413,15 +413,10 @@ handlers.GetUserGameParams = function () {
     var itemLevel = JSON.parse(userData.Data.itemLevel.Value);
     var HP = [0, 0, 0]
     var DMG = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
-    log.debug(robotData)
-    log.debug(itemLevel)
-
     for (i = 0; i < 3; i++) {
         HP[i] = robotData[i][0][itemLevel[i][0] - 1]
-        log.debug("HP +  " + HP)
         for (j = 0; j < 4; j++) {
             DMG[i][j] = robotData[i][1][itemLevel[i][0] - 1] * robotData[i][3][j][0]
-            log.debug("DMG +  " + DMG)
         }
     }
     var equipped = JSON.parse(userData.Data.equipped.Value)

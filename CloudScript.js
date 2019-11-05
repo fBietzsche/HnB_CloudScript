@@ -464,7 +464,6 @@ handlers.CheckUpgrade = function () {
         "requiredExp": requiredExp,
         "requiredCoin": requiredCoin
     }
-
 }
 handlers.UpgradeBoombot = function (args) {
     //usable when an boombot can be upgraded

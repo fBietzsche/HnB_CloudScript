@@ -459,6 +459,7 @@ handlers.CheckUpgrade = function () {
         }
     }
     return checkResult;
+    
 }
 handlers.UpgradeBoombot = function (args) {
     //usable when an boombot can be upgraded

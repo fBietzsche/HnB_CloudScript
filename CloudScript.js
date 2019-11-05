@@ -19,6 +19,14 @@ function getBoombot(boombot) {
     return boombots[boombot]
 }
 
+handlers.CheckItem = function isPlayerGotItem(){
+    //boomBotId,weaponId,playerId
+    var currentPlayerInventory = server.GetUserInventory({
+        PlayFabId: currentPlayerId
+    });
+    log.debug(currentPlayerInventory)
+}
+
 handlers.WinCondition = function () {
     //After win match
     //get player info
@@ -465,6 +473,7 @@ handlers.CheckUpgrade = function () {
         "requiredCoin": requiredCoin
     }
 }
+
 handlers.UpgradeBoombot = function (args) {
     //usable when an boombot can be upgraded
     args.whichBoombot = !args.whichBoombot ? {} : args.whichBoombot;

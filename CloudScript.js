@@ -432,6 +432,34 @@ handlers.GetUserGameParams = function () {
     return gameParams;
 }
 
+handlers.CheckUpgrade = function () {
+
+    var currentPlayerData = server.GetUserReadOnlyData({
+        PlayFabId: currentPlayerId
+    });
+    var titleData = server.GetTitleData({
+        PlayFabId: currentPlayerId,
+        "Keys": "levelData"
+    });
+
+    var itemLevel = JSON.parse(currentPlayerData.Data.itemLevel.Value);
+    var levelData = JSON.parse(titleData.Data.levelData);
+    var levelRamp = levelData.levelRamp;
+    var levelCoin = levelData.levelCoin;
+    var requiredExp = [0, 0, 0];
+    var requiredCoin = [0, 0, 0];
+    var currentExp = [0, 0, 0];
+    var checkResult = [0, 0, 0];
+    for (i = 3; i < 3; i++) {
+        currentExp[i] = itemLevel[i][1];
+        requiredExp[i] = levelRamp[itemLevel[i][0]]
+        requiredCoin[i] = levelCoin[itemLevel[i][0]]
+        if (requiredExp[i] <= currentExp[i]) {
+            checkResult[i] = 1
+        }
+    }
+    return checkResult;
+}
 handlers.UpgradeBoombot = function (args) {
     //usable when an boombot can be upgraded
     args.whichBoombot = !args.whichBoombot ? {} : args.whichBoombot;

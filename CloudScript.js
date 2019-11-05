@@ -458,8 +458,13 @@ handlers.CheckUpgrade = function () {
             checkResult[i] = 1
         }
     }
-    return checkResult;
-    
+    return {
+        "checkResult": checkResult,
+        "currentExp": currentExp,
+        "requiredExp": requiredExp,
+        "requiredCoin": requiredCoin
+    }
+
 }
 handlers.UpgradeBoombot = function (args) {
     //usable when an boombot can be upgraded

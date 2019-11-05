@@ -255,9 +255,9 @@ handlers.EquipItem = function (args) {
     
         {   
             "boombot":"BoomBot",
-            "cos":0,
-            "wpn":0,
-            "wpnCos":0
+            "cos":1,
+            "wpn":1,
+            "wpnCos":1
         }
     */
     args.boombot = !args.boombot ? {} : args.boombot;

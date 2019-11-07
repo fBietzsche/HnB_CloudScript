@@ -19,12 +19,77 @@ function getBoombot(boombot) {
     return boombots[boombot]
 }
 
-handlers.CheckItem = function isPlayerGotItem(){
-    //boomBotId,weaponId,playerId
-    var currentPlayerInventory = server.GetUserInventory({
-        PlayFabId: currentPlayerId
-    });
-    log.debug(currentPlayerInventory)
+handlers.FirstLogin = function () {
+    var slots = [
+        {
+            "isReady": 0,
+            "isAvailable": 1,
+            "startTime": 0,
+            "currentTime": 0,
+            "endTime": 0
+        },
+        {
+            "isReady": 0,
+            "isAvailable": 1,
+            "startTime": 0,
+            "currentTime": 0,
+            "endTime": 0
+        },
+        {
+            "isReady": 0,
+            "isAvailable": 1,
+            "startTime": 0,
+            "currentTime": 0,
+            "endTime": 0
+        }
+    ]
+    var itemLevel = [
+        [
+            1,
+            0
+        ],
+        [
+            1,
+            0
+        ],
+        [
+            1,
+            0
+        ]
+    ]
+    var equipped = [
+        "MekaScorp",
+        1,
+        1,
+        1
+    ]
+    var configs = [
+        [
+            1,
+            1,
+            1
+        ],
+        [
+            1,
+            1,
+            1
+        ],
+        [
+            1,
+            1,
+            1
+        ]
+    ]
+    var updateUserReadOnly = {
+        PlayFabId: currentPlayerId,
+        Data: {
+            "equipped": JSON.stringify(equipped),
+            "configs": JSON.stringify(configs),
+            "itemLevel": JSON.stringify(itemLevel),
+            "slots": JSON.stringify(slots)
+        }
+    }
+    server.UpdateUserReadOnlyData(updateUserReadOnly);
 }
 
 handlers.WinCondition = function () {
@@ -37,36 +102,7 @@ handlers.WinCondition = function () {
         PlayFabId: currentPlayerId,
         "StatisticNames": "Trophy"
     });
-    if (currentPlayerData.Data.slots === undefined) {
-        //if first time login
-        currentPlayerData.Data.slots = [
-            {
-                "isReady": 0,
-                "isAvailable": 1,
-                "startTime": 0,
-                "currentTime": 0,
-                "endTime": 0
-            },
-            {
-                "isReady": 0,
-                "isAvailable": 1,
-                "startTime": 0,
-                "currentTime": 0,
-                "endTime": 0
-            },
-            {
-                "isReady": 0,
-                "isAvailable": 1,
-                "startTime": 0,
-                "currentTime": 0,
-                "endTime": 0
-            }
-        ]
-        var slots = currentPlayerData.Data.slots;
-    }
-    else {
-        var slots = JSON.parse(currentPlayerData.Data.slots.Value);
-    }
+    var slots = JSON.parse(currentPlayerData.Data.slots.Value);
     var trophy = JSON.parse(currentPlayerTrophy.Data.Statistics[1].Value)
     var newTrophy = trophy + 7;
     //give booster if available
@@ -74,8 +110,8 @@ handlers.WinCondition = function () {
         PlayFabId: currentPlayerId
     });
     var reserveBooster = JSON.parse(currentPlayerInventory.VirtualCurrency.BR);
-    if (reserveBooster >= 10) {
-        var tradedBooster = 10;
+    if (reserveBooster >= 15) {
+        var tradedBooster = 15;
     }
     else { var tradedBooster = reserveBooster }
     var subBooster = {
@@ -127,7 +163,7 @@ handlers.WinCondition = function () {
     return {
         "givenBooster": tradedBooster,
         "isBoxGiven": isBoxGiven,
-        "trophy": trophy,
+        "oldtrophy": trophy,
         "newTrophy": newTrophy
     }
 }
@@ -140,9 +176,56 @@ handlers.LoseCondition = function () {
     var trophy = JSON.parse(currentPlayerTrophy.Data.Statistics[1].Value)
     var newTrophy = trophy - 3;
 
+    var currentPlayerInventory = server.GetUserInventory({
+        PlayFabId: currentPlayerId
+    });
+    var reserveBooster = JSON.parse(currentPlayerInventory.VirtualCurrency.BR);
+    if (reserveBooster >= 5) {
+        var tradedBooster = 5;
+    }
+    else { var tradedBooster = reserveBooster }
+    var subBooster = {
+        PlayFabId: currentPlayerId,
+        VirtualCurrency: "BR",
+        Amount: tradedBooster
+    }
+    var addBooster = {
+        PlayFabId: currentPlayerId,
+        VirtualCurrency: "TB",
+        Amount: tradedBooster
+    }
+    server.SubtractUserVirtualCurrency(subBooster);
+    server.AddUserVirtualCurrency(addBooster);
     return {
         "trophy": trophy,
-        "newTrophy": newTrophy
+        "newTrophy": newTrophy,
+        "tradedBooster": tradedBooster
+    }
+}
+
+handlers.DrawCondition = function () {
+    var currentPlayerInventory = server.GetUserInventory({
+        PlayFabId: currentPlayerId
+    });
+    var reserveBooster = JSON.parse(currentPlayerInventory.VirtualCurrency.BR);
+    if (reserveBooster >= 10) {
+        var tradedBooster = 10;
+    }
+    else { var tradedBooster = reserveBooster }
+    var subBooster = {
+        PlayFabId: currentPlayerId,
+        VirtualCurrency: "BR",
+        Amount: tradedBooster
+    }
+    var addBooster = {
+        PlayFabId: currentPlayerId,
+        VirtualCurrency: "TB",
+        Amount: tradedBooster
+    }
+    server.SubtractUserVirtualCurrency(subBooster);
+    server.AddUserVirtualCurrency(addBooster);
+    return {
+        "tradedBooster": tradedBooster
     }
 }
 
@@ -259,8 +342,7 @@ handlers.OpenBox = function (args) {
 
 handlers.EquipItem = function (args) {
     //Garage equip item function
-    /*args must be in this format:
-    
+    /*args must be in this format:    
         {   
             "boombot":"BoomBot",
             "cos":1,
@@ -278,90 +360,26 @@ handlers.EquipItem = function (args) {
         PlayFabId: currentPlayerId,
     });
     var boomBotId = getBoombot(args.boombot)
+    //var isPlayerGotItem = isPlayerGotItem(boomBotId, args.wpn, currentPlayerId)
+    //select boombot values    
+    var equipped = JSON.parse(currentPlayerData.Data.equipped.Value);
+    var configs = JSON.parse(currentPlayerData.Data.configs.Value);
+    equipped[0] = args.boombot;
+    equipped[1] = args.cos;
+    equipped[2] = args.wpn;
+    equipped[3] = args.wpnCos;
+    configs[boomBotId][0] = args.cos;
+    configs[boomBotId][1] = args.wpn;
+    configs[boomBotId][2] = args.wpnCos;
 
-    if (currentPlayerData.Data.itemLevel === undefined) {
-        var isFirstTime = 1;
-        //itemLevel[boombot] = [level,xp]
-        currentPlayerData.Data.itemLevel = [
-            [
-                1,
-                0
-            ],
-            [
-                1,
-                0
-            ],
-            [
-                1,
-                0
-            ]
-        ]
-
-        var itemLevel = currentPlayerData.Data.itemLevel;
-    }
-    if (currentPlayerData.Data.equipped === undefined) {
-        // equipped = ["boombot", boombotcostume, weapon, weaponcostume]
-        currentPlayerData.Data.equipped = [
-            "MekaScorp",
-            1,
-            1,
-            1
-        ]
-        // configs[boombot] = [costume, weapon, weaponcostume]
-        currentPlayerData.Data.configs = [
-            [
-                1,
-                1,
-                1
-            ],
-            [
-                1,
-                1,
-                1
-            ],
-            [
-                1,
-                1,
-                1
-            ]
-        ]
-
-        var equipped = currentPlayerData.Data.equipped;
-        var configs = currentPlayerData.Data.configs
-    }
-    else {
-        //select boombot values
-        //Write a check code (is player got item? is this item compatible with robot etc.)
-        var equipped = JSON.parse(currentPlayerData.Data.equipped.Value);
-        var configs = JSON.parse(currentPlayerData.Data.configs.Value);
-        equipped[0] = args.boombot;
-        equipped[1] = args.cos;
-        equipped[2] = args.wpn;
-        equipped[3] = args.wpnCos;
-        configs[boomBotId][0] = args.cos;
-        configs[boomBotId][1] = args.wpn;
-        configs[boomBotId][2] = args.wpnCos;
-    }
-
-    if (isFirstTime == 1) {
-        var updateEquippedItems = {
-            PlayFabId: currentPlayerId,
-            Data: {
-                "equipped": JSON.stringify(equipped),
-                "configs": JSON.stringify(configs),
-                "itemLevel": JSON.stringify(itemLevel)
-            }
+    var updateEquippedItems = {
+        PlayFabId: currentPlayerId,
+        Data: {
+            "equipped": JSON.stringify(equipped),
+            "configs": JSON.stringify(configs)
         }
     }
-    else {
-        var updateEquippedItems = {
-            PlayFabId: currentPlayerId,
-            Data: {
-                "equipped": JSON.stringify(equipped),
-                "configs": JSON.stringify(configs)
-            }
-        }
-    }
+
     server.UpdateUserReadOnlyData(updateEquippedItems);
 }
 

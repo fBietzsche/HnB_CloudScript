@@ -19,6 +19,15 @@ function getBoombot(boombot) {
     return boombots[boombot]
 }
 
+handlers.Debug = function (){
+    var currentPlayerTrophy = server.GetPlayerStatistics({
+        PlayFabId: currentPlayerId,
+        "StatisticNames": "Trophy"
+    });
+
+    log.debug(currentPlayerTrophy)
+}
+
 handlers.FirstLogin = function () {
     var slots = [
         {

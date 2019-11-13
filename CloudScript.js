@@ -89,6 +89,15 @@ handlers.FirstLogin = function () {
             "slots": JSON.stringify(slots)
         }
     }
+    server.UpdatePlayerStatisticsRequest({
+        "PlayFabId": currentPlayerId,
+        "Statistics": [
+            {
+                "StatisticName": "Trophy",
+                "Value": 0
+            }
+        ]
+    })
     server.UpdateUserReadOnlyData(updateUserReadOnly);
 }
 

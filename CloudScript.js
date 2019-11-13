@@ -89,7 +89,7 @@ handlers.FirstLogin = function () {
             "slots": JSON.stringify(slots)
         }
     }
-    server.UpdatePlayerStatisticsRequest({
+    server.UpdatePlayerStatistics({
         "PlayFabId": currentPlayerId,
         "Statistics": [
             {
@@ -133,7 +133,7 @@ handlers.WinCondition = function () {
         VirtualCurrency: "TB",
         Amount: tradedBooster
     }
-    server.UpdatePlayerStatisticsRequest({
+    server.UpdatePlayerStatistics({
         "PlayFabId": currentPlayerId,
         "Statistics": [
             {

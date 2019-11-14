@@ -122,8 +122,9 @@ handlers.WinCondition = function (args) {
         PlayFabId: PlayerId,
         "StatisticNames": "Trophy"
     });
+    log.debug(currentPlayerTrophy)
     var slots = JSON.parse(currentPlayerData.Data.slots.Value);
-    var trophy = JSON.parse(currentPlayerTrophy.Data.Statistics[1].Value)
+    var trophy = JSON.parse(currentPlayerTrophy.Statistics[1].Value)
     var newTrophy = trophy + 7;
     //give booster if available
     var currentPlayerInventory = server.GetUserInventory({

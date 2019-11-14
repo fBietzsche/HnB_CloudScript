@@ -458,6 +458,7 @@ handlers.GetUserGameParams = function () {
     var levelData = JSON.parse(titleData.Data.levelData)
     var HP = [0, 0, 0]
     var DMG = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
+    var nextLevel = [[0,0],[0,0],[0,0]]
     var nextExp = levelData.levelRamp;
     var nextCoin = levelData.levelCoin;
     for (i = 0; i < 3; i++) {

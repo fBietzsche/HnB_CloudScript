@@ -124,7 +124,7 @@ handlers.WinCondition = function (args) {
     });
     log.debug(currentPlayerTrophy)
     var slots = JSON.parse(currentPlayerData.Data.slots.Value);
-    var trophy = JSON.parse(currentPlayerTrophy.Statistics[1].Value)
+    var trophy = JSON.parse(currentPlayerTrophy.Statistics[0].Value)
     var newTrophy = trophy + 7;
     //give booster if available
     var currentPlayerInventory = server.GetUserInventory({

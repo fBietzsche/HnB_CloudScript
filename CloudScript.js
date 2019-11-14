@@ -183,7 +183,7 @@ handlers.WinCondition = function (args) {
     return {
         "givenBooster": tradedBooster,
         "isBoxGiven": isBoxGiven,
-        "oldtrophy": trophy,
+        "oldTrophy": trophy,
         "newTrophy": newTrophy
     }
 }
@@ -230,7 +230,7 @@ handlers.LoseCondition = function (args) {
     return {
         "givenBooster": tradedBooster,
         "isBoxGiven": 0,
-        "oldtrophy": trophy,
+        "oldTrophy": trophy,
         "newTrophy": newTrophy
     }
 }
@@ -261,7 +261,7 @@ handlers.DrawCondition = function (args) {
     return {
         "givenBooster": tradedBooster,
         "isBoxGiven": 0,
-        "oldtrophy": trophy,
+        "oldTrophy": trophy,
         "newTrophy": trophy
     }
 }

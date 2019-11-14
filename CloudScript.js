@@ -126,7 +126,7 @@ handlers.WinCondition = function (args) {
         PlayFabId: PlayerId,
         "StatisticNames": "Trophy"
     });
-    var slots = JSON.parse(currentPlayerData.Data.slots.Value);    
+    var slots = JSON.parse(currentPlayerData.Data.slots.Value);
     var trophy = JSON.parse(currentPlayerTrophy.Statistics[0].Value)
     var matchStats = JSON.parse(currentPlayerData.Data.matchStats.Value);
     matchStats[0] += 1;
@@ -179,7 +179,7 @@ handlers.WinCondition = function (args) {
             slots[i].isAvailable = 0;
             slots[i].startTime = startTime;
             slots[i].endTime = endTime;
-            
+
             break;
         }
     }
@@ -212,8 +212,12 @@ handlers.LoseCondition = function (args) {
     var matchStats = JSON.parse(currentPlayerData.Data.matchStats.Value);
     matchStats[1] += 1;
     var trophy = JSON.parse(currentPlayerTrophy.Statistics[0].Value)
-    var newTrophy = trophy - 3;
-
+    if (trophy <= 2) {
+        var newTrophy = 0
+    }
+    else {
+        var newTrophy = trophy - 3;
+    }
     var currentPlayerInventory = server.GetUserInventory({
         PlayFabId: PlayerId
     });

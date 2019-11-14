@@ -89,13 +89,17 @@ handlers.FirstLogin = function () {
             1
         ]
     ]
+    var matchStats = [
+        0, 0, 0
+    ]
     var updateUserReadOnly = {
         PlayFabId: currentPlayerId,
         Data: {
             "equipped": JSON.stringify(equipped),
             "configs": JSON.stringify(configs),
             "itemLevel": JSON.stringify(itemLevel),
-            "slots": JSON.stringify(slots)
+            "slots": JSON.stringify(slots),
+            "matchStats": JSON.stringify(matchStats)
         }
     }
     server.UpdatePlayerStatistics({
@@ -123,8 +127,10 @@ handlers.WinCondition = function (args) {
         "StatisticNames": "Trophy"
     });
     log.debug(currentPlayerTrophy)
-    var slots = JSON.parse(currentPlayerData.Data.slots.Value);
+    var slots = JSON.parse(currentPlayerData.Data.slots.Value);    
     var trophy = JSON.parse(currentPlayerTrophy.Statistics[0].Value)
+    var matchStats = JSON.parse(currentPlayerData.Data.matchStats.Value);
+    matchStats[0] += 1;
     var newTrophy = trophy + 7;
     //give booster if available
     var currentPlayerInventory = server.GetUserInventory({
@@ -154,6 +160,7 @@ handlers.WinCondition = function (args) {
             }
         ]
     })
+
     server.SubtractUserVirtualCurrency(subBooster);
     server.AddUserVirtualCurrency(addBooster);
     //check for slot availability, give box, start timer and record set time
@@ -173,14 +180,18 @@ handlers.WinCondition = function (args) {
             slots[i].isAvailable = 0;
             slots[i].startTime = startTime;
             slots[i].endTime = endTime;
-            var updateSlotTimer = {
-                PlayFabId: PlayerId,
-                Data: { "slots": JSON.stringify(slots) }
-            }
-            server.UpdateUserReadOnlyData(updateSlotTimer);
+            
             break;
         }
     }
+    var updateSlotTimer = {
+        PlayFabId: PlayerId,
+        Data: {
+            "slots": JSON.stringify(slots),
+            "matchStats": JSON.stringify(matchStats)
+        }
+    }
+    server.UpdateUserReadOnlyData(updateSlotTimer);
     return {
         "givenBooster": tradedBooster,
         "isBoxGiven": isBoxGiven,
@@ -192,10 +203,15 @@ handlers.WinCondition = function (args) {
 handlers.LoseCondition = function (args) {
     args.PlayerId = !args.PlayerId ? {} : args.PlayerId;
     var PlayerId = args.PlayerId;
+    var currentPlayerData = server.GetUserReadOnlyData({
+        PlayFabId: PlayerId
+    });
     var currentPlayerTrophy = server.GetPlayerStatistics({
         PlayFabId: PlayerId,
         "StatisticNames": "Trophy"
     });
+    var matchStats = JSON.parse(currentPlayerData.Data.matchStats.Value);
+    matchStats[1] += 1;
     var trophy = JSON.parse(currentPlayerTrophy.Statistics[0].Value)
     var newTrophy = trophy - 3;
 
@@ -226,6 +242,13 @@ handlers.LoseCondition = function (args) {
             }
         ]
     })
+    var updateUserData = {
+        PlayFabId: PlayerId,
+        Data: {
+            "matchStats": JSON.stringify(matchStats)
+        }
+    }
+    server.UpdateUserReadOnlyData(updateUserData);
     server.SubtractUserVirtualCurrency(subBooster);
     server.AddUserVirtualCurrency(addBooster);
     return {
@@ -239,6 +262,9 @@ handlers.LoseCondition = function (args) {
 handlers.DrawCondition = function (args) {
     args.PlayerId = !args.PlayerId ? {} : args.PlayerId;
     var PlayerId = args.PlayerId;
+    var currentPlayerData = server.GetUserReadOnlyData({
+        PlayFabId: PlayerId
+    });
     var currentPlayerTrophy = server.GetPlayerStatistics({
         PlayFabId: PlayerId,
         "StatisticNames": "Trophy"
@@ -247,6 +273,8 @@ handlers.DrawCondition = function (args) {
     var currentPlayerInventory = server.GetUserInventory({
         PlayFabId: PlayerId
     });
+    var matchStats = JSON.parse(currentPlayerData.Data.matchStats.Value);
+    matchStats[2] += 1;
     var reserveBooster = JSON.parse(currentPlayerInventory.VirtualCurrency.BR);
     if (reserveBooster >= 10) {
         var tradedBooster = 10;
@@ -262,6 +290,13 @@ handlers.DrawCondition = function (args) {
         VirtualCurrency: "TB",
         Amount: tradedBooster
     }
+    var updateUserData = {
+        PlayFabId: PlayerId,
+        Data: {
+            "matchStats": JSON.stringify(matchStats)
+        }
+    }
+    server.UpdateUserReadOnlyData(updateUserData);
     server.SubtractUserVirtualCurrency(subBooster);
     server.AddUserVirtualCurrency(addBooster);
     return {

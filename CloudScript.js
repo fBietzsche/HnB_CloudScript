@@ -196,7 +196,7 @@ handlers.LoseCondition = function (args) {
         PlayFabId: PlayerId,
         "StatisticNames": "Trophy"
     });
-    var trophy = JSON.parse(currentPlayerTrophy.Data.Statistics[1].Value)
+    var trophy = JSON.parse(currentPlayerTrophy.Statistics[0].Value)
     var newTrophy = trophy - 3;
 
     var currentPlayerInventory = server.GetUserInventory({
@@ -239,6 +239,11 @@ handlers.LoseCondition = function (args) {
 handlers.DrawCondition = function (args) {
     args.PlayerId = !args.PlayerId ? {} : args.PlayerId;
     var PlayerId = args.PlayerId;
+    var currentPlayerTrophy = server.GetPlayerStatistics({
+        PlayFabId: PlayerId,
+        "StatisticNames": "Trophy"
+    });
+    var trophy = JSON.parse(currentPlayerTrophy.Statistics[0].Value)
     var currentPlayerInventory = server.GetUserInventory({
         PlayFabId: PlayerId
     });

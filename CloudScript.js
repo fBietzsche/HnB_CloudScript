@@ -212,6 +212,15 @@ handlers.LoseCondition = function () {
         VirtualCurrency: "TB",
         Amount: tradedBooster
     }
+    server.UpdatePlayerStatistics({
+        "PlayFabId": currentPlayerId,
+        "Statistics": [
+            {
+                "StatisticName": "Trophy",
+                "Value": newTrophy
+            }
+        ]
+    })
     server.SubtractUserVirtualCurrency(subBooster);
     server.AddUserVirtualCurrency(addBooster);
     return {

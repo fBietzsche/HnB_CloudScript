@@ -19,7 +19,7 @@ function getBoombot(boombot) {
     return boombots[boombot]
 }
 
-handlers.Debug = function (){
+handlers.Debug = function () {
     var currentPlayerTrophy = server.GetPlayerStatistics({
         PlayFabId: currentPlayerId,
         "StatisticNames": "Trophy"
@@ -455,10 +455,15 @@ handlers.GetUserGameParams = function () {
     });
     var robotData = JSON.parse(titleData.Data.robotValues);
     var itemLevel = JSON.parse(userData.Data.itemLevel.Value);
+    var levelData = JSON.parse(titleData.Data.levelData)
     var HP = [0, 0, 0]
     var DMG = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
+    var nextExp = levelData.levelRamp;
+    var nextCoin = levelData.levelCoin;
     for (i = 0; i < 3; i++) {
         HP[i] = robotData[i][0][itemLevel[i][0] - 1]
+        nextLevel[i][0] = nextExp[itemlevel[i]]
+        nextLevel[i][1] = nextCoin[itemLevel[i]]
         for (j = 0; j < 4; j++) {
             DMG[i][j] = robotData[i][1][itemLevel[i][0] - 1] * robotData[i][3][j][0]
         }
@@ -471,7 +476,8 @@ handlers.GetUserGameParams = function () {
         "configs": configs,
         "itemLevel": itemLevel,
         "HealthPoints": HP,
-        "Damage": DMG
+        "Damage": DMG,
+        "nextLevel" : nextLevel
     }
     return gameParams;
 }

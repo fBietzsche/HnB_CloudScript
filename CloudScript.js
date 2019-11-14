@@ -224,9 +224,10 @@ handlers.LoseCondition = function () {
     server.SubtractUserVirtualCurrency(subBooster);
     server.AddUserVirtualCurrency(addBooster);
     return {
+        "givenBooster": tradedBooster,
+        "isBoxGiven": 0,
         "oldtrophy": trophy,
-        "newTrophy": newTrophy,
-        "givenBooster": tradedBooster
+        "newTrophy": newTrophy
     }
 }
 
@@ -252,7 +253,10 @@ handlers.DrawCondition = function () {
     server.SubtractUserVirtualCurrency(subBooster);
     server.AddUserVirtualCurrency(addBooster);
     return {
-        "givenBooster": tradedBooster
+        "givenBooster": tradedBooster,
+        "isBoxGiven": 0,
+        "oldtrophy": trophy,
+        "newTrophy": trophy
     }
 }
 

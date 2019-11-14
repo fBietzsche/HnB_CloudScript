@@ -126,7 +126,6 @@ handlers.WinCondition = function (args) {
         PlayFabId: PlayerId,
         "StatisticNames": "Trophy"
     });
-    log.debug(currentPlayerTrophy)
     var slots = JSON.parse(currentPlayerData.Data.slots.Value);    
     var trophy = JSON.parse(currentPlayerTrophy.Statistics[0].Value)
     var matchStats = JSON.parse(currentPlayerData.Data.matchStats.Value);
@@ -520,9 +519,7 @@ handlers.GetUserGameParams = function () {
     var DMG = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
     var nextLevel = [[0, 0], [0, 0], [0, 0]]
     var nextExp = levelData.levelRamp;
-    log.debug("nextExp" + nextExp)
     var nextCoin = levelData.levelCoin;
-    log.debug("nextCoin" + nextCoin)
     for (i = 0; i < 3; i++) {
         HP[i] = robotData[i][0][itemLevel[i][0] - 1]
         nextLevel[i][0] = nextExp[itemLevel[i][0]]

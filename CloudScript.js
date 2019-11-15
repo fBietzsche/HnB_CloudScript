@@ -340,7 +340,11 @@ handlers.CheckSlots = function () {
         }
         else timer[i] = remainingTime;
     }
-    return timer;
+    return {
+        "timer": timer,
+        "isReady": slots.isBoxGiven,
+        "isAvailable": slots.isAvailable
+    }
 }
 
 handlers.SpendBoosterSlot = function (args) {

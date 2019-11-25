@@ -136,6 +136,7 @@ handlers.WinCondition = function (args) {
         PlayFabId: PlayerId
     });
     var reserveBooster = JSON.parse(currentPlayerInventory.VirtualCurrency.BR);
+    var oldBooster = JSON.parse(currentPlayerInventory.VirtualCurrency.TB)
     if (reserveBooster >= 15) {
         var tradedBooster = 15;
     }
@@ -192,6 +193,7 @@ handlers.WinCondition = function (args) {
     }
     server.UpdateUserReadOnlyData(updateSlotTimer);
     return {
+        "oldBooster": oldBooster,
         "givenBooster": tradedBooster,
         "isBoxGiven": isBoxGiven,
         "oldTrophy": trophy,
@@ -222,6 +224,7 @@ handlers.LoseCondition = function (args) {
         PlayFabId: PlayerId
     });
     var reserveBooster = JSON.parse(currentPlayerInventory.VirtualCurrency.BR);
+    var oldBooster = JSON.parse(currentPlayerInventory.VirtualCurrency.TB)
     if (reserveBooster >= 5) {
         var tradedBooster = 5;
     }
@@ -255,6 +258,7 @@ handlers.LoseCondition = function (args) {
     server.SubtractUserVirtualCurrency(subBooster);
     server.AddUserVirtualCurrency(addBooster);
     return {
+        "oldBooster": oldBooster,
         "givenBooster": tradedBooster,
         "isBoxGiven": 0,
         "oldTrophy": trophy,
@@ -279,6 +283,7 @@ handlers.DrawCondition = function (args) {
     var matchStats = JSON.parse(currentPlayerData.Data.matchStats.Value);
     matchStats[2] += 1;
     var reserveBooster = JSON.parse(currentPlayerInventory.VirtualCurrency.BR);
+    var oldBooster = JSON.parse(currentPlayerInventory.VirtualCurrency.TB)
     if (reserveBooster >= 10) {
         var tradedBooster = 10;
     }
@@ -303,6 +308,7 @@ handlers.DrawCondition = function (args) {
     server.SubtractUserVirtualCurrency(subBooster);
     server.AddUserVirtualCurrency(addBooster);
     return {
+        "oldBooster": oldBooster,
         "givenBooster": tradedBooster,
         "isBoxGiven": 0,
         "oldTrophy": trophy,

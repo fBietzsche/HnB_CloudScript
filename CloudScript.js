@@ -321,7 +321,7 @@ handlers.CheckSlots = function () {
     //get player info
     var timer = [0, 0, 0]
     var isReady = [0, 0, 0]
-    var timer = [0, 0, 0]
+    var isAvailable = [0, 0, 0]
     var currentPlayerData = server.GetUserReadOnlyData({
         PlayFabId: currentPlayerId
     });

@@ -335,7 +335,7 @@ handlers.CheckSlots = function () {
         var remainingTime = slots[i].endTime - (new Date().getTime() / 1000);
         isReady[i] = slots[i].isReady;
         isAvailable[i] = slots[i].isAvailable;
-        if ((remainingTime <= 0) && (slots[i].isReady == 0)) {
+        if ((remainingTime <= 0) && (slots[i].isReady == 0) && (slots[i].isAvailable == 0)) {
             slots[i].isReady = 1;
             var updateSlotTimer = {
                 PlayFabId: currentPlayerId,

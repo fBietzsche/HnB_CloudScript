@@ -320,6 +320,8 @@ handlers.CheckSlots = function () {
     //Every time main screen loaded or booster used for accelerate box opening
     //get player info
     var timer = [0, 0, 0]
+    var isReady = [0, 0, 0]
+    var timer = [0, 0, 0]
     var currentPlayerData = server.GetUserReadOnlyData({
         PlayFabId: currentPlayerId
     });
@@ -331,6 +333,8 @@ handlers.CheckSlots = function () {
     //check for remaining time and give key
     for (i = 0; i < slots.length; i++) {
         var remainingTime = slots[i].endTime - (new Date().getTime() / 1000);
+        isReady[i] = slots[i].isReady;
+        isAvailable[i] = slots[i].isAvailable;
         if ((remainingTime <= 0) && (slots[i].isReady == 0)) {
             slots[i].isReady = 1;
             var updateSlotTimer = {
@@ -348,8 +352,8 @@ handlers.CheckSlots = function () {
     }
     return {
         "timer": timer,
-        "isReady": slots.isBoxGiven,
-        "isAvailable": slots.isAvailable
+        "isReady": isReady,
+        "isAvailable": isAvailable
     }
 }
 

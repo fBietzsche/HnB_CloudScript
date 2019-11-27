@@ -160,7 +160,7 @@ handlers.WinCondition = function (args) {
             }
         ]
     })
-if(tradedBooster >= 0){
+if(reserveBooster >= 0){
     server.SubtractUserVirtualCurrency(subBooster);
     server.AddUserVirtualCurrency(addBooster);
 }
@@ -256,7 +256,7 @@ handlers.LoseCondition = function (args) {
         }
     }
     server.UpdateUserReadOnlyData(updateUserData);
-    if(tradedBooster >= 0){
+    if(reserveBooster >= 0){
         server.SubtractUserVirtualCurrency(subBooster);
         server.AddUserVirtualCurrency(addBooster);
     }
@@ -308,7 +308,7 @@ handlers.DrawCondition = function (args) {
         }
     }
     server.UpdateUserReadOnlyData(updateUserData);
-    if(tradedBooster >= 0){
+    if(reserveBooster >= 0){
         server.SubtractUserVirtualCurrency(subBooster);
         server.AddUserVirtualCurrency(addBooster);
     }

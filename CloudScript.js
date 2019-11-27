@@ -379,7 +379,7 @@ handlers.SpendBoosterSlot = function (args) {
     var playerBooster = JSON.parse(currentPlayerInventory.VirtualCurrency.TB);
     var slots = JSON.parse(currentPlayerData.Data.slots.Value);
     var reqBooster = Math.ceil((slots[whichSlot].endTime - slots[whichSlot].startTime) / 60000);
-    if (slots[whichSlot].isReady == 0 && playerBooster >= reqBooster && slots[whichSlot].isAvailable == 0 ) {
+    if (slots[whichSlot].isReady == 0 && playerBooster >= reqBooster && slots[whichSlot].isAvailable == 0 && reqBooster >= 1 ) {
         slots[whichSlot].endTime = slots[whichSlot].startTime;
         var subBooster = {
             PlayFabId: currentPlayerId,

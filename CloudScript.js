@@ -348,7 +348,11 @@ handlers.CheckSlots = function () {
         else if ((remainingTime <= 0) && (slots[i].isReady == 1)) {
             timer[i] = 0
         }
-        else timer[i] = remainingTime;
+        else if ((slots[i].isAvailable == 1)) {
+            timer[i] = -1;
+        }
+        else
+            timer[i] = remainingTime;
     }
     return {
         "timer": timer,

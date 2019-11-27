@@ -160,9 +160,10 @@ handlers.WinCondition = function (args) {
             }
         ]
     })
-
+if(tradedBooster >= 0){
     server.SubtractUserVirtualCurrency(subBooster);
     server.AddUserVirtualCurrency(addBooster);
+}
     //check for slot availability, give box, start timer and record set time
     if (slots[0].isAvailable == 1 || slots[1].isAvailable == 1 || slots[2].isAvailable == 1) {
         var grantBasicBox = {
@@ -255,8 +256,10 @@ handlers.LoseCondition = function (args) {
         }
     }
     server.UpdateUserReadOnlyData(updateUserData);
-    server.SubtractUserVirtualCurrency(subBooster);
-    server.AddUserVirtualCurrency(addBooster);
+    if(tradedBooster >= 0){
+        server.SubtractUserVirtualCurrency(subBooster);
+        server.AddUserVirtualCurrency(addBooster);
+    }
     return {
         "oldBooster": oldBooster,
         "givenBooster": tradedBooster,
@@ -305,8 +308,10 @@ handlers.DrawCondition = function (args) {
         }
     }
     server.UpdateUserReadOnlyData(updateUserData);
-    server.SubtractUserVirtualCurrency(subBooster);
-    server.AddUserVirtualCurrency(addBooster);
+    if(tradedBooster >= 0){
+        server.SubtractUserVirtualCurrency(subBooster);
+        server.AddUserVirtualCurrency(addBooster);
+    }
     return {
         "oldBooster": oldBooster,
         "givenBooster": tradedBooster,

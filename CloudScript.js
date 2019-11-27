@@ -370,6 +370,7 @@ handlers.SpendBoosterSlot = function (args) {
     var currentPlayerInventory = server.GetUserInventory({
         PlayFabId: currentPlayerId
     });
+    var isUsed = 0;
     var playerBooster = JSON.parse(currentPlayerInventory.VirtualCurrency.TB);
     var slots = JSON.parse(currentPlayerData.Data.slots.Value);
     var reqBooster = Math.ceil((slots[whichSlot].endTime - slots[whichSlot].startTime) / 60000);
@@ -386,7 +387,9 @@ handlers.SpendBoosterSlot = function (args) {
             Data: { "slots": JSON.stringify(slots) }
         }
         server.UpdateUserReadOnlyData(updateSlotTimer);
+        isUsed = 1
     }
+    return {"isUsed":isUsed}
 }
 
 handlers.SpendRubySlot = function (args) {

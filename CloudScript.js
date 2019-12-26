@@ -526,7 +526,7 @@ handlers.GetUserGameplayConfig = function (args) {
         "EnergyChargeRate": robotData[boomBotId][3][weaponId - 1][2],
         "EnergyCost": robotData[boomBotId][3][weaponId - 1][3],
         "UltDamageScale": robotData[boomBotId][3][weaponId - 1][4],
-        "UltCharge": ((robotData[boomBotId][1][itemLevel[boomBotId][0] - 1] * robotData[boomBotId][3][weaponId - 1][0])*100) / robotData[boomBotId][3][weaponId - 1][5],
+        "UltCharge": robotData[boomBotId][3][weaponId - 1][5],
         "AltDamage": robotData[boomBotId][1][itemLevel[boomBotId][0] - 1] * robotData[boomBotId][3][weaponId - 1][6]
     }
     return gameplayParams;

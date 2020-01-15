@@ -46,6 +46,14 @@ handlers.AddNewRobot = function () {
     var configs = []
     itemLevel.push(itemLevelBase)
     configs.push(configsBase)
+    var updateUserReadOnly = {
+        PlayFabId: currentPlayerId,
+        Data: {            
+            "configs": JSON.stringify(configs),
+            "itemLevel": JSON.stringify(itemLevel)
+        }
+    }
+    server.UpdateUserReadOnlyData(updateUserReadOnly);
 }
 
 handlers.FirstLogin = function () {

@@ -10,11 +10,15 @@
 // #######################################################################################################################
 // This is the test build. Heavily under work in progress. Numbers will be changed.
 //
+
+var robotCount = 4;
+
 function getBoombot(boombot) {
     var boombots = {
         "MekaScorp": 0,
         "SharkBot": 1,
-        "RoboMantis": 2
+        "RoboMantis": 2,
+        "IronTurtle": 3
     };
     return boombots[boombot]
 }
@@ -28,22 +32,24 @@ handlers.Debug = function () {
     log.debug(currentPlayerTrophy)
 }
 
+handlers.AddNewRobot = function () {
+    var itemLevelBase = [
+        1,
+        0
+    ]
+    var configsBase = [
+        1,
+        1,
+        1
+    ]    
+    var itemLevel = []
+    var configs = []
+    itemLevel.push(itemLevelBase)
+    configs.push(configsBase)
+}
+
 handlers.FirstLogin = function () {
-    var slots = [
-        {
-            "isReady": 0,
-            "isAvailable": 1,
-            "startTime": 0,
-            "currentTime": 0,
-            "endTime": 0
-        },
-        {
-            "isReady": 0,
-            "isAvailable": 1,
-            "startTime": 0,
-            "currentTime": 0,
-            "endTime": 0
-        },
+    var slotsBase = [
         {
             "isReady": 0,
             "isAvailable": 1,
@@ -52,43 +58,32 @@ handlers.FirstLogin = function () {
             "endTime": 0
         }
     ]
-    var itemLevel = [
-        [
-            1,
-            0
-        ],
-        [
-            1,
-            0
-        ],
-        [
-            1,
-            0
-        ]
+    var slots = []
+    for (var j = 0; j < 3; j++) {
+        slots.push(slotsBase)
+    }
+    var itemLevelBase = [
+        1,
+        0
     ]
+    var configsBase = [
+        1,
+        1,
+        1
+    ]
+    var itemLevel = []
+    var configs = []
+    for (var i = 0; i < robotCount; i++) {
+        itemLevel.push(itemLevelBase)
+        configs.push(configsBase)
+    }
     var equipped = [
         "MekaScorp",
         1,
         1,
         1
     ]
-    var configs = [
-        [
-            1,
-            1,
-            1
-        ],
-        [
-            1,
-            1,
-            1
-        ],
-        [
-            1,
-            1,
-            1
-        ]
-    ]
+
     var matchStats = [
         0, 0, 0
     ]
@@ -160,10 +155,10 @@ handlers.WinCondition = function (args) {
             }
         ]
     })
-if(reserveBooster >= 1 ){
-    server.SubtractUserVirtualCurrency(subBooster);
-    server.AddUserVirtualCurrency(addBooster);
-}
+    if (reserveBooster >= 1) {
+        server.SubtractUserVirtualCurrency(subBooster);
+        server.AddUserVirtualCurrency(addBooster);
+    }
     //check for slot availability, give box, start timer and record set time
     if (slots[0].isAvailable == 1 || slots[1].isAvailable == 1 || slots[2].isAvailable == 1) {
         var grantBasicBox = {
@@ -256,7 +251,7 @@ handlers.LoseCondition = function (args) {
         }
     }
     server.UpdateUserReadOnlyData(updateUserData);
-    if(reserveBooster >= 1 ){
+    if (reserveBooster >= 1) {
         server.SubtractUserVirtualCurrency(subBooster);
         server.AddUserVirtualCurrency(addBooster);
     }
@@ -308,7 +303,7 @@ handlers.DrawCondition = function (args) {
         }
     }
     server.UpdateUserReadOnlyData(updateUserData);
-    if(reserveBooster >= 1 ){
+    if (reserveBooster >= 1) {
         server.SubtractUserVirtualCurrency(subBooster);
         server.AddUserVirtualCurrency(addBooster);
     }
@@ -379,7 +374,7 @@ handlers.SpendBoosterSlot = function (args) {
     var playerBooster = JSON.parse(currentPlayerInventory.VirtualCurrency.TB);
     var slots = JSON.parse(currentPlayerData.Data.slots.Value);
     var reqBooster = Math.ceil((slots[whichSlot].endTime - slots[whichSlot].startTime) / 60);
-    if (slots[whichSlot].isReady == 0 && playerBooster >= reqBooster && slots[whichSlot].isAvailable == 0 && reqBooster >= 1 ) {
+    if (slots[whichSlot].isReady == 0 && playerBooster >= reqBooster && slots[whichSlot].isAvailable == 0 && reqBooster >= 1) {
         slots[whichSlot].endTime = slots[whichSlot].startTime;
         var subBooster = {
             PlayFabId: currentPlayerId,
@@ -394,7 +389,7 @@ handlers.SpendBoosterSlot = function (args) {
         server.UpdateUserReadOnlyData(updateSlotTimer);
         isUsed = 1
     }
-    return {"isUsed":isUsed}
+    return { "isUsed": isUsed }
 }
 
 handlers.SpendRubySlot = function (args) {
@@ -424,7 +419,7 @@ handlers.OpenBox = function (args) {
         //Give randomized upgrade shards
         var itemLevel = JSON.parse(currentPlayerData.Data.itemLevel.Value);
         //Math.floor(Math.random() * (max - min + 1) ) + min;
-        boomBotId = Math.floor(Math.random() * 3);
+        boomBotId = Math.floor(Math.random() * robotCount);
         expAmount = Math.floor(Math.random() * (36 - 24 + 1)) + 24;
 
         itemLevel[boomBotId][1] += expAmount;

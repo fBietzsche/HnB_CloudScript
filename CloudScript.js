@@ -552,12 +552,13 @@ handlers.GetUserGameParams = function () {
     var robotData = JSON.parse(titleData.Data.robotValues);
     var itemLevel = JSON.parse(userData.Data.itemLevel.Value);
     var levelData = JSON.parse(titleData.Data.levelData)
-    var HP = []
+    var HP = []    
     var DMG = [[],[]]
-    var nextLevel = [[],[],[]]
+    var nextLevel = []
     var nextExp = levelData.levelRamp;
     var nextCoin = levelData.levelCoin;
     for (i = 0; i < robotCount; i++) {
+        nextLevel.push([])
         log.debug("i +  " + i)
         HP[i] = robotData[i][0][itemLevel[i][0] - 1]
         log.debug("HP +  " + HP)

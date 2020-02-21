@@ -35,7 +35,9 @@ handlers.Debug = function () {
 handlers.AddNewRobot = function () {
     var currentPlayerData = server.GetUserReadOnlyData({
         PlayFabId: currentPlayerId
-    });
+    });        
+    var itemLevel = []
+    var configs = []
     var itemLevel = JSON.parse(currentPlayerData.Data.itemLevel.Value);
     var configs = JSON.parse(currentPlayerData.Data.configs.Value)
     var itemLevelBase = [
@@ -46,9 +48,7 @@ handlers.AddNewRobot = function () {
         1,
         1,
         1
-    ]    
-    var itemLevel = []
-    var configs = []
+    ]
     itemLevel.push(itemLevelBase)
     configs.push(configsBase)
     var updateUserReadOnly = {

@@ -35,7 +35,7 @@ handlers.Debug = function () {
 handlers.AddNewRobot = function () {
     var currentPlayerData = server.GetUserReadOnlyData({
         PlayFabId: currentPlayerId
-    });        
+    });
     var itemLevel = []
     var configs = []
     var itemLevel = JSON.parse(currentPlayerData.Data.itemLevel.Value);
@@ -53,7 +53,7 @@ handlers.AddNewRobot = function () {
     configs.push(configsBase)
     var updateUserReadOnly = {
         PlayFabId: currentPlayerId,
-        Data: {            
+        Data: {
             "configs": JSON.stringify(configs),
             "itemLevel": JSON.stringify(itemLevel)
         }
@@ -552,13 +552,14 @@ handlers.GetUserGameParams = function () {
     var robotData = JSON.parse(titleData.Data.robotValues);
     var itemLevel = JSON.parse(userData.Data.itemLevel.Value);
     var levelData = JSON.parse(titleData.Data.levelData)
-    var HP = []    
-    var DMG = [[],[]]
+    var HP = []
+    var DMG = []
     var nextLevel = []
     var nextExp = levelData.levelRamp;
     var nextCoin = levelData.levelCoin;
     for (i = 0; i < robotCount; i++) {
         nextLevel.push([])
+        DMG.push([])
         log.debug("i +  " + i)
         HP[i] = robotData[i][0][itemLevel[i][0] - 1]
         log.debug("HP +  " + HP)
@@ -567,7 +568,9 @@ handlers.GetUserGameParams = function () {
         nextLevel[i][1] = nextCoin[itemLevel[i][0]]
         log.debug("nextLevel +  " + nextLevel)
         for (j = 0; j < 4; j++) {
+            DMG[i].push([])
             DMG[i][j] = robotData[i][1][itemLevel[i][0] - 1] * robotData[i][3][j][0]
+            log.debug("DMG   =  " + DMG)
         }
     }
     var equipped = JSON.parse(userData.Data.equipped.Value)

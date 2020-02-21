@@ -558,9 +558,13 @@ handlers.GetUserGameParams = function () {
     var nextExp = levelData.levelRamp;
     var nextCoin = levelData.levelCoin;
     for (i = 0; i < robotCount; i++) {
+        log.debug("i +  " + i)
         HP[i] = robotData[i][0][itemLevel[i][0] - 1]
+        log.debug("HP +  " + HP)
         nextLevel[i][0] = nextExp[itemLevel[i][0]]
+        log.debug("nextLevel +  " + nextLevel)
         nextLevel[i][1] = nextCoin[itemLevel[i][0]]
+        log.debug("nextLevel +  " + nextLevel)
         for (j = 0; j < 4; j++) {
             DMG[i][j] = robotData[i][1][itemLevel[i][0] - 1] * robotData[i][3][j][0]
         }

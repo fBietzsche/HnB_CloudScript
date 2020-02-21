@@ -569,7 +569,7 @@ handlers.GetUserGameParams = function () {
         log.debug("nextLevel +  " + nextLevel)
         for (j = 0; j < 4; j++) {
             DMG[i].push([])
-            DMG[i][j] = robotData[i][1][itemLevel[i][0] - 1] * robotData[i][3][j][0]
+            DMG[i][j] = Math.round(robotData[i][1][itemLevel[i][0] - 1] * robotData[i][3][j][0])
             log.debug("DMG   =  " + DMG)
         }
     }

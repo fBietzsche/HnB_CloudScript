@@ -332,19 +332,20 @@ handlers.DrawCondition = function (args) {
 handlers.CheckSlots = function () {
     //Every time main screen loaded or booster used for accelerate box opening
     //get player info
-    var timer = [0, 0, 0]
-    var isReady = [0, 0, 0]
-    var isAvailable = [0, 0, 0]
+    var timer = [0,0,0]
+    var isReady = [0,0,0]
+    var isAvailable = [0,0,0]
     var currentPlayerData = server.GetUserReadOnlyData({
         PlayFabId: currentPlayerId
     });
     var slots = JSON.parse(currentPlayerData.Data.slots.Value);
+    log.debug(slots)
     var grantBasicKey = {
         PlayFabId: currentPlayerId,
         ItemIds: "BasicBoxKey"
     }
     //check for remaining time and give key
-    for (i = 0; i < slots.length; i++) {
+    for (i = 0; i < 3; i++) {
         var remainingTime = slots[i].endTime - (new Date().getTime() / 1000);
         isReady[i] = slots[i].isReady;
         isAvailable[i] = slots[i].isAvailable;

@@ -346,14 +346,14 @@ handlers.CheckSlots = function () {
     }
     //check for remaining time and give key
     for (i = 0; i < 3; i++) {
-        var remainingTime = slots[i].endTime - (new Date().getTime() / 1000);
-        isReady[i] = slots[i].isReady;
+        var remainingTime = slots[i][4] - (new Date().getTime() / 1000);
+        isReady[i] = slots[i][0];
         log.debug("slots[i] " + JSON.stringify(slots[i]))
-        log.debug("isready   " + slots[i].isReady)
-        isAvailable[i] = slots[i].isAvailable;
+        log.debug("isready   " + slots[i][0])
+        isAvailable[i] = slots[i][1];
         log.debug("isAvailable   " + isAvailable)
-        if ((remainingTime <= 0) && (slots[i].isReady == 0) && (slots[i].isAvailable == 0)) {
-            slots[i].isReady = 1;
+        if ((remainingTime <= 0) && (slots[i][0] == 0) && (slots[i][1] == 0)) {
+            slots[i][0] = 1;
             var updateSlotTimer = {
                 PlayFabId: currentPlayerId,
                 Data: { "slots": JSON.stringify(slots) }
@@ -362,10 +362,10 @@ handlers.CheckSlots = function () {
             server.GrantItemsToUser(grantBasicKey);
             timer[i] = 0
         }
-        else if ((remainingTime <= 0) && (slots[i].isReady == 1)) {
+        else if ((remainingTime <= 0) && (slots[i][0] == 1)) {
             timer[i] = 0
         }
-        else if ((slots[i].isAvailable == 1)) {
+        else if ((slots[i][1] == 1)) {
             timer[i] = -1;
         }
         else

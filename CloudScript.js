@@ -423,11 +423,11 @@ handlers.OpenBox = function (args) {
         PlayFabId: currentPlayerId
     });
     var slots = JSON.parse(currentPlayerData.Data.slots.Value);
-    if (slots[whichSlot].isReady == 1) {
-        slots[whichSlot].isReady = 0;
-        slots[whichSlot].isAvailable = 1;
-        slots[whichSlot].startTime = 0;
-        slots[whichSlot].endTime = 0;
+    if (slots[whichSlot][0] == 1) {
+        slots[whichSlot][0] = 0;
+        slots[whichSlot][1] = 1;
+        slots[whichSlot][2] = 0;
+        slots[whichSlot][4] = 0;
         var openBox = {
             PlayFabId: currentPlayerId,
             ContainerItemId: "BasicBox"

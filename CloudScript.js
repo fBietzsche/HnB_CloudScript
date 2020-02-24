@@ -11,7 +11,7 @@
 // This is the test build. Heavily under work in progress. Numbers will be changed.
 //
 
-var robotCount = 3;
+var robotCount = 4;
 
 function getBoombot(boombot) {
     var boombots = {

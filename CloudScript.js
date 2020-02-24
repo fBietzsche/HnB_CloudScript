@@ -186,7 +186,7 @@ handlers.WinCondition = function (args) {
     }
     else { var isBoxGiven = 0 }
     for (i = 0; i < slots.length; i++) {
-        if (slots[i].isAvailable == 1) {
+        if (slots[i][1] == 1) {
             var startTime = new Date().getTime() / 1000;
             var endTime = startTime + BasicBoxTime;
             slots[i][1] = 0;

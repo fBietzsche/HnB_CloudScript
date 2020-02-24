@@ -348,7 +348,7 @@ handlers.CheckSlots = function () {
     for (i = 0; i < 3; i++) {
         var remainingTime = slots[i].endTime - (new Date().getTime() / 1000);
         isReady[i] = slots[i].isReady;
-        log.debug("isready   " + isReady)
+        log.debug("isready   " + slots[i].isReady)
         isAvailable[i] = slots[i].isAvailable;
         log.debug("isAvailable   " + isAvailable)
         if ((remainingTime <= 0) && (slots[i].isReady == 0) && (slots[i].isAvailable == 0)) {

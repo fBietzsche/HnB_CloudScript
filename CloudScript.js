@@ -24,9 +24,8 @@ function getBoombot(boombot) {
 }
 
 handlers.Debug = function () {
-    var currentPlayerTrophy = server.GetPlayerStatistics({
-        PlayFabId: currentPlayerId,
-        "StatisticNames": "Trophy"
+    var currentPlayerTrophy = server.GetUserInventory({
+        PlayFabId: currentPlayerId
     });
 
     log.debug(currentPlayerTrophy)

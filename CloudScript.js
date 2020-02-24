@@ -424,6 +424,7 @@ handlers.OpenBox = function (args) {
     });
     var slots = JSON.parse(currentPlayerData.Data.slots.Value);
     log.debug(slots)
+    log.debug(slots[whichSlot])
     if (slots[whichSlot][0] == 1) {
         slots[whichSlot][0] = 0;
         slots[whichSlot][1] = 1;

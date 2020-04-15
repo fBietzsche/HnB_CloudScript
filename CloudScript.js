@@ -402,9 +402,9 @@ handlers.EndMatch = function (args) {
     //End match functions handler
     /*args must be in this format:    
         {   
-            "winnerPlayers":"[x, y, z]",
-            "loserPlayers":"[x, y, z]",
-            "drawPlayers":"[x, y, z]"
+            "winnerPlayers":["x", "y", "z"],
+            "loserPlayers":["x", "y", "z"],
+            "drawPlayers":["x", "y", "z"]
         }
     */
     args.winnerPlayers = !args.winnerPlayers ? {} : args.winnerPlayers;
@@ -417,13 +417,18 @@ handlers.EndMatch = function (args) {
     log.debug("winnerPlayers = " + winnerPlayers)
     log.debug("loserPlayers = " + loserPlayers)
     log.debug("drawPlayers = " + drawPlayers)
-    for (i = 0; i <= winnerPlayers.length; i++) {
+    for (i = 0; i < winnerPlayers.length; i++) {
         log.debug("win " + i)
+        var accInfo = server.GetUserAccountInfo({
+            PlayFabId: winnerPlayers[0]
+        });
+        var titleInfo = accInfo.UserInfo.TitleInfo; 
+        log.debug("Name = " + titleInfo.DisplayName)
     }
-    for (i = 0; i <= loserPlayers.length; i++) {
+    for (i = 0; i < loserPlayers.length; i++) {
         log.debug("lose " + i)
     }
-    for (i = 0; i <= drawPlayers.length; i++) {
+    for (i = 0; i < drawPlayers.length; i++) {
         log.debug("draw " + i)
     }
 /*

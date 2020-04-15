@@ -24,14 +24,14 @@ function getBoombot(boombot) {
     return boombots[boombot]
 }
 
-function winCondition(args) {
+function winCondition(winArgs) {
     //After win match
     //get player info 
-    log.debug(args)    
-    log.debug("playerId + " + args[0])
-    var PlayerId = args[0];
-    var winnerPlayers = args[1];
-    var loserPlayers = args[2];
+    log.debug(winArgs)    
+    log.debug("playerId + " + winArgs[0])
+    var PlayerId = winArgs[0];
+    var winnerPlayers = winArgs[1];
+    var loserPlayers = winArgs[2];
     var drawPlayers = [];
     var currentPlayerData = server.GetUserReadOnlyData({
         PlayFabId: PlayerId
@@ -430,7 +430,8 @@ handlers.EndMatch = function (args) {
     var drawPlayers = args.drawPlayers;
     //Win
     for (i = 0; i < winnerPlayers.length; i++) {
-        winCondition(winnerPlayers[i], winnerPlayers, loserPlayers)
+        let winArgs = [winnerPlayers[i], winnerPlayers, loserPlayers];
+        winCondition(winArgs)
     }
 
     //Lose

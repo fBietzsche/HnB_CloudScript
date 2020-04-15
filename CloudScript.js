@@ -204,6 +204,8 @@ function loseCondition(args) {
 function drawCondition(args) {
     var PlayerId = args[0];
     var drawPlayers = args[1];
+    var winnerPlayers = [];
+    var loserPlayers = [];
     var currentPlayerData = server.GetUserReadOnlyData({
         PlayFabId: PlayerId
     });

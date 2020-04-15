@@ -27,8 +27,6 @@ function getBoombot(boombot) {
 function winCondition(winArgs) {
     //After win match
     //get player info 
-    log.debug(winArgs)    
-    log.debug("playerId + " + winArgs[0])
     var PlayerId = winArgs[0];
     var winnerPlayers = winArgs[1];
     var loserPlayers = winArgs[2];
@@ -436,12 +434,14 @@ handlers.EndMatch = function (args) {
 
     //Lose
     for (i = 0; i < loserPlayers.length; i++) {
-        loseCondition(loserPlayers[i], winnerPlayers, loserPlayers)
+        let loseArgs = [winnerPlayers[i], winnerPlayers, loserPlayers];
+        loseCondition(loseArgs)
     }
 
     //Draw
     for (i = 0; i < drawPlayers.length; i++) {
-        drawCondition(drawPlayers[i], drawPlayers)
+        let drawArgs = [drawPlayers[i], drawPlayers];
+        drawCondition(drawArgs)
     }
 
 }

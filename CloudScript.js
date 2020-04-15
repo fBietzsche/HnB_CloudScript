@@ -102,7 +102,7 @@ function winCondition(winArgs) {
     if (5 == matchHistory.length) {
         matchHistory.pop();
     }
-    var thisMatch = [startTime, winnerPlayers, loserPlayers, drawPlayers, oldBooster, tradedBooster, isBoxGiven, trophy, newTrophy]
+    var thisMatch = [new Date().toISOString(), winnerPlayers, loserPlayers, drawPlayers, oldBooster, tradedBooster, isBoxGiven, trophy, newTrophy]
     matchHistory.unshift(thisMatch);
     var UpdateUserReadOnlyData = {
         PlayFabId: PlayerId,
@@ -177,7 +177,7 @@ function loseCondition(args) {
     if (5 == matchHistory.length) {
         matchHistory.pop();
     }
-    var thisMatch = [startTime, winnerPlayers, loserPlayers, drawPlayers, oldBooster, tradedBooster, isBoxGiven, trophy, newTrophy]
+    var thisMatch = [new Date().toISOString(), winnerPlayers, loserPlayers, drawPlayers, oldBooster, tradedBooster, isBoxGiven, trophy, newTrophy]
     matchHistory.unshift(thisMatch);
     var updateUserData = {
         PlayFabId: PlayerId,
@@ -238,7 +238,7 @@ function drawCondition(args) {
     if (5 == matchHistory.length) {
         matchHistory.pop();
     }
-    var thisMatch = [startTime, winnerPlayers, loserPlayers, drawPlayers, oldBooster, tradedBooster, isBoxGiven, trophy, newTrophy]
+    var thisMatch = [new Date().toISOString(), winnerPlayers, loserPlayers, drawPlayers, oldBooster, tradedBooster, isBoxGiven, trophy, newTrophy]
     matchHistory.unshift(thisMatch);
     var updateUserData = {
         PlayFabId: PlayerId,

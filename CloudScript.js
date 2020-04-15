@@ -414,7 +414,7 @@ handlers.EndMatch = function (args) {
     var winnerPlayers = args.winnerPlayers;
     var loserPlayers = args.loserPlayers;
     var drawPlayers = args.drawPlayers;
-    log.debug("winnerPlayers = " + winnerPlayers[0])
+    log.debug("winnerPlayers = " + JSON.parse(winnerPlayers[0]))
     log.debug("loserPlayers = " + loserPlayers[1])
     log.debug("drawPlayers = " + drawPlayers[2])
 /*

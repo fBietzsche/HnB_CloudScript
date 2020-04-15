@@ -451,6 +451,19 @@ handlers.EndMatch = function (args) {
 
 }
 
+handlers.SendMatchResult = function () {
+    
+    var currentPlayerData = server.GetUserReadOnlyData({
+        PlayFabId: currentPlayerId
+    });
+    var matchHistory = JSON.parse(currentPlayerData.Data.matchHistory.Value);
+    return {
+        "lastMatchResults": matchHistory[0]
+    }
+    
+
+}
+
 handlers.SpendBoosterSlot = function (args) {
     args.Slot = !args.Slot ? {} : args.Slot;
     var whichSlot = args.Slot;

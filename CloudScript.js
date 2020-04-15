@@ -402,9 +402,9 @@ handlers.EndMatch = function (args) {
     //End match functions handler
     /*args must be in this format:    
         {   
-            "winnerPlayers":"[xxx, yyy, zzz]",
-            "loserPlayers":"[xxx, yyy, zzz]",
-            "drawPlayers":"[xxx, yyy, zzz]"
+            "winnerPlayers":"[x, y, z]",
+            "loserPlayers":"[x, y, z]",
+            "drawPlayers":"[x, y, z]"
         }
     */
     args.winnerPlayers = !args.winnerPlayers ? {} : args.winnerPlayers;

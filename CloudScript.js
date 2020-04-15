@@ -27,9 +27,9 @@ function getBoombot(boombot) {
 function winCondition(args) {
     //After win match
     //get player info  
-    args[0] = PlayerId;
-    args[1] = winnerPlayers;
-    args[2] = loserPlayers;
+    var PlayerId = args[0];
+    var winnerPlayers = args[1];
+    var loserPlayers = args[2];
     var drawPlayers = [];
     var currentPlayerData = server.GetUserReadOnlyData({
         PlayFabId: PlayerId
@@ -123,9 +123,9 @@ function winCondition(args) {
 }
 
 function loseCondition(args) {
-    args[0] = PlayerId;
-    args[1] = winnerPlayers;
-    args[2] = loserPlayers;
+    var PlayerId = args[0];
+    var winnerPlayers = args[1];
+    var loserPlayers = args[2];
     var drawPlayers = [];
     var currentPlayerData = server.GetUserReadOnlyData({
         PlayFabId: PlayerId
@@ -201,8 +201,8 @@ function loseCondition(args) {
 }
 
 function drawCondition(args) {
-    args[0] = PlayerId;
-    args[1] = drawPlayers;
+    var PlayerId = args[0];
+    var drawPlayers = args[1];
     var currentPlayerData = server.GetUserReadOnlyData({
         PlayFabId: PlayerId
     });
@@ -431,17 +431,17 @@ handlers.EndMatch = function (args) {
     log.debug("draw" + drawPlayers)
     //Win
     for (i = 0; i < winnerPlayers.length; i++) {
-        winCondition(winnerPlayers[i],winnerPlayers,loserPlayers)
+        winCondition(winnerPlayers[i], winnerPlayers, loserPlayers)
     }
 
     //Lose
     for (i = 0; i < loserPlayers.length; i++) {
-        loseCondition(loserPlayers[i],winnerPlayers,loserPlayers)
+        loseCondition(loserPlayers[i], winnerPlayers, loserPlayers)
     }
 
     //Draw
     for (i = 0; i < drawPlayers.length; i++) {
-        drawCondition(drawPlayers[i],drawPlayers)
+        drawCondition(drawPlayers[i], drawPlayers)
     }
 
 }

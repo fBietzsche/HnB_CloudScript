@@ -330,6 +330,7 @@ handlers.FirstLogin = function () {
     var matchStats = [
         0, 0, 0
     ]
+    var matchHistory = []
     var updateUserReadOnly = {
         PlayFabId: currentPlayerId,
         Data: {
@@ -337,7 +338,8 @@ handlers.FirstLogin = function () {
             "configs": JSON.stringify(configs),
             "itemLevel": JSON.stringify(itemLevel),
             "slots": JSON.stringify(slots),
-            "matchStats": JSON.stringify(matchStats)
+            "matchStats": JSON.stringify(matchStats),
+            "matchHistory": JSON.stringify(matchHistory)
         }
     }
     server.UpdatePlayerStatistics({
@@ -413,8 +415,10 @@ handlers.EndMatch = function (args) {
 
     var winnerPlayers = args.winnerPlayers;
     var loserPlayers = args.loserPlayers;
-    var drawPlayers = args.drawPlayers;    
-
+    var drawPlayers = args.drawPlayers;
+    log.debug("win" + winnerPlayers)
+    log.debug("lose" + loserPlayers)
+    log.debug("draw" + drawPlayers)
     //Win
     for (i = 0; i < winnerPlayers.length; i++) {
         winCondition(winnerPlayers[i])
@@ -429,7 +433,7 @@ handlers.EndMatch = function (args) {
     for (i = 0; i < drawPlayers.length; i++) {
         drawCondition(drawPlayers[i])
     }
-    
+
 }
 
 handlers.SpendBoosterSlot = function (args) {

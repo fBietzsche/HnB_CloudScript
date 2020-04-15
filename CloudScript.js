@@ -214,6 +214,7 @@ function drawCondition(args) {
         "StatisticNames": "Trophy"
     });
     var trophy = JSON.parse(currentPlayerTrophy.Statistics[0].Value)
+    var newTrophy = trophy;
     var currentPlayerInventory = server.GetUserInventory({
         PlayFabId: PlayerId
     });

@@ -93,7 +93,7 @@ function winCondition(PlayerId) {
             break;
         }
     }
-    if (5 = matchHistory.length) {
+    if (5 == matchHistory.length) {
         matchHistory.pop();
     }
     var thisMatch = [startTime, winnerPlayers, loserPlayers, drawPlayers, oldBooster, tradedBooster, isBoxGiven, trophy, newTrophy]
@@ -164,7 +164,7 @@ function loseCondition(PlayerId) {
             }
         ]
     })
-    if (5 = matchHistory.length) {
+    if (5 == matchHistory.length) {
         matchHistory.pop();
     }
     var thisMatch = [startTime, winnerPlayers, loserPlayers, drawPlayers, oldBooster, tradedBooster, isBoxGiven, trophy, newTrophy]
@@ -223,7 +223,7 @@ function drawCondition(PlayerId) {
         VirtualCurrency: "TB",
         Amount: tradedBooster
     }
-    if (5 = matchHistory.length) {
+    if (5 == matchHistory.length) {
         matchHistory.pop();
     }
     var thisMatch = [startTime, winnerPlayers, loserPlayers, drawPlayers, oldBooster, tradedBooster, isBoxGiven, trophy, newTrophy]

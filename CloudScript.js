@@ -24,6 +24,233 @@ function getBoombot(boombot) {
     return boombots[boombot]
 }
 
+function winCondition(PlayerId) {
+    //After win match
+    //get player info    
+    var currentPlayerData = server.GetUserReadOnlyData({
+        PlayFabId: PlayerId
+    });
+    var currentPlayerTrophy = server.GetPlayerStatistics({
+        PlayFabId: PlayerId,
+        "StatisticNames": "Trophy"
+    });
+    var slots = JSON.parse(currentPlayerData.Data.slots.Value);
+    var trophy = JSON.parse(currentPlayerTrophy.Statistics[0].Value)
+    var matchStats = JSON.parse(currentPlayerData.Data.matchStats.Value);
+    var matchHistory = JSON.parse(currentPlayerData.Data.matchHistory.Value);
+    matchStats[0] += 1;
+    var newTrophy = trophy + 7;
+    //give booster if available
+    var currentPlayerInventory = server.GetUserInventory({
+        PlayFabId: PlayerId
+    });
+    var reserveBooster = JSON.parse(currentPlayerInventory.VirtualCurrency.BR);
+    var oldBooster = JSON.parse(currentPlayerInventory.VirtualCurrency.TB)
+    if (reserveBooster >= 15) {
+        var tradedBooster = 15;
+    }
+    else { var tradedBooster = reserveBooster }
+    var subBooster = {
+        PlayFabId: PlayerId,
+        VirtualCurrency: "BR",
+        Amount: tradedBooster
+    }
+    var addBooster = {
+        PlayFabId: PlayerId,
+        VirtualCurrency: "TB",
+        Amount: tradedBooster
+    }
+    server.UpdatePlayerStatistics({
+        "PlayFabId": PlayerId,
+        "Statistics": [
+            {
+                "StatisticName": "Trophy",
+                "Value": newTrophy
+            }
+        ]
+    })
+    if (reserveBooster >= 1) {
+        server.SubtractUserVirtualCurrency(subBooster);
+        server.AddUserVirtualCurrency(addBooster);
+    }
+    //check for slot availability, give box, start timer and record set time
+    if (slots[0][1] == 1 || slots[1][1] == 1 || slots[2][1] == 1) {
+        var grantBasicBox = {
+            PlayFabId: PlayerId,
+            ItemIds: "BasicBox"
+        }
+        var isBoxGiven = 1;
+        server.GrantItemsToUser(grantBasicBox);
+    }
+    else { var isBoxGiven = 0 }
+    for (i = 0; i < slots.length; i++) {
+        if (slots[i][1] == 1) {
+            var startTime = new Date().getTime() / 1000;
+            var endTime = startTime + BasicBoxTime;
+            slots[i][1] = 0;
+            slots[i][2] = startTime;
+            slots[i][3] = endTime;
+            break;
+        }
+    }
+    if (5 = matchHistory.length) {
+        matchHistory.pop();
+    }
+    var thisMatch = [startTime, winnerPlayers, loserPlayers, drawPlayers, oldBooster, tradedBooster, isBoxGiven, trophy, newTrophy]
+    matchHistory.unshift(thisMatch);
+    var UpdateUserReadOnlyData = {
+        PlayFabId: PlayerId,
+        Data: {
+            "slots": JSON.stringify(slots),
+            "matchStats": JSON.stringify(matchStats),
+            "matchHistory": JSON.stringify(matchHistory)
+        }
+    }
+    server.UpdateUserReadOnlyData(UpdateUserReadOnlyData);
+    /*
+    return {
+        "oldBooster": oldBooster,
+        "givenBooster": tradedBooster,
+        "isBoxGiven": isBoxGiven,
+        "oldTrophy": trophy,
+        "newTrophy": newTrophy
+    }
+    */
+}
+
+function loseCondition(PlayerId) {
+    var currentPlayerData = server.GetUserReadOnlyData({
+        PlayFabId: PlayerId
+    });
+    var currentPlayerTrophy = server.GetPlayerStatistics({
+        PlayFabId: PlayerId,
+        "StatisticNames": "Trophy"
+    });
+    var matchHistory = JSON.parse(currentPlayerData.Data.matchHistory.Value);
+    var matchStats = JSON.parse(currentPlayerData.Data.matchStats.Value);
+    matchStats[1] += 1;
+    var trophy = JSON.parse(currentPlayerTrophy.Statistics[0].Value)
+    if (trophy <= 2) {
+        var newTrophy = 0
+    }
+    else {
+        var newTrophy = trophy - 3;
+    }
+    var currentPlayerInventory = server.GetUserInventory({
+        PlayFabId: PlayerId
+    });
+    var reserveBooster = JSON.parse(currentPlayerInventory.VirtualCurrency.BR);
+    var oldBooster = JSON.parse(currentPlayerInventory.VirtualCurrency.TB)
+    if (reserveBooster >= 5) {
+        var tradedBooster = 5;
+    }
+    else { var tradedBooster = reserveBooster }
+    var subBooster = {
+        PlayFabId: PlayerId,
+        VirtualCurrency: "BR",
+        Amount: tradedBooster
+    }
+    var addBooster = {
+        PlayFabId: PlayerId,
+        VirtualCurrency: "TB",
+        Amount: tradedBooster
+    }
+    server.UpdatePlayerStatistics({
+        "PlayFabId": PlayerId,
+        "Statistics": [
+            {
+                "StatisticName": "Trophy",
+                "Value": newTrophy
+            }
+        ]
+    })
+    if (5 = matchHistory.length) {
+        matchHistory.pop();
+    }
+    var thisMatch = [startTime, winnerPlayers, loserPlayers, drawPlayers, oldBooster, tradedBooster, isBoxGiven, trophy, newTrophy]
+    matchHistory.unshift(thisMatch);
+    var updateUserData = {
+        PlayFabId: PlayerId,
+        Data: {
+            "matchStats": JSON.stringify(matchStats),
+            "matchHistory": JSON.stringify(matchHistory)
+        }
+    }
+    server.UpdateUserReadOnlyData(updateUserData);
+    if (reserveBooster >= 1) {
+        server.SubtractUserVirtualCurrency(subBooster);
+        server.AddUserVirtualCurrency(addBooster);
+    }
+    /*
+    return {
+        "oldBooster": oldBooster,
+        "givenBooster": tradedBooster,
+        "isBoxGiven": 0,
+        "oldTrophy": trophy,
+        "newTrophy": newTrophy
+    }
+    */
+}
+
+function drawCondition(PlayerId) {
+    var currentPlayerData = server.GetUserReadOnlyData({
+        PlayFabId: PlayerId
+    });
+    var currentPlayerTrophy = server.GetPlayerStatistics({
+        PlayFabId: PlayerId,
+        "StatisticNames": "Trophy"
+    });
+    var trophy = JSON.parse(currentPlayerTrophy.Statistics[0].Value)
+    var currentPlayerInventory = server.GetUserInventory({
+        PlayFabId: PlayerId
+    });
+    var matchStats = JSON.parse(currentPlayerData.Data.matchStats.Value);
+    var matchHistory = JSON.parse(currentPlayerData.Data.matchHistory.Value);
+    matchStats[2] += 1;
+    var reserveBooster = JSON.parse(currentPlayerInventory.VirtualCurrency.BR);
+    var oldBooster = JSON.parse(currentPlayerInventory.VirtualCurrency.TB)
+    if (reserveBooster >= 10) {
+        var tradedBooster = 10;
+    }
+    else { var tradedBooster = reserveBooster }
+    var subBooster = {
+        PlayFabId: PlayerId,
+        VirtualCurrency: "BR",
+        Amount: tradedBooster
+    }
+    var addBooster = {
+        PlayFabId: PlayerId,
+        VirtualCurrency: "TB",
+        Amount: tradedBooster
+    }
+    if (5 = matchHistory.length) {
+        matchHistory.pop();
+    }
+    var thisMatch = [startTime, winnerPlayers, loserPlayers, drawPlayers, oldBooster, tradedBooster, isBoxGiven, trophy, newTrophy]
+    matchHistory.unshift(thisMatch);
+    var updateUserData = {
+        PlayFabId: PlayerId,
+        Data: {
+            "matchStats": JSON.stringify(matchStats),
+            "matchHistory": JSON.stringify(matchHistory)
+        }
+    }
+    server.UpdateUserReadOnlyData(updateUserData);
+    if (reserveBooster >= 1) {
+        server.SubtractUserVirtualCurrency(subBooster);
+        server.AddUserVirtualCurrency(addBooster);
+    }
+    /*
+    return {
+        "oldBooster": oldBooster,
+        "givenBooster": tradedBooster,
+        "isBoxGiven": 0,
+        "oldTrophy": trophy,
+        "newTrophy": trophy
+    }
+    */
+}
+
 handlers.Debug = function () {
     var currentPlayerTrophy = server.GetUserInventory({
         PlayFabId: currentPlayerId
@@ -125,219 +352,12 @@ handlers.FirstLogin = function () {
     server.UpdateUserReadOnlyData(updateUserReadOnly);
 }
 
-handlers.WinCondition = function (args) {
-    //After win match
-    //get player info
-    args.PlayerId = !args.PlayerId ? {} : args.PlayerId;
-    var PlayerId = args.PlayerId;
-    var currentPlayerData = server.GetUserReadOnlyData({
-        PlayFabId: PlayerId
-    });
-    var currentPlayerTrophy = server.GetPlayerStatistics({
-        PlayFabId: PlayerId,
-        "StatisticNames": "Trophy"
-    });
-    var slots = JSON.parse(currentPlayerData.Data.slots.Value);
-    var trophy = JSON.parse(currentPlayerTrophy.Statistics[0].Value)
-    var matchStats = JSON.parse(currentPlayerData.Data.matchStats.Value);
-    matchStats[0] += 1;
-    var newTrophy = trophy + 7;
-    //give booster if available
-    var currentPlayerInventory = server.GetUserInventory({
-        PlayFabId: PlayerId
-    });
-    var reserveBooster = JSON.parse(currentPlayerInventory.VirtualCurrency.BR);
-    var oldBooster = JSON.parse(currentPlayerInventory.VirtualCurrency.TB)
-    if (reserveBooster >= 15) {
-        var tradedBooster = 15;
-    }
-    else { var tradedBooster = reserveBooster }
-    var subBooster = {
-        PlayFabId: PlayerId,
-        VirtualCurrency: "BR",
-        Amount: tradedBooster
-    }
-    var addBooster = {
-        PlayFabId: PlayerId,
-        VirtualCurrency: "TB",
-        Amount: tradedBooster
-    }
-    server.UpdatePlayerStatistics({
-        "PlayFabId": PlayerId,
-        "Statistics": [
-            {
-                "StatisticName": "Trophy",
-                "Value": newTrophy
-            }
-        ]
-    })
-    if (reserveBooster >= 1) {
-        server.SubtractUserVirtualCurrency(subBooster);
-        server.AddUserVirtualCurrency(addBooster);
-    }
-    //check for slot availability, give box, start timer and record set time
-    if (slots[0][1] == 1 || slots[1][1] == 1 || slots[2][1] == 1) {
-        var grantBasicBox = {
-            PlayFabId: PlayerId,
-            ItemIds: "BasicBox"
-        }
-        var isBoxGiven = 1;
-        server.GrantItemsToUser(grantBasicBox);
-    }
-    else { var isBoxGiven = 0 }
-    for (i = 0; i < slots.length; i++) {
-        if (slots[i][1] == 1) {
-            var startTime = new Date().getTime() / 1000;
-            var endTime = startTime + BasicBoxTime;
-            slots[i][1] = 0;
-            slots[i][2] = startTime;
-            slots[i][3] = endTime;
-
-            break;
-        }
-    }
-    var updateSlotTimer = {
-        PlayFabId: PlayerId,
-        Data: {
-            "slots": JSON.stringify(slots),
-            "matchStats": JSON.stringify(matchStats)
-        }
-    }
-    server.UpdateUserReadOnlyData(updateSlotTimer);
-    return {
-        "oldBooster": oldBooster,
-        "givenBooster": tradedBooster,
-        "isBoxGiven": isBoxGiven,
-        "oldTrophy": trophy,
-        "newTrophy": newTrophy
-    }
-}
-
-handlers.LoseCondition = function (args) {
-    args.PlayerId = !args.PlayerId ? {} : args.PlayerId;
-    var PlayerId = args.PlayerId;
-    var currentPlayerData = server.GetUserReadOnlyData({
-        PlayFabId: PlayerId
-    });
-    var currentPlayerTrophy = server.GetPlayerStatistics({
-        PlayFabId: PlayerId,
-        "StatisticNames": "Trophy"
-    });
-    var matchStats = JSON.parse(currentPlayerData.Data.matchStats.Value);
-    matchStats[1] += 1;
-    var trophy = JSON.parse(currentPlayerTrophy.Statistics[0].Value)
-    if (trophy <= 2) {
-        var newTrophy = 0
-    }
-    else {
-        var newTrophy = trophy - 3;
-    }
-    var currentPlayerInventory = server.GetUserInventory({
-        PlayFabId: PlayerId
-    });
-    var reserveBooster = JSON.parse(currentPlayerInventory.VirtualCurrency.BR);
-    var oldBooster = JSON.parse(currentPlayerInventory.VirtualCurrency.TB)
-    if (reserveBooster >= 5) {
-        var tradedBooster = 5;
-    }
-    else { var tradedBooster = reserveBooster }
-    var subBooster = {
-        PlayFabId: PlayerId,
-        VirtualCurrency: "BR",
-        Amount: tradedBooster
-    }
-    var addBooster = {
-        PlayFabId: PlayerId,
-        VirtualCurrency: "TB",
-        Amount: tradedBooster
-    }
-    server.UpdatePlayerStatistics({
-        "PlayFabId": PlayerId,
-        "Statistics": [
-            {
-                "StatisticName": "Trophy",
-                "Value": newTrophy
-            }
-        ]
-    })
-    var updateUserData = {
-        PlayFabId: PlayerId,
-        Data: {
-            "matchStats": JSON.stringify(matchStats)
-        }
-    }
-    server.UpdateUserReadOnlyData(updateUserData);
-    if (reserveBooster >= 1) {
-        server.SubtractUserVirtualCurrency(subBooster);
-        server.AddUserVirtualCurrency(addBooster);
-    }
-    return {
-        "oldBooster": oldBooster,
-        "givenBooster": tradedBooster,
-        "isBoxGiven": 0,
-        "oldTrophy": trophy,
-        "newTrophy": newTrophy
-    }
-}
-
-handlers.DrawCondition = function (args) {
-    args.PlayerId = !args.PlayerId ? {} : args.PlayerId;
-    var PlayerId = args.PlayerId;
-    var currentPlayerData = server.GetUserReadOnlyData({
-        PlayFabId: PlayerId
-    });
-    var currentPlayerTrophy = server.GetPlayerStatistics({
-        PlayFabId: PlayerId,
-        "StatisticNames": "Trophy"
-    });
-    var trophy = JSON.parse(currentPlayerTrophy.Statistics[0].Value)
-    var currentPlayerInventory = server.GetUserInventory({
-        PlayFabId: PlayerId
-    });
-    var matchStats = JSON.parse(currentPlayerData.Data.matchStats.Value);
-    matchStats[2] += 1;
-    var reserveBooster = JSON.parse(currentPlayerInventory.VirtualCurrency.BR);
-    var oldBooster = JSON.parse(currentPlayerInventory.VirtualCurrency.TB)
-    if (reserveBooster >= 10) {
-        var tradedBooster = 10;
-    }
-    else { var tradedBooster = reserveBooster }
-    var subBooster = {
-        PlayFabId: PlayerId,
-        VirtualCurrency: "BR",
-        Amount: tradedBooster
-    }
-    var addBooster = {
-        PlayFabId: PlayerId,
-        VirtualCurrency: "TB",
-        Amount: tradedBooster
-    }
-    var updateUserData = {
-        PlayFabId: PlayerId,
-        Data: {
-            "matchStats": JSON.stringify(matchStats)
-        }
-    }
-    server.UpdateUserReadOnlyData(updateUserData);
-    if (reserveBooster >= 1) {
-        server.SubtractUserVirtualCurrency(subBooster);
-        server.AddUserVirtualCurrency(addBooster);
-    }
-    return {
-        "oldBooster": oldBooster,
-        "givenBooster": tradedBooster,
-        "isBoxGiven": 0,
-        "oldTrophy": trophy,
-        "newTrophy": trophy
-    }
-}
-
 handlers.CheckSlots = function () {
     //Every time main screen loaded or booster used for accelerate box opening
     //get player info
-    var timer = [0,0,0]
-    var isReady = [0,0,0]
-    var isAvailable = [0,0,0]
+    var timer = [0, 0, 0]
+    var isReady = [0, 0, 0]
+    var isAvailable = [0, 0, 0]
     var currentPlayerData = server.GetUserReadOnlyData({
         PlayFabId: currentPlayerId
     });
@@ -376,6 +396,43 @@ handlers.CheckSlots = function () {
         "isReady": isReady,
         "isAvailable": isAvailable
     }
+}
+
+handlers.EndMatch = function (args) {
+    //End match functions handler
+    /*args must be in this format:    
+        {   
+            "winnerPlayers":"[xxx, yyy, zzz]",
+            "loserPlayers":"[xxx, yyy, zzz]",
+            "drawPlayers":"[xxx, yyy, zzz]"
+        }
+    */
+    args.winnerPlayers = !args.winnerPlayers ? {} : args.winnerPlayers;
+    args.loserPlayers = !args.loserPlayers ? {} : args.loserPlayers;
+    args.drawPlayers = !args.drawPlayers ? {} : args.drawPlayers;
+
+    var winnerPlayers = args.winnerPlayers;
+    var loserPlayers = args.loserPlayers;
+    var drawPlayers = args.drawPlayers;
+    log.debug("winnerPlayers = " + winnerPlayers)
+    log.debug("loserPlayers = " + loserPlayers)
+    log.debug("drawPlayers = " + drawPlayers)
+/*
+    //Win
+    for (i = 0; i <= winnerPlayers.length; i++) {
+        winCondition(winnerPlayers[i])
+    }
+
+    //Lose
+    for (i = 0; i <= loserPlayers.length; i++) {
+        loseCondition(loserPlayers[i])
+    }
+
+    //Draw
+    for (i = 0; i <= drawPlayers.length; i++) {
+        drawCondition(drawPlayers[i])
+    }
+    */
 }
 
 handlers.SpendBoosterSlot = function (args) {

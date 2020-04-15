@@ -413,40 +413,23 @@ handlers.EndMatch = function (args) {
 
     var winnerPlayers = args.winnerPlayers;
     var loserPlayers = args.loserPlayers;
-    var drawPlayers = args.drawPlayers;
-    log.debug("winnerPlayers = " + winnerPlayers)
-    log.debug("loserPlayers = " + loserPlayers)
-    log.debug("drawPlayers = " + drawPlayers)
-    for (i = 0; i < winnerPlayers.length; i++) {
-        log.debug("win " + i)
-        var accInfo = server.GetUserAccountInfo({
-            PlayFabId: winnerPlayers[0]
-        });
-        var titleInfo = accInfo.UserInfo.TitleInfo; 
-        log.debug("Name = " + titleInfo.DisplayName)
-    }
-    for (i = 0; i < loserPlayers.length; i++) {
-        log.debug("lose " + i)
-    }
-    for (i = 0; i < drawPlayers.length; i++) {
-        log.debug("draw " + i)
-    }
-/*
+    var drawPlayers = args.drawPlayers;    
+
     //Win
-    for (i = 0; i <= winnerPlayers.length; i++) {
+    for (i = 0; i < winnerPlayers.length; i++) {
         winCondition(winnerPlayers[i])
     }
 
     //Lose
-    for (i = 0; i <= loserPlayers.length; i++) {
+    for (i = 0; i < loserPlayers.length; i++) {
         loseCondition(loserPlayers[i])
     }
 
     //Draw
-    for (i = 0; i <= drawPlayers.length; i++) {
+    for (i = 0; i < drawPlayers.length; i++) {
         drawCondition(drawPlayers[i])
     }
-    */
+    
 }
 
 handlers.SpendBoosterSlot = function (args) {

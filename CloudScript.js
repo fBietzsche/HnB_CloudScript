@@ -24,6 +24,28 @@ function getBoombot(boombot) {
     return boombots[boombot]
 }
 
+function getWeapon(weapon) {
+    var weapons = {
+        "msw_1": 0,
+        "msw_2": 1,
+        "msw_3": 2,
+        "msw_4": 3,
+        "sbw_1": 4,
+        "sbw_2": 5,
+        "sbw_3": 6,
+        "sbw_4": 7,
+        "rmw_1": 8,
+        "rmw_2": 9,
+        "rmw_3": 10,
+        "rmw_4": 11,
+        "itw_1": 12,
+        "itw_2": 13,
+        "itw_3": 14,
+        "itw_4": 15,
+    };
+    return weapons[weapon]
+}
+
 function winCondition(winArgs) {
     //After win match
     //get player info 
@@ -289,6 +311,7 @@ handlers.AddNewRobot = function () {
     var configsBase = [
         1,
         1,
+        1,
         1
     ]
     itemLevel.push(itemLevelBase)
@@ -325,6 +348,7 @@ handlers.FirstLogin = function () {
         0
     ]
     var configsBase = [
+        1,
         1,
         1,
         1
@@ -452,7 +476,7 @@ handlers.EndMatch = function (args) {
 }
 
 handlers.SendMatchResult = function () {
-    
+
     var currentPlayerData = server.GetUserReadOnlyData({
         PlayFabId: currentPlayerId
     });
@@ -460,7 +484,7 @@ handlers.SendMatchResult = function () {
     return {
         "lastMatchResults": matchHistory[0]
     }
-    
+
 
 }
 
@@ -509,8 +533,7 @@ handlers.OpenBox = function (args) {
         PlayFabId: currentPlayerId
     });
     var slots = JSON.parse(currentPlayerData.Data.slots.Value);
-    log.debug(slots)
-    log.debug(slots[whichSlot])
+    //reset slot
     if (slots[whichSlot][0] == 1) {
         slots[whichSlot][0] = 0;
         slots[whichSlot][1] = 1;
@@ -524,11 +547,11 @@ handlers.OpenBox = function (args) {
         //Give randomized upgrade shards
         var itemLevel = JSON.parse(currentPlayerData.Data.itemLevel.Value);
         //Math.floor(Math.random() * (max - min + 1) ) + min;
-        boomBotId = Math.floor(Math.random() * RobotCount);
-        expAmount = Math.floor(Math.random() * (36 - 24 + 1)) + 24;
-
-        itemLevel[boomBotId][1] += expAmount;
-
+        /*  boomBotId = Math.floor(Math.random() * RobotCount);
+          expAmount = Math.floor(Math.random() * (36 - 24 + 1)) + 24;
+  
+          itemLevel[boomBotId][1] += expAmount;
+        */
         var giveExp = {
             PlayFabId: currentPlayerId,
             Data: {
@@ -544,6 +567,29 @@ handlers.OpenBox = function (args) {
         }
     }
 
+}
+
+handlers.BoxOutcomeWeapon = function (args) {
+
+    /*
+        args.WeaponId = !args.WeaponId ? {} : args.WeaponId;
+        var weaponId = getWeapon(args.WeaponId)
+        var boomBotId = weaponId % 4
+        var currentPlayerData = server.GetUserReadOnlyData({
+            PlayFabId: currentPlayerId
+        });
+        var configs = JSON.parse(currentPlayerData.Data.configs.Value);
+        var itemLevel = JSON.parse(currentPlayerData.Data.itemLevel.Value);
+    
+        if (itemLevel[weaponId][0] == 0) {
+            if (configs[boomBotId][0] == 0) {
+                let grantBoombot = {
+                    PlayFabId: currentPlayerId,
+                    ItemIds: "BasicBoxKey"
+                }
+                server.GrantItemsToUser(grantBasicKey);
+            }
+        }*/
 }
 
 handlers.EquipItem = function (args) {
@@ -574,9 +620,9 @@ handlers.EquipItem = function (args) {
     equipped[1] = args.cos;
     equipped[2] = args.wpn;
     equipped[3] = args.wpnCos;
-    configs[boomBotId][0] = args.cos;
-    configs[boomBotId][1] = args.wpn;
-    configs[boomBotId][2] = args.wpnCos;
+    configs[boomBotId][1] = args.cos;
+    configs[boomBotId][2] = args.wpn;
+    configs[boomBotId][3] = args.wpnCos;
 
     var updateEquippedItems = {
         PlayFabId: currentPlayerId,

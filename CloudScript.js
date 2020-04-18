@@ -497,19 +497,19 @@ handlers.EndMatchUpdate = function (args) {
     var drawPlayers = args.drawPlayers;
     //Win
     for (i = 0; i < winnerPlayers.length; i++) {
-        let winArgs = [winnerPlayers[i]];
+        let winArgs = winnerPlayers[i];
         winConditionUpdate(winArgs)
     }
 
     //Lose
     for (i = 0; i < loserPlayers.length; i++) {
-        let loseArgs = [loserPlayers[i]];
+        let loseArgs = loserPlayers[i];
         loseConditionUpdate(loseArgs)
     }
 
     //Draw
     for (i = 0; i < drawPlayers.length; i++) {
-        let drawArgs = [drawPlayers[i]];
+        let drawArgs = drawPlayers[i];
         drawConditionUpdate(drawArgs)
     }
 }

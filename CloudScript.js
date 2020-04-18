@@ -514,7 +514,7 @@ handlers.EndMatchUpdate = function (args) {
     }
 }
 
-handlers.SendMatchResult = function () {
+handlers.GetMatchResult = function () {
 
     var currentPlayerData = server.GetUserReadOnlyData({
         PlayFabId: currentPlayerId

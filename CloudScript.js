@@ -521,7 +521,7 @@ handlers.GetMatchResult = function () {
     });
     var matchHistory = JSON.parse(currentPlayerData.Data.matchHistory.Value);
     return {
-        "lastMatchResults": matchHistory[0]
+        "lastMatchResults": [[new Date().toISOString()],matchHistory[0]]
     }
 
 

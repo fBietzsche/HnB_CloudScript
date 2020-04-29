@@ -9,9 +9,11 @@
 */
 // #######################################################################################################################
 // This is the test build. Heavily under work in progress. Numbers will be changed.
+
 //
 
 var RobotCount = 4;
+var WeaponCount = 15;
 var BasicBoxTime = 900;
 
 function getBoombot(boombot) {
@@ -22,6 +24,16 @@ function getBoombot(boombot) {
         "IronTurtle": 3
     };
     return boombots[boombot]
+}
+
+function getBoombotName(boombotId) {
+    var boombots = {
+        0: "MekaScorp",
+        1: "SharkBot",
+        2: "RoboMantis",
+        3: "IronTurtle"
+    };
+    return boombots[boombotId]
 }
 
 function getWeapon(weapon) {
@@ -302,6 +314,7 @@ handlers.Debug = function () {
 }
 
 handlers.AddNewRobot = function () {
+    //TODO Yeni exp sistemine göre güncellenecek
     var currentPlayerData = server.GetUserReadOnlyData({
         PlayFabId: currentPlayerId
     });
@@ -316,7 +329,8 @@ handlers.AddNewRobot = function () {
     var configsBase = [
         1,
         1,
-        1
+        1,
+        0
     ]
     itemLevel.push(itemLevelBase)
     configs.push(configsBase)
@@ -331,6 +345,7 @@ handlers.AddNewRobot = function () {
 }
 
 handlers.FirstLogin = function () {
+    //TODO yeni exp sistemine göre güncellenecek
     /*{
         "isReady": 0,
         "isAvailable": 1,
@@ -354,7 +369,8 @@ handlers.FirstLogin = function () {
     var configsBase = [
         1,
         1,
-        1
+        1,
+        0
     ]
     var itemLevel = []
     var configs = []
@@ -521,7 +537,7 @@ handlers.GetMatchResult = function () {
     });
     var matchHistory = JSON.parse(currentPlayerData.Data.matchHistory.Value);
     return {
-        "lastMatchResults": [[new Date().toISOString()],matchHistory[0]]
+        "lastMatchResults": [[new Date().toISOString()], matchHistory[0]]
     }
 
 
@@ -559,11 +575,12 @@ handlers.SpendBoosterSlot = function (args) {
 }
 
 handlers.SpendRubySlot = function (args) {
-    //open instantly with ruby TBA
+    //TODO open instantly with ruby TBA
 
 }
 
 handlers.OpenBox = function (args) {
+    //TODO yeni exp sistemine göre düzenlenecek
     //when box ready, click to open function
     args.Slot = !args.Slot ? {} : args.Slot;
     var whichSlot = args.Slot;
@@ -609,29 +626,69 @@ handlers.OpenBox = function (args) {
 }
 
 handlers.BoxOutcomeWeapon = function (args) {
+    //TODO boombota sahipmi değilmi koşuluna göre devam edilecek
     args.WeaponId = !args.WeaponId ? {} : args.WeaponId;
     var weaponId = getWeapon(args.WeaponId)
-    var boomBotId = weaponId % 4
+    var boombotId = weaponId % 4
+    var boombotName = getBoombotName(boombotId)
     var currentPlayerData = server.GetUserReadOnlyData({
         PlayFabId: currentPlayerId
     });
     var configs = JSON.parse(currentPlayerData.Data.configs.Value);
     var itemLevel = JSON.parse(currentPlayerData.Data.itemLevel.Value);
-
+    // player got weapon?
     if (itemLevel[weaponId][0] == 0) {
-        if (configs[boomBotId][0] == 0) {
-            configs[boomBotId][0] = 1
+        //player got boombot?
+        if (configs[boombotId][3] == 0) {
+            configs[boombotId][3] = 1
+            var grantBoombot = {
+                PlayFabId: currentPlayerId,
+                ItemIds: boombotName
+            }
+            server.GrantItemsToUser(grantBoombot);
+            var isBoombotGranted = 1
         }
         itemLevel[weaponId][0] = 1
+        var updateUserReadOnly = {
+            PlayFabId: currentPlayerId,
+            Data: {
+                "configs": JSON.stringify(configs),
+                "itemLevel": JSON.stringify(itemLevel)
+            }
+        }
+        server.UpdateUserReadOnlyData(updateUserReadOnly);
+        return {
+            "isBoombotGranted": isBoombotGranted,
+            "whichBoombot": boombotId,            
+            "whichWeapon": weaponId,
+            "expAmount": 0,
+            "currentExp": 0
+        }
     }
     else {
+        var isBoombotGranted = 0
         //Math.floor(Math.random() * (max - min + 1) ) + min;
         expAmount = Math.floor(Math.random() * (36 - 24 + 1)) + 24;
         itemLevel[weaponId][1] += expAmount;
+        var updateUserReadOnly = {
+            PlayFabId: currentPlayerId,
+            Data: {
+                "itemLevel": JSON.stringify(itemLevel)
+            }
+        }
+        server.UpdateUserReadOnlyData(updateUserReadOnly);
+        return {
+            "isBoombotGranted": isBoombotGranted,
+            "whichBoombot": boombotId,
+            "whichWeapon": weaponId,
+            "expAmount": expAmount,
+            "currentExp": itemLevel[boomBotId][1]
+        }
     }
 }
 
 handlers.EquipItem = function (args) {
+    //TODO silah expe göre güncellenecek
     //Garage equip item function
     /*args must be in this format:    
         {   
@@ -760,7 +817,7 @@ handlers.GetUserGameParams = function () {
 }
 
 handlers.CheckUpgrade = function () {
-
+    //TODO Max level durumu eklenecek
     var currentPlayerData = server.GetUserReadOnlyData({
         PlayFabId: currentPlayerId
     });
@@ -777,7 +834,7 @@ handlers.CheckUpgrade = function () {
     var requiredCoin = [0, 0, 0];
     var currentExp = [0, 0, 0];
     var checkResult = [0, 0, 0];
-    for (i = 0; i < 3; i++) {
+    for (i = 0; i < RobotCount; i++) {
         currentExp[i] = itemLevel[i][1];
         requiredExp[i] = levelRamp[itemLevel[i][0]]
         requiredCoin[i] = levelCoin[itemLevel[i][0]]

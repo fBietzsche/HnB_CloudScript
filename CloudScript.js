@@ -313,7 +313,9 @@ handlers.Debug = function () {
     var result = server.UnlockContainerItem(openBox);
     for(i = 0; i < result.length; i++){
     result.GrantedItems[i].ItemId
-    log.debug(result.GrantedItems[i].ItemId)
+    log.debug("result  =  " + result)
+    log.debug("result.GrantedItems  =  " + result.GrantedItems)
+    log.debug("result.GrantedItems[i].ItemId  =  " + result.GrantedItems[i].ItemId)
     }    
 }
 

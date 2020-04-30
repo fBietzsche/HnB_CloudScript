@@ -306,16 +306,17 @@ function drawConditionUpdate(drawArgs) {
 }
 
 handlers.Debug = function () {
-    var openBox = {
-        PlayFabId: currentPlayerId,
-        ContainerItemId: "BasicBox"
-    }
-    var result = server.UnlockContainerItem(openBox);
-    for (i = 0; i < result.GrantedItems.length; i++) {
-        log.debug("result  =  " + result)
-        log.debug("result.GrantedItems  =  " + result.GrantedItems)
-        log.debug("result.GrantedItems[i].ItemId  =  " + result.GrantedItems[i].ItemId)
-    }
+    var userData = server.GetUserReadOnlyData({
+        PlayFabId: currentPlayerId
+    });
+    var weaponData = JSON.parse(titleData.Data.weaponValues);
+    var itemLevel = JSON.parse(userData.Data.itemLevel.Value);
+    var levelData = JSON.parse(titleData.Data.levelData)
+    log.debug("userData  =  " + userData)
+        log.debug("weaponData  =  " + weaponData)
+        log.debug("itemLevel  =  " + itemLevel)
+        log.debug("levelData  =  " + levelData)
+   
 }
 
 handlers.AddNewRobot = function () {

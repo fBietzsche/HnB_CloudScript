@@ -588,6 +588,7 @@ handlers.SpendRubySlot = function (args) {
 handlers.OpenBox = function () {   
     //when box ready, click to open function    
     //get player info 
+    var result = server.UnlockContainerItem(openBox);
     var currentPlayerData = server.GetUserReadOnlyData({
         PlayFabId: currentPlayerId
     });
@@ -597,13 +598,12 @@ handlers.OpenBox = function () {
         PlayFabId: currentPlayerId,
         ContainerItemId: "BasicBox"
     }
-    var grantedItemIds = []
-    var result = server.UnlockContainerItem(openBox);
+    var grantedItemIds = []    
     for (i = 0; i < result.GrantedItems.length; i++) {
         grantedItemIds.push(0)
         grantedItemIds[i] = result.GrantedItems[i].ItemId
         var itemClass = result.GrantedItems[i].ItemClass
-        if (itemClass == msw || itemClass == sbw || itemClass == rmw || itemClass == itw) {
+        if (itemClass == "msw" || itemClass == "sbw" || itemClass == "rmw" || itemClass == "itw") {
             var weaponId = getWeapon(grantedItemIds[i])
             var boombotId = weaponId % 4
             var boombotName = getBoombotName(boombotId)

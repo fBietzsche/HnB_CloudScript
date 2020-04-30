@@ -311,8 +311,7 @@ handlers.Debug = function () {
         ContainerItemId: "BasicBox"
     }
     var result = server.UnlockContainerItem(openBox);
-    for(i = 0; i < result.length; i++){
-    result.GrantedItems[i].ItemId
+    for(i = 0; i < result.GrantedItems.length; i++){
     log.debug("result  =  " + result)
     log.debug("result.GrantedItems  =  " + result.GrantedItems)
     log.debug("result.GrantedItems[i].ItemId  =  " + result.GrantedItems[i].ItemId)

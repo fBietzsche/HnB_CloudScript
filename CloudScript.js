@@ -309,6 +309,10 @@ handlers.Debug = function () {
     var userData = server.GetUserReadOnlyData({
         PlayFabId: currentPlayerId
     });
+    var titleData = server.GetTitleData({
+        PlayFabId: currentPlayerId,
+        "Keys": ["levelData", "robotValues"]
+    });
     var weaponData = JSON.parse(titleData.Data.weaponValues);
     var itemLevel = JSON.parse(userData.Data.itemLevel.Value);
     var levelData = JSON.parse(titleData.Data.levelData)

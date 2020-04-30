@@ -319,7 +319,7 @@ handlers.Debug = function () {
     log.debug("itemLevel  =  " + itemLevel)
     var levelData = JSON.parse(titleData.Data.levelData)
     log.debug("levelData  =  " + levelData)
-    var weaponData = JSON.parse(titleData.Data.weaponValues);
+    var weaponData = titleData.Data.weaponValues;
     log.debug("weaponData  =  " + weaponData)
 }
 

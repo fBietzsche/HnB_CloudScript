@@ -13,7 +13,7 @@
 //
 
 var RobotCount = 4;
-var WeaponCount = 15;
+var WeaponCount = 16;
 var BasicBoxTime = 900;
 
 function getBoombot(boombot) {
@@ -306,11 +306,13 @@ function drawConditionUpdate(drawArgs) {
 }
 
 handlers.Debug = function () {
-    var currentPlayerTrophy = server.GetUserInventory({
-        PlayFabId: currentPlayerId
-    });
+    var openBox = {
+        PlayFabId: currentPlayerId,
+        ContainerItemId: "BasicBox"
+    }
+    var result = server.UnlockContainerItem(openBox);
 
-    log.debug(currentPlayerTrophy)
+    log.debug(result)
 }
 
 handlers.AddNewRobot = function () {
@@ -332,7 +334,9 @@ handlers.AddNewRobot = function () {
         1,
         0
     ]
-    itemLevel.push(itemLevelBase)
+    for (var i = 0; i < 4; i++) {
+        itemLevel.push(itemLevelBase)
+    }
     configs.push(configsBase)
     var updateUserReadOnly = {
         PlayFabId: currentPlayerId,
@@ -370,13 +374,15 @@ handlers.FirstLogin = function () {
         1,
         1,
         1,
-        0
+        1
     ]
     var itemLevel = []
     var configs = []
-    for (var i = 0; i < RobotCount; i++) {
-        itemLevel.push(itemLevelBase)
+    for (var k = 0; k < RobotCount; k++) {
         configs.push(configsBase)
+    }
+    for (var i = 0; i < WeaponCount; i++) {
+        itemLevel.push(itemLevelBase)
     }
     var equipped = [
         "MekaScorp",
@@ -659,7 +665,7 @@ handlers.BoxOutcomeWeapon = function (args) {
         server.UpdateUserReadOnlyData(updateUserReadOnly);
         return {
             "isBoombotGranted": isBoombotGranted,
-            "whichBoombot": boombotId,            
+            "whichBoombot": boombotId,
             "whichWeapon": weaponId,
             "expAmount": 0,
             "currentExp": 0
@@ -688,7 +694,6 @@ handlers.BoxOutcomeWeapon = function (args) {
 }
 
 handlers.EquipItem = function (args) {
-    //TODO silah expe göre güncellenecek
     //Garage equip item function
     /*args must be in this format:    
         {   
@@ -708,18 +713,20 @@ handlers.EquipItem = function (args) {
         PlayFabId: currentPlayerId,
     });
     var boomBotId = getBoombot(args.boombot)
-    //var isPlayerGotItem = isPlayerGotItem(boomBotId, args.wpn, currentPlayerId)
+    var weaponId = (4 * boomBotId) + args.wpn - 1
     //select boombot values    
     var equipped = JSON.parse(currentPlayerData.Data.equipped.Value);
     var configs = JSON.parse(currentPlayerData.Data.configs.Value);
-    equipped[0] = args.boombot;
-    equipped[1] = args.cos;
-    equipped[2] = args.wpn;
-    equipped[3] = args.wpnCos;
-    configs[boomBotId][0] = args.cos;
-    configs[boomBotId][1] = args.wpn;
-    configs[boomBotId][2] = args.wpnCos;
-
+    var itemLevel = JSON.parse(currentPlayerData.Data.itemLevel.Value);
+    if (configs[boomBotId][3] == 1 && itemLevel[weaponId][0] >= 1) {
+        equipped[0] = args.boombot;
+        equipped[1] = args.cos;
+        equipped[2] = args.wpn;
+        equipped[3] = args.wpnCos;
+        configs[boomBotId][0] = args.cos;
+        configs[boomBotId][1] = args.wpn;
+        configs[boomBotId][2] = args.wpnCos;
+    }
     var updateEquippedItems = {
         PlayFabId: currentPlayerId,
         Data: {
@@ -742,7 +749,7 @@ handlers.GetUserGameplayConfig = function (args) {
     });
     var titleData = server.GetTitleData({
         PlayFabId: PlayerId,
-        "Keys": ["levelData", "robotValues"]
+        "Keys": ["levelData", "robotValues", "weaponValues"]
     });
     var userData = server.GetUserReadOnlyData({
         PlayFabId: PlayerId,
@@ -751,25 +758,25 @@ handlers.GetUserGameplayConfig = function (args) {
 
     var titleInfo = accInfo.UserInfo.TitleInfo;
     var itemLevel = JSON.parse(userData.Data.itemLevel.Value);
-    var robotData = JSON.parse(titleData.Data.robotValues);
+    var weaponData = JSON.parse(titleData.Data.weaponValues);
     var currentEquipment = JSON.parse(userData.Data.equipped.Value);
     var boomBotId = getBoombot(currentEquipment[0])
-    var weaponId = currentEquipment[2]
+    var weaponId = ((4 * boomBotId) + currentEquipment[2] - 1)
     var gameplayParams = {
         "DisplayName": titleInfo.DisplayName,
         "RobotId": currentEquipment[0],
         "RobotCostumeId": currentEquipment[1] - 1,
         "WeaponId": currentEquipment[2] - 1,
         "WeaponCostumeId": currentEquipment[3] - 1,
-        "HealthPoints": robotData[boomBotId][0][itemLevel[boomBotId][0] - 1],
-        "MoveSpeedScale": robotData[boomBotId][2],
-        "Damage": robotData[boomBotId][1][itemLevel[boomBotId][0] - 1] * robotData[boomBotId][3][weaponId - 1][0],
-        "Cooldown": robotData[boomBotId][3][weaponId - 1][1],
-        "EnergyChargeRate": robotData[boomBotId][3][weaponId - 1][2],
-        "EnergyCost": robotData[boomBotId][3][weaponId - 1][3],
-        "UltDamageScale": robotData[boomBotId][3][weaponId - 1][4],
-        "UltCharge": robotData[boomBotId][3][weaponId - 1][5],
-        "AltDamage": robotData[boomBotId][1][itemLevel[boomBotId][0] - 1] * robotData[boomBotId][3][weaponId - 1][6]
+        "Damage": weaponData[weaponId][0] + (weaponData[weaponId][0] * (itemLevel[weaponId][0] - 1) * 0.05),
+        "EnergyCost": weaponData[weaponId][1],
+        "EnergyChargeRate": weaponData[weaponId][2],
+        "UltDamageScale": weaponData[weaponId][3],
+        "UltCharge": weaponData[weaponId][4],
+        "MoveSpeedScale": weaponData[weaponId][5],
+        "AltDamage": weaponData[weaponId][6],
+        "HealthPoints": weaponData[weaponId][7] + (weaponData[weaponId][7] * (itemLevel[weaponId][0] - 1) * 0.05),
+        "Cooldown": weaponData[weaponId][8]
     }
     return gameplayParams;
 }
@@ -783,7 +790,7 @@ handlers.GetUserGameParams = function () {
         PlayFabId: currentPlayerId,
         "Keys": ["levelData", "robotValues"]
     });
-    var robotData = JSON.parse(titleData.Data.robotValues);
+    var weaponData = JSON.parse(titleData.Data.weaponValues);
     var itemLevel = JSON.parse(userData.Data.itemLevel.Value);
     var levelData = JSON.parse(titleData.Data.levelData)
     var HP = []
@@ -791,16 +798,13 @@ handlers.GetUserGameParams = function () {
     var nextLevel = []
     var nextExp = levelData.levelRamp;
     var nextCoin = levelData.levelCoin;
-    for (i = 0; i < RobotCount; i++) {
+    for (i = 0; i < WeaponCount; i++) {
         nextLevel.push([])
         DMG.push([])
-        HP[i] = robotData[i][0][itemLevel[i][0] - 1]
+        HP[i] = weaponData[i][7] + (weaponData[i][7] * (itemLevel[i][0] - 1) * 0.05)
         nextLevel[i][0] = nextExp[itemLevel[i][0]]
         nextLevel[i][1] = nextCoin[itemLevel[i][0]]
-        for (j = 0; j < 4; j++) {
-            DMG[i].push([])
-            DMG[i][j] = Math.round(robotData[i][1][itemLevel[i][0] - 1] * robotData[i][3][j][0])
-        }
+        DMG[i] = Math.round(weaponData[i][0] + (weaponData[i][0] * (itemLevel[i][0] - 1) * 0.05))
     }
     var equipped = JSON.parse(userData.Data.equipped.Value)
     var configs = JSON.parse(userData.Data.configs.Value)
@@ -830,16 +834,29 @@ handlers.CheckUpgrade = function () {
     var levelData = JSON.parse(titleData.Data.levelData);
     var levelRamp = levelData.levelRamp;
     var levelCoin = levelData.levelCoin;
-    var requiredExp = [0, 0, 0];
-    var requiredCoin = [0, 0, 0];
-    var currentExp = [0, 0, 0];
-    var checkResult = [0, 0, 0];
-    for (i = 0; i < RobotCount; i++) {
-        currentExp[i] = itemLevel[i][1];
-        requiredExp[i] = levelRamp[itemLevel[i][0]]
-        requiredCoin[i] = levelCoin[itemLevel[i][0]]
-        if (requiredExp[i] <= currentExp[i]) {
-            checkResult[i] = 1
+    var requiredExp = [];
+    var requiredCoin = [];
+    var currentExp = [];
+    var checkResult = [];
+
+    for (i = 0; i < WeaponCount; i++) {
+        requiredExp.push(0)
+        requiredCoin.push(0)
+        currentExp.push(0)
+        checkResult.push(0)
+        if (itemLevel[i][0] == 10) {
+            checkResult[i] = "max"
+            currentExp[i] = "max"
+            requiredExp[i] = "max"
+            requiredCoin[i] = "max"
+        }
+        else {
+            currentExp[i] = itemLevel[i][1];
+            requiredExp[i] = levelRamp[itemLevel[i][0] - 1]
+            requiredCoin[i] = levelCoin[itemLevel[i][0] - 1]
+            if (requiredExp[i] <= currentExp[i]) {
+                checkResult[i] = 1
+            }
         }
     }
     return {
@@ -852,10 +869,9 @@ handlers.CheckUpgrade = function () {
 
 handlers.UpgradeBoombot = function (args) {
     //usable when an boombot can be upgraded
-    args.whichBoombot = !args.whichBoombot ? {} : args.whichBoombot;
-    var whichBoombot = args.whichBoombot;
-    //get user item info and VC
-    var boombotId = getBoombot(whichBoombot);
+    args.whichWeapon = !args.whichWeapon ? {} : args.whichWeapon;
+    var whichWeapon = args.whichWeapon;
+    //get user item info and VC    
     var currentPlayerData = server.GetUserReadOnlyData({
         PlayFabId: currentPlayerId
     });
@@ -872,14 +888,14 @@ handlers.UpgradeBoombot = function (args) {
     var levelData = JSON.parse(titleData.Data.levelData);
     var levelRamp = levelData.levelRamp;
     var levelCoin = levelData.levelCoin;
-    var currentExp = itemLevel[boombotId][1];
-    var requiredExp = levelRamp[itemLevel[boombotId][0]]
-    var requiredCoin = levelCoin[itemLevel[boombotId][0]]
+    var currentExp = itemLevel[whichWeapon][1];
+    var requiredExp = levelRamp[itemLevel[whichWeapon][0] - 1]
+    var requiredCoin = levelCoin[itemLevel[whichWeapon][0] - 1]
 
     //if OK level up
     if ((playerCoin >= requiredCoin) && (currentExp >= requiredExp)) {
-        itemLevel[boombotId][1] -= requiredExp
-        itemLevel[boombotId][0] += 1;
+        itemLevel[whichWeapon][1] -= requiredExp
+        itemLevel[whichWeapon][0] += 1;
         var upgradeItem = {
             PlayFabId: currentPlayerId,
             Data: { "itemLevel": JSON.stringify(itemLevel) }

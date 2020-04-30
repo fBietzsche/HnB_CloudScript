@@ -311,11 +311,11 @@ handlers.Debug = function () {
         ContainerItemId: "BasicBox"
     }
     var result = server.UnlockContainerItem(openBox);
-    for(i = 0; i < result.GrantedItems.length; i++){
-    log.debug("result  =  " + result)
-    log.debug("result.GrantedItems  =  " + result.GrantedItems)
-    log.debug("result.GrantedItems[i].ItemId  =  " + result.GrantedItems[i].ItemId)
-    }    
+    for (i = 0; i < result.GrantedItems.length; i++) {
+        log.debug("result  =  " + result)
+        log.debug("result.GrantedItems  =  " + result.GrantedItems)
+        log.debug("result.GrantedItems[i].ItemId  =  " + result.GrantedItems[i].ItemId)
+    }
 }
 
 handlers.AddNewRobot = function () {
@@ -451,7 +451,7 @@ handlers.CheckSlots = function () {
             server.UpdateUserReadOnlyData(updateSlotTimer);
             server.GrantItemsToUser(grantBasicKeyAndBox);
             timer[i] = 0
-        }        
+        }
         else if ((isAvailable[i] == 1)) {
             timer[i] = -1;
         }
@@ -585,72 +585,81 @@ handlers.SpendRubySlot = function (args) {
 
 }
 
-handlers.OpenBox = function () {
-    //TODO yeni exp sistemine göre düzenlenecek
+handlers.OpenBox = function () {   
     //when box ready, click to open function    
-    //get player info    
-    var openBox = {
-        PlayFabId: currentPlayerId,
-        ContainerItemId: "BasicBox"
-    }
-    var result = server.UnlockContainerItem(openBox); 
-    //TODO boombota sahipmi değilmi koşuluna göre devam edilecek
-    
-    var weaponId = getWeapon(args.WeaponId)
-    var boombotId = weaponId % 4
-    var boombotName = getBoombotName(boombotId)
+    //get player info 
     var currentPlayerData = server.GetUserReadOnlyData({
         PlayFabId: currentPlayerId
     });
     var configs = JSON.parse(currentPlayerData.Data.configs.Value);
     var itemLevel = JSON.parse(currentPlayerData.Data.itemLevel.Value);
-    // player got weapon?
-    if (itemLevel[weaponId][0] == 0) {
-        //player got boombot?
-        if (configs[boombotId][3] == 0) {
-            configs[boombotId][3] = 1
-            var grantBoombot = {
-                PlayFabId: currentPlayerId,
-                ItemIds: boombotName
-            }
-            server.GrantItemsToUser(grantBoombot);
-            var isBoombotGranted = 1
-        }
-        itemLevel[weaponId][0] = 1
-        var updateUserReadOnly = {
-            PlayFabId: currentPlayerId,
-            Data: {
-                "configs": JSON.stringify(configs),
-                "itemLevel": JSON.stringify(itemLevel)
-            }
-        }
-        server.UpdateUserReadOnlyData(updateUserReadOnly);
-        return {
-            "isBoombotGranted": isBoombotGranted,
-            "whichBoombot": boombotId,
-            "whichWeapon": weaponId,
-            "expAmount": 0,
-            "currentExp": 0
-        }
+    var openBox = {
+        PlayFabId: currentPlayerId,
+        ContainerItemId: "BasicBox"
     }
-    else {
-        var isBoombotGranted = 0
-        //Math.floor(Math.random() * (max - min + 1) ) + min;
-        expAmount = Math.floor(Math.random() * (36 - 24 + 1)) + 24;
-        itemLevel[weaponId][1] += expAmount;
-        var updateUserReadOnly = {
-            PlayFabId: currentPlayerId,
-            Data: {
-                "itemLevel": JSON.stringify(itemLevel)
+    var grantedItemIds = []
+    var result = server.UnlockContainerItem(openBox);
+    for (i = 0; i < result.GrantedItems.length; i++) {
+        grantedItemIds.push(0)
+        grantedItemIds[i] = result.GrantedItems[i].ItemId
+        var itemClass = result.GrantedItems[i].ItemClass
+        if (itemClass == msw || itemClass == sbw || itemClass == rmw || itemClass == itw) {
+            var weaponId = getWeapon(grantedItemIds[i])
+            var boombotId = weaponId % 4
+            var boombotName = getBoombotName(boombotId)
+            // player got weapon?
+            if (itemLevel[weaponId][0] == 0) {
+                var isWeaponGranted = 1
+                //player got boombot?
+                if (configs[boombotId][3] == 0) {
+                    configs[boombotId][3] = 1
+                    var grantBoombot = {
+                        PlayFabId: currentPlayerId,
+                        ItemIds: boombotName
+                    }
+                    server.GrantItemsToUser(grantBoombot);
+                    var isBoombotGranted = 1
+                }
+                itemLevel[weaponId][0] = 1
+                var updateUserReadOnly = {
+                    PlayFabId: currentPlayerId,
+                    Data: {
+                        "configs": JSON.stringify(configs),
+                        "itemLevel": JSON.stringify(itemLevel)
+                    }
+                }
+                server.UpdateUserReadOnlyData(updateUserReadOnly);
+                return {
+                    "isBoombotGranted": isBoombotGranted,
+                    "isWeaponGranted": isWeaponGranted,
+                    "whichBoombot": boombotId,
+                    "whichWeapon": weaponId,
+                    "expAmount": 0,
+                    "currentExp": 0
+                }
             }
-        }
-        server.UpdateUserReadOnlyData(updateUserReadOnly);
-        return {
-            "isBoombotGranted": isBoombotGranted,
-            "whichBoombot": boombotId,
-            "whichWeapon": weaponId,
-            "expAmount": expAmount,
-            "currentExp": itemLevel[boomBotId][1]
+            else {
+                var isWeaponGranted = 0
+                var isBoombotGranted = 0
+                //Math.floor(Math.random() * (max - min + 1) ) + min;
+                expAmount = Math.floor(Math.random() * (36 - 24 + 1)) + 24;
+                itemLevel[weaponId][1] += expAmount;
+                var updateUserReadOnly = {
+                    PlayFabId: currentPlayerId,
+                    Data: {
+                        "itemLevel": JSON.stringify(itemLevel)
+                    }
+                }
+                server.UpdateUserReadOnlyData(updateUserReadOnly);
+                return {
+                    "isBoombotGranted": isBoombotGranted,
+                    "isWeaponGranted": isWeaponGranted,
+                    "whichBoombot": boombotId,
+                    "whichWeapon": weaponId,
+                    "expAmount": expAmount,
+                    "currentExp": itemLevel[weaponId][1]
+                }
+            }
         }
     }
 }

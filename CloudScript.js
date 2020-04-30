@@ -602,7 +602,7 @@ handlers.OpenBox = function () {
     for (i = 0; i < result.GrantedItems.length; i++) {
         grantedItemIds.push(0)
         grantedItemIds[i] = result.GrantedItems[i].ItemId
-        var itemClass = result.GrantedItems[i].ItemClass
+        var itemClass = result.GrantedItems[i].ItemClass        
         if (itemClass == "msw" || itemClass == "sbw" || itemClass == "rmw" || itemClass == "itw") {
             var weaponId = getWeapon(grantedItemIds[i])
             var boombotId = weaponId % 4
@@ -634,6 +634,7 @@ handlers.OpenBox = function () {
                     "isWeaponGranted": isWeaponGranted,
                     "whichBoombot": boombotId,
                     "whichWeapon": weaponId,
+                    "grantedCoin": grantedCoin,
                     "expAmount": 0,
                     "currentExp": 0
                 }
@@ -656,6 +657,7 @@ handlers.OpenBox = function () {
                     "isWeaponGranted": isWeaponGranted,
                     "whichBoombot": boombotId,
                     "whichWeapon": weaponId,
+                    "grantedCoin": grantedCoin,
                     "expAmount": expAmount,
                     "currentExp": itemLevel[weaponId][1]
                 }

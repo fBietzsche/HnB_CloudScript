@@ -311,8 +311,10 @@ handlers.Debug = function () {
         ContainerItemId: "BasicBox"
     }
     var result = server.UnlockContainerItem(openBox);
-
-    log.debug(result)
+    for(i = 0; i < result.length; i++){
+    result.GrantedItems[i].ItemId
+    log.debug(result.GrantedItems[i].ItemId)
+    }    
 }
 
 handlers.AddNewRobot = function () {
@@ -422,13 +424,11 @@ handlers.CheckSlots = function () {
     //Every time main screen loaded or booster used for accelerate box opening
     //get player info
     var timer = [0, 0, 0]
-    var isReady = [0, 0, 0]
     var isAvailable = [0, 0, 0]
     var currentPlayerData = server.GetUserReadOnlyData({
         PlayFabId: currentPlayerId
     });
     var slots = JSON.parse(currentPlayerData.Data.slots.Value);
-    log.debug(slots)
     var grantBasicKeyAndBox = {
         PlayFabId: currentPlayerId,
         ItemIds: ["BasicBoxKey", "BasicBox"]
@@ -436,10 +436,13 @@ handlers.CheckSlots = function () {
     //check for remaining time and give key
     for (i = 0; i < 3; i++) {
         var remainingTime = slots[i][3] - (new Date().getTime() / 1000);
-        isReady[i] = slots[i][0];
         isAvailable[i] = slots[i][1];
-        if ((remainingTime <= 0) && (slots[i][0] == 0) && (slots[i][1] == 0)) {
-            slots[i][0] = 1;
+        if ((remainingTime <= 0) && (isAvailable[i] == 0)) {
+            //reset slot
+            slots[i][0] = 0;
+            slots[i][1] = 1;
+            slots[i][2] = 0;
+            slots[i][3] = 0;
             var updateSlotTimer = {
                 PlayFabId: currentPlayerId,
                 Data: { "slots": JSON.stringify(slots) }
@@ -447,11 +450,8 @@ handlers.CheckSlots = function () {
             server.UpdateUserReadOnlyData(updateSlotTimer);
             server.GrantItemsToUser(grantBasicKeyAndBox);
             timer[i] = 0
-        }
-        else if ((remainingTime <= 0) && (slots[i][0] == 1)) {
-            timer[i] = 0
-        }
-        else if ((slots[i][1] == 1)) {
+        }        
+        else if ((isAvailable[i] == 1)) {
             timer[i] = -1;
         }
         else
@@ -459,7 +459,6 @@ handlers.CheckSlots = function () {
     }
     return {
         "timer": timer,
-        "isReady": isReady,
         "isAvailable": isAvailable
     }
 }
@@ -585,55 +584,17 @@ handlers.SpendRubySlot = function (args) {
 
 }
 
-handlers.OpenBox = function (args) {
+handlers.OpenBox = function () {
     //TODO yeni exp sistemine göre düzenlenecek
-    //when box ready, click to open function
-    args.Slot = !args.Slot ? {} : args.Slot;
-    var whichSlot = args.Slot;
-    //get player info
-    var currentPlayerData = server.GetUserReadOnlyData({
-        PlayFabId: currentPlayerId
-    });
-    var slots = JSON.parse(currentPlayerData.Data.slots.Value);
-    //reset slot
-    if (slots[whichSlot][0] == 1) {
-        slots[whichSlot][0] = 0;
-        slots[whichSlot][1] = 1;
-        slots[whichSlot][2] = 0;
-        slots[whichSlot][3] = 0;
-        var openBox = {
-            PlayFabId: currentPlayerId,
-            ContainerItemId: "BasicBox"
-        }
-        server.UnlockContainerItem(openBox);
-        //Give randomized upgrade shards
-        var itemLevel = JSON.parse(currentPlayerData.Data.itemLevel.Value);
-        //Math.floor(Math.random() * (max - min + 1) ) + min;
-        /*  boomBotId = Math.floor(Math.random() * RobotCount);
-          expAmount = Math.floor(Math.random() * (36 - 24 + 1)) + 24;
-  
-          itemLevel[boomBotId][1] += expAmount;
-        */
-        var giveExp = {
-            PlayFabId: currentPlayerId,
-            Data: {
-                "itemLevel": JSON.stringify(itemLevel),
-                "slots": JSON.stringify(slots)
-            }
-        }
-        server.UpdateUserReadOnlyData(giveExp);
-        return {
-            "whichBoombot": boomBotId,
-            "expAmount": expAmount,
-            "currentExp": itemLevel[boomBotId][1]
-        }
+    //when box ready, click to open function    
+    //get player info    
+    var openBox = {
+        PlayFabId: currentPlayerId,
+        ContainerItemId: "BasicBox"
     }
-
-}
-
-handlers.BoxOutcomeWeapon = function (args) {
+    var result = server.UnlockContainerItem(openBox); 
     //TODO boombota sahipmi değilmi koşuluna göre devam edilecek
-    args.WeaponId = !args.WeaponId ? {} : args.WeaponId;
+    
     var weaponId = getWeapon(args.WeaponId)
     var boombotId = weaponId % 4
     var boombotName = getBoombotName(boombotId)

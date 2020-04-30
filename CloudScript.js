@@ -313,14 +313,14 @@ handlers.Debug = function () {
         PlayFabId: currentPlayerId,
         "Keys": ["levelData", "robotValues"]
     });
-    var weaponData = JSON.parse(titleData.Data.weaponValues);
-    var itemLevel = JSON.parse(userData.Data.itemLevel.Value);
-    var levelData = JSON.parse(titleData.Data.levelData)
     log.debug("userData  =  " + userData)
-        log.debug("weaponData  =  " + weaponData)
-        log.debug("itemLevel  =  " + itemLevel)
-        log.debug("levelData  =  " + levelData)
-   
+    log.debug("titleData  =  " + titleData)
+    var itemLevel = JSON.parse(userData.Data.itemLevel.Value);
+    log.debug("itemLevel  =  " + itemLevel)
+    var levelData = JSON.parse(titleData.Data.levelData)
+    log.debug("levelData  =  " + levelData)
+    var weaponData = JSON.parse(titleData.Data.weaponValues);
+    log.debug("weaponData  =  " + weaponData)
 }
 
 handlers.AddNewRobot = function () {
@@ -590,7 +590,7 @@ handlers.SpendRubySlot = function (args) {
 
 }
 
-handlers.OpenBox = function () {   
+handlers.OpenBox = function () {
     //when box ready, click to open function    
     //get player info 
     var openBox = {
@@ -602,12 +602,12 @@ handlers.OpenBox = function () {
         PlayFabId: currentPlayerId
     });
     var configs = JSON.parse(currentPlayerData.Data.configs.Value);
-    var itemLevel = JSON.parse(currentPlayerData.Data.itemLevel.Value);    
-    var grantedItemIds = []    
+    var itemLevel = JSON.parse(currentPlayerData.Data.itemLevel.Value);
+    var grantedItemIds = []
     for (i = 0; i < result.GrantedItems.length; i++) {
         grantedItemIds.push(0)
         grantedItemIds[i] = result.GrantedItems[i].ItemId
-        var itemClass = result.GrantedItems[i].ItemClass        
+        var itemClass = result.GrantedItems[i].ItemClass
         if (itemClass == "msw" || itemClass == "sbw" || itemClass == "rmw" || itemClass == "itw") {
             var weaponId = getWeapon(grantedItemIds[i])
             var boombotId = weaponId % 4

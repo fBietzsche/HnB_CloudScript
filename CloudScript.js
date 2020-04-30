@@ -588,16 +588,16 @@ handlers.SpendRubySlot = function (args) {
 handlers.OpenBox = function () {   
     //when box ready, click to open function    
     //get player info 
+    var openBox = {
+        PlayFabId: currentPlayerId,
+        ContainerItemId: "BasicBox"
+    }
     var result = server.UnlockContainerItem(openBox);
     var currentPlayerData = server.GetUserReadOnlyData({
         PlayFabId: currentPlayerId
     });
     var configs = JSON.parse(currentPlayerData.Data.configs.Value);
-    var itemLevel = JSON.parse(currentPlayerData.Data.itemLevel.Value);
-    var openBox = {
-        PlayFabId: currentPlayerId,
-        ContainerItemId: "BasicBox"
-    }
+    var itemLevel = JSON.parse(currentPlayerData.Data.itemLevel.Value);    
     var grantedItemIds = []    
     for (i = 0; i < result.GrantedItems.length; i++) {
         grantedItemIds.push(0)

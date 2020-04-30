@@ -845,7 +845,7 @@ handlers.CheckUpgrade = function () {
     }
 }
 
-handlers.UpgradeBoombot = function (args) {
+handlers.UpgradeWeapon = function (args) {
     //usable when an boombot can be upgraded
     args.whichWeapon = !args.whichWeapon ? {} : args.whichWeapon;
     var whichWeapon = args.whichWeapon;

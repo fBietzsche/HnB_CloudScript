@@ -311,7 +311,7 @@ handlers.Debug = function () {
     });
     var titleData = server.GetTitleData({
         PlayFabId: currentPlayerId,
-        "Keys": ["levelData", "robotValues"]
+        "Keys": ["levelData", "weaponValues"]
     });
     log.debug("userData  =  " + userData)
     log.debug("titleData  =  " + titleData)

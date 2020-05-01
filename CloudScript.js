@@ -618,7 +618,7 @@ handlers.OpenBox = function () {
         else if (itemClass == "exp") {
             var weaponName = grantedItemIds[i].slice(0, -4)
             var weaponId = getWeapon(weaponName)
-            var boombotId = weaponId % 4
+            var boombotId = Math.floor(weaponId / 4)
             var boombotName = getBoombotName(boombotId)
             // player got weapon?
             if (itemLevel[weaponId][0] == 0) {

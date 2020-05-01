@@ -600,14 +600,18 @@ handlers.OpenBox = function () {
     var result = server.UnlockContainerItem(openBox);
     var currentPlayerData = server.GetUserReadOnlyData({
         PlayFabId: currentPlayerId
-    });
+    });    
     var configs = JSON.parse(currentPlayerData.Data.configs.Value);
     var itemLevel = JSON.parse(currentPlayerData.Data.itemLevel.Value);
     var grantedItemIds = []
+    var grantedCoin = 0
     for (i = 0; i < result.GrantedItems.length; i++) {
         grantedItemIds.push(0)
         grantedItemIds[i] = result.GrantedItems[i].ItemId
         var itemClass = result.GrantedItems[i].ItemClass
+        if (itemClass == coinPack) {
+            grantedCoin = grantedItemIds[i]
+        }
         if (itemClass == "msw" || itemClass == "sbw" || itemClass == "rmw" || itemClass == "itw") {
             var weaponId = getWeapon(grantedItemIds[i])
             var boombotId = weaponId % 4
@@ -634,21 +638,14 @@ handlers.OpenBox = function () {
                     }
                 }
                 server.UpdateUserReadOnlyData(updateUserReadOnly);
-                return {
-                    "isBoombotGranted": isBoombotGranted,
-                    "isWeaponGranted": isWeaponGranted,
-                    "whichBoombot": boombotId,
-                    "whichWeapon": weaponId,
-                    "grantedCoin": grantedCoin,
-                    "expAmount": 0,
-                    "currentExp": 0
-                }
+                var expAmount = 0
+                var currentExp = 0
             }
             else {
                 var isWeaponGranted = 0
                 var isBoombotGranted = 0
                 //Math.floor(Math.random() * (max - min + 1) ) + min;
-                expAmount = Math.floor(Math.random() * (36 - 24 + 1)) + 24;
+                var expAmount = Math.floor(Math.random() * (36 - 24 + 1)) + 24;
                 itemLevel[weaponId][1] += expAmount;
                 var updateUserReadOnly = {
                     PlayFabId: currentPlayerId,
@@ -657,17 +654,18 @@ handlers.OpenBox = function () {
                     }
                 }
                 server.UpdateUserReadOnlyData(updateUserReadOnly);
-                return {
-                    "isBoombotGranted": isBoombotGranted,
-                    "isWeaponGranted": isWeaponGranted,
-                    "whichBoombot": boombotId,
-                    "whichWeapon": weaponId,
-                    "grantedCoin": grantedCoin,
-                    "expAmount": expAmount,
-                    "currentExp": itemLevel[weaponId][1]
-                }
+                var currentExp = itemLevel[weaponId][1]                
             }
         }
+    }
+    return {
+        "isBoombotGranted": isBoombotGranted,
+        "isWeaponGranted": isWeaponGranted,
+        "whichBoombot": boombotId,
+        "whichWeapon": weaponId,
+        "grantedCoin": grantedCoin,
+        "expAmount": expAmount,
+        "currentExp": currentExp
     }
 }
 

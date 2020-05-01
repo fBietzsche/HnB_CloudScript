@@ -609,7 +609,7 @@ handlers.OpenBox = function () {
         grantedItemIds.push(0)
         grantedItemIds[i] = result.GrantedItems[i].ItemId
         var itemClass = result.GrantedItems[i].ItemClass
-        if (itemClass == coinPack) {
+        if (itemClass == "coinPack") {
             grantedCoin = grantedItemIds[i]
             grantedCoin = grantedCoin.slice(4, 20)
         }

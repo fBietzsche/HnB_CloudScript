@@ -600,7 +600,7 @@ handlers.OpenBox = function () {
     var result = server.UnlockContainerItem(openBox);
     var currentPlayerData = server.GetUserReadOnlyData({
         PlayFabId: currentPlayerId
-    });    
+    });
     var configs = JSON.parse(currentPlayerData.Data.configs.Value);
     var itemLevel = JSON.parse(currentPlayerData.Data.itemLevel.Value);
     var grantedItemIds = []
@@ -611,22 +611,22 @@ handlers.OpenBox = function () {
         var itemClass = result.GrantedItems[i].ItemClass
         if (itemClass == coinPack) {
             grantedCoin = grantedItemIds[i]
+            grantedCoin = grantedCoin.slice(4, 20)
         }
-        if (itemClass == "msw" || itemClass == "sbw" || itemClass == "rmw" || itemClass == "itw") {
-            var weaponId = getWeapon(grantedItemIds[i])
+        else if (itemClass == "exp") {
+            var weaponName = grantedItemIds[i].slice(0, -4)
+            var weaponId = getWeapon(weaponName)
             var boombotId = weaponId % 4
             var boombotName = getBoombotName(boombotId)
             // player got weapon?
             if (itemLevel[weaponId][0] == 0) {
                 var isWeaponGranted = 1
+                var grantItemsIds = [weaponName]
                 //player got boombot?
                 if (configs[boombotId][3] == 0) {
                     configs[boombotId][3] = 1
-                    var grantBoombot = {
-                        PlayFabId: currentPlayerId,
-                        ItemIds: boombotName
-                    }
-                    server.GrantItemsToUser(grantBoombot);
+                   
+                    grantItemsIds.push(boombotName)
                     var isBoombotGranted = 1
                 }
                 itemLevel[weaponId][0] = 1
@@ -638,6 +638,11 @@ handlers.OpenBox = function () {
                     }
                 }
                 server.UpdateUserReadOnlyData(updateUserReadOnly);
+                var grantItems = {
+                    PlayFabId: currentPlayerId,
+                    ItemIds: grantItemsIds
+                }
+                server.GrantItemsToUser(grantItems);
                 var expAmount = 0
                 var currentExp = 0
             }
@@ -654,7 +659,7 @@ handlers.OpenBox = function () {
                     }
                 }
                 server.UpdateUserReadOnlyData(updateUserReadOnly);
-                var currentExp = itemLevel[weaponId][1]                
+                var currentExp = itemLevel[weaponId][1]
             }
         }
     }

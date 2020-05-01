@@ -605,6 +605,8 @@ handlers.OpenBox = function () {
     var itemLevel = JSON.parse(currentPlayerData.Data.itemLevel.Value);
     var grantedItemIds = []
     var grantedCoin = 0
+    var isWeaponGranted = 0
+    var isBoombotGranted = 0
     for (i = 0; i < result.GrantedItems.length; i++) {
         grantedItemIds.push(0)
         grantedItemIds[i] = result.GrantedItems[i].ItemId
@@ -625,7 +627,6 @@ handlers.OpenBox = function () {
                 //player got boombot?
                 if (configs[boombotId][3] == 0) {
                     configs[boombotId][3] = 1
-                   
                     grantItemsIds.push(boombotName)
                     var isBoombotGranted = 1
                 }
@@ -647,8 +648,6 @@ handlers.OpenBox = function () {
                 var currentExp = 0
             }
             else {
-                var isWeaponGranted = 0
-                var isBoombotGranted = 0
                 //Math.floor(Math.random() * (max - min + 1) ) + min;
                 var expAmount = Math.floor(Math.random() * (36 - 24 + 1)) + 24;
                 itemLevel[weaponId][1] += expAmount;

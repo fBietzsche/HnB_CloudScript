@@ -367,7 +367,7 @@ handlers.SlotTester = function (args) {
         PlayFabId: currentPlayerId
     });
     var slots = JSON.parse(currentPlayerData.Data.slots.Value);
-    var whichSlot = slot
+    var whichSlot = args.slot
     var timer = args.timer
     slots[whichSlot] = [
         0,

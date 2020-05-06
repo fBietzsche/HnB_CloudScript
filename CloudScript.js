@@ -356,6 +356,36 @@ handlers.AddNewRobot = function () {
     server.UpdateUserReadOnlyData(updateUserReadOnly);
 }
 
+handlers.SlotTester = function (args) {
+    /*{
+        "slot": 0,
+        "timer": seconds
+    }*/
+    args.slot = !args.slot ? {} : args.slot;
+    args.timer = !args.timer ? {} : args.timer;
+    var currentPlayerData = server.GetUserReadOnlyData({
+        PlayFabId: currentPlayerId
+    });
+    var slots = JSON.parse(currentPlayerData.Data.slots.Value);
+    var whichSlot = slot
+    var timer = args.timer
+    slots[whichSlot] = [
+        0,
+        0,
+        (new Date().getTime() / 1000),
+        (new Date().getTime() / 1000) + timer
+    ]    
+    log.debug("slots = " + slots)
+    log.debug("choosen slot = " + slots[whichSlot])
+    var updateUserReadOnly = {
+        PlayFabId: currentPlayerId,
+        Data: {
+            "slots": JSON.stringify(slots)            
+        }
+    }    
+    server.UpdateUserReadOnlyData(updateUserReadOnly);
+}
+
 handlers.FirstLogin = function () {
     //TODO yeni exp sistemine göre güncellenecek
     /*{

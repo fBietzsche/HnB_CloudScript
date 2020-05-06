@@ -369,6 +369,7 @@ handlers.SlotTester = function (args) {
     var slots = JSON.parse(currentPlayerData.Data.slots.Value);
     var whichSlot = args.slot
     var timer = args.timer
+    log.debug("choosen slot before = " + slots[whichSlot])
     slots[whichSlot] = [
         0,
         0,

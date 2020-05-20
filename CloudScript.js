@@ -785,7 +785,7 @@ handlers.GetUserGameplayConfig = function (args) {
         "UltDamageScale": weaponData[weaponId][3],
         "UltCharge": weaponData[weaponId][4],
         "MoveSpeedScale": weaponData[weaponId][5],
-        "AltDamage": weaponData[weaponId][6],
+        "AltDamage": weaponData[weaponId][6] * (weaponData[weaponId][0] + (weaponData[weaponId][0] * (itemLevel[weaponId][0] - 1) * 0.05)),
         "HealthPoints": weaponData[weaponId][7] + (weaponData[weaponId][7] * (itemLevel[weaponId][0] - 1) * 0.05),
         "Cooldown": weaponData[weaponId][8]
     }

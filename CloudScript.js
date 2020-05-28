@@ -959,7 +959,7 @@ handlers.OnMatchStart = function (args) {
     ongoingMatch[4] = new Date().getTime() / 1000
     log.debug("ongoingMatch = " + JSON.stringify(ongoingMatch))
     var UpdateUserReadOnlyData = {
-        PlayFabId: PlayerId,
+        PlayFabId: currentPlayerId,
         Data: {
             "ongoingMatch": JSON.stringify(ongoingMatch)
         }

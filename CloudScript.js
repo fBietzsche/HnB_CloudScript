@@ -16,6 +16,13 @@ var RobotCount = 4;
 var WeaponCount = 16;
 var BasicBoxTime = 900;
 
+function getMatchDuration(matchType) {
+    var matchDurations = {
+        "deathmatch": 120
+    };
+    return matchDurations[matchType]
+}
+
 function getBoombot(boombot) {
     var boombots = {
         "MekaScorp": 0,
@@ -76,6 +83,7 @@ function winCondition(winArgs) {
     var trophy = JSON.parse(currentPlayerTrophy.Statistics[0].Value)
     var matchStats = JSON.parse(currentPlayerData.Data.matchStats.Value);
     var matchHistory = JSON.parse(currentPlayerData.Data.matchHistory.Value);
+    var ongoingMatch = JSON.parse(currentPlayerData.Data.ongoingMatch.Value);
     matchStats[0] += 1;
     var newTrophy = trophy + 7;
     //give booster if available
@@ -105,14 +113,16 @@ function winCondition(winArgs) {
         matchHistory.pop();
     }
     var thisMatch = [new Date().toISOString(), winnerPlayers, loserPlayers, drawPlayers,
-        oldBooster, tradedBooster, isBoxGiven, trophy, newTrophy]
+        oldBooster, tradedBooster, isBoxGiven, trophy, newTrophy, ongoingMatch[1]]
     matchHistory.unshift(thisMatch);
+    var ongoingMatch = ["0", "0", "0", "0", 0]
     var UpdateUserReadOnlyData = {
         PlayFabId: PlayerId,
         Data: {
             "slots": JSON.stringify(slots),
             "matchStats": JSON.stringify(matchStats),
-            "matchHistory": JSON.stringify(matchHistory)
+            "matchHistory": JSON.stringify(matchHistory),
+            "ongoingMatch": JSON.stringify(ongoingMatch)
         }
     }
     server.UpdateUserReadOnlyData(UpdateUserReadOnlyData);
@@ -132,6 +142,7 @@ function loseCondition(loseArgs) {
     });
     var matchHistory = JSON.parse(currentPlayerData.Data.matchHistory.Value);
     var matchStats = JSON.parse(currentPlayerData.Data.matchStats.Value);
+    var ongoingMatch = JSON.parse(currentPlayerData.Data.ongoingMatch.Value);
     matchStats[1] += 1;
     var trophy = JSON.parse(currentPlayerTrophy.Statistics[0].Value)
     if (trophy <= 2) {
@@ -153,13 +164,16 @@ function loseCondition(loseArgs) {
         matchHistory.pop();
     }
     var isBoxGiven = 0;
-    var thisMatch = [new Date().toISOString(), winnerPlayers, loserPlayers, drawPlayers, oldBooster, tradedBooster, isBoxGiven, trophy, newTrophy]
+    var thisMatch = [new Date().toISOString(), winnerPlayers, loserPlayers, drawPlayers,
+        oldBooster, tradedBooster, isBoxGiven, trophy, newTrophy, ongoingMatch[1]]
     matchHistory.unshift(thisMatch);
+    var ongoingMatch = ["0", "0", "0", "0", 0]
     var updateUserData = {
         PlayFabId: PlayerId,
         Data: {
             "matchStats": JSON.stringify(matchStats),
-            "matchHistory": JSON.stringify(matchHistory)
+            "matchHistory": JSON.stringify(matchHistory),
+            "ongoingMatch": JSON.stringify(ongoingMatch)
         }
     }
     server.UpdateUserReadOnlyData(updateUserData);
@@ -184,6 +198,7 @@ function drawCondition(drawArgs) {
     });
     var matchStats = JSON.parse(currentPlayerData.Data.matchStats.Value);
     var matchHistory = JSON.parse(currentPlayerData.Data.matchHistory.Value);
+    var ongoingMatch = JSON.parse(currentPlayerData.Data.ongoingMatch.Value);
     matchStats[2] += 1;
     var reserveBooster = JSON.parse(currentPlayerInventory.VirtualCurrency.BR);
     var oldBooster = JSON.parse(currentPlayerInventory.VirtualCurrency.TB)
@@ -195,13 +210,16 @@ function drawCondition(drawArgs) {
         matchHistory.pop();
     }
     var isBoxGiven = 0;
-    var thisMatch = [new Date().toISOString(), winnerPlayers, loserPlayers, drawPlayers, oldBooster, tradedBooster, isBoxGiven, trophy, newTrophy]
+    var thisMatch = [new Date().toISOString(), winnerPlayers, loserPlayers, drawPlayers,
+        oldBooster, tradedBooster, isBoxGiven, trophy, newTrophy, ongoingMatch[1]]
     matchHistory.unshift(thisMatch);
+    var ongoingMatch = ["0", "0", "0", "0", 0]
     var updateUserData = {
         PlayFabId: PlayerId,
         Data: {
             "matchStats": JSON.stringify(matchStats),
-            "matchHistory": JSON.stringify(matchHistory)
+            "matchHistory": JSON.stringify(matchHistory),
+            "ongoingMatch": JSON.stringify(ongoingMatch)
         }
     }
     server.UpdateUserReadOnlyData(updateUserData);
@@ -375,15 +393,15 @@ handlers.SlotTester = function (args) {
         0,
         (new Date().getTime() / 1000),
         (new Date().getTime() / 1000) + timer
-    ]    
+    ]
     log.debug("slots = " + slots)
     log.debug("choosen slot = " + slots[whichSlot])
     var updateUserReadOnly = {
         PlayFabId: currentPlayerId,
         Data: {
-            "slots": JSON.stringify(slots)            
+            "slots": JSON.stringify(slots)
         }
-    }    
+    }
     server.UpdateUserReadOnlyData(updateUserReadOnly);
 }
 
@@ -919,4 +937,58 @@ handlers.UpgradeWeapon = function (args) {
         }
         server.SubtractUserVirtualCurrency(subCoin);
     }
+}
+
+handlers.OnMatchStart = function (args) {
+    /*
+    {"PlayerGameliftId":"asd",
+    "MatchId":"asd",
+    "MatchType":"asd",
+    "Adress":"asd"}
+    */
+    args.PlayerGameliftId = !args.PlayerGameliftId ? {} : args.PlayerGameliftId;
+    args.MatchId = !args.MatchId ? {} : args.MatchId;
+    args.MatchType = !args.MatchType ? {} : args.MatchType;
+    args.Adress = !args.Adress ? {} : args.Adress;
+
+    var ongoingMatch = [0, 0, 0, 0, 0]
+    ongoingMatch[0] = args.PlayerGameliftId
+    ongoingMatch[1] = args.MatchId
+    ongoingMatch[2] = args.MatchType
+    ongoingMatch[3] = args.Adress
+    ongoingMatch[4] = new Date().getTime() / 1000
+    log.debug("ongoingMatch = " + JSON.stringify(ongoingMatch))
+    var UpdateUserReadOnlyData = {
+        PlayFabId: PlayerId,
+        Data: {
+            "ongoingMatch": JSON.stringify(ongoingMatch)
+        }
+    }
+    server.UpdateUserReadOnlyData(UpdateUserReadOnlyData);
+}
+
+handlers.getOngoingMatch = function () {
+
+    var currentPlayerData = server.GetUserReadOnlyData({
+        PlayFabId: currentPlayerId
+    });
+    var reconnectData = {}
+    var ongoingMatch = JSON.parse(currentPlayerData.Data.ongoingMatch.Value);
+    var matchDuration = getMatchDuration(ongoingMatch[2])
+    var matchEndTime = ongoingMatch[4] + matchDuration
+
+    if (matchEndTime > ((new Date().getTime() / 1000) + 15)) {
+        reconnectData = {
+            "PlayerGameliftId": ongoingMatch[0],
+            "Adress": ongoingMatch[3]
+        }
+    }
+    else {
+        reconnectData = {
+            "PlayerGameliftId": "0",
+            "Adress": "0"
+        }
+    }
+    log.debug("return = " + reconnectData)
+    return reconnectData
 }

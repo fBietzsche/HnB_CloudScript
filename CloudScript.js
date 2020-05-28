@@ -997,14 +997,13 @@ handlers.GetCurrentEquipment = function () {
     });
     var itemLevel = JSON.parse(currentPlayerData.Data.itemLevel.Value);
     var equipped = JSON.parse(currentPlayerData.Data.equipped.Value);
-    
+
     var equipments = {
         "boombot": equipped[0],
         "boombotCostume": equipped[1],
         "weapon": equipped[2],
         "weaponCostume": equipped[3],
-        "itemLevel": itemLevel[equipped[2]],
-        
+        "itemLevel": itemLevel[equipped[2]][0]
     }
     return equipments
 }

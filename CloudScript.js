@@ -957,7 +957,6 @@ handlers.OnMatchStart = function (args) {
     ongoingMatch[2] = args.MatchType
     ongoingMatch[3] = args.Adress
     ongoingMatch[4] = new Date().getTime() / 1000
-    log.debug("ongoingMatch = " + JSON.stringify(ongoingMatch))
     var UpdateUserReadOnlyData = {
         PlayFabId: currentPlayerId,
         Data: {
@@ -975,10 +974,7 @@ handlers.getOngoingMatch = function () {
     var reconnectData = {}
     var ongoingMatch = JSON.parse(currentPlayerData.Data.ongoingMatch.Value);
     var matchDuration = getMatchDuration(ongoingMatch[2])
-    log.debug("matchDuration = " + matchDuration)
     var matchEndTime = ongoingMatch[4] + matchDuration
-    log.debug("matchEndTime = " + matchEndTime)
-    log.debug("(new Date().getTime() / 1000) = " + (new Date().getTime() / 1000))
     if (matchEndTime > ((new Date().getTime() / 1000) + 15)) {
         reconnectData = {
             "PlayerGameliftId": ongoingMatch[0],
@@ -991,6 +987,5 @@ handlers.getOngoingMatch = function () {
             "Adress": "0"
         }
     }
-    log.debug("return = " + reconnectData)
     return reconnectData
 }

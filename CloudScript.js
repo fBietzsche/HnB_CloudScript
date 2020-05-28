@@ -998,7 +998,7 @@ handlers.GetCurrentEquipment = function () {
     var equipped = JSON.parse(currentPlayerData.Data.equipped.Value);
 
     var equipments = {
-        "boombot": equipped[0],
+        "boombot": getBoombot(equipped[0]),
         "boombotCostume": equipped[1],
         "weapon": equipped[2],
         "weaponCostume": equipped[3],

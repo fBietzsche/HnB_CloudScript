@@ -18,7 +18,7 @@ var BasicBoxTime = 900;
 
 function getMatchDuration(matchType) {
     var matchDurations = {
-        "deathmatch": 120
+        "Deathmatch": 120
     };
     return matchDurations[matchType]
 }

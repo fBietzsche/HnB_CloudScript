@@ -966,7 +966,7 @@ handlers.OnMatchStart = function (args) {
     server.UpdateUserReadOnlyData(UpdateUserReadOnlyData);
 }
 
-handlers.getOngoingMatch = function () {
+handlers.GetOngoingMatch = function () {
 
     var currentPlayerData = server.GetUserReadOnlyData({
         PlayFabId: currentPlayerId
@@ -988,4 +988,23 @@ handlers.getOngoingMatch = function () {
         }
     }
     return reconnectData
+}
+
+handlers.GetCurrentEquipment = function () {
+
+    var currentPlayerData = server.GetUserReadOnlyData({
+        PlayFabId: currentPlayerId,
+    });
+    var itemLevel = JSON.parse(currentPlayerData.Data.itemLevel.Value);
+    var equipped = JSON.parse(currentPlayerData.Data.equipped.Value);
+    
+    var equipments = {
+        "boombot": equipped[0],
+        "boombotCostume": equipped[1],
+        "weapon": equipped[2],
+        "weaponCostume": equipped[3],
+        "itemLevel": itemLevel[equipped[2]],
+        
+    }
+    return equipments
 }

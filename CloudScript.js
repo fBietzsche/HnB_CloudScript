@@ -972,7 +972,11 @@ handlers.GetOngoingMatch = function () {
         PlayFabId: currentPlayerId
     });
     var ongoingMatch = JSON.parse(currentPlayerData.Data.ongoingMatch.Value);
-    var matchDuration = getMatchDuration(ongoingMatch[2])
+    var reconnectData = {
+        "PlayerGameliftId": ongoingMatch[0],
+        "Adress": ongoingMatch[3]
+    }
+ /*   var matchDuration = getMatchDuration(ongoingMatch[2])
     var matchEndTime = ongoingMatch[4] + matchDuration
     if (matchEndTime > ((new Date().getTime() / 1000) + 15)) {
        var reconnectData = {
@@ -985,7 +989,7 @@ handlers.GetOngoingMatch = function () {
             "PlayerGameliftId": "0",
             "Adress": "0"
         }
-    }
+    }*/
     return reconnectData
 }
 

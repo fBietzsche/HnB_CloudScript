@@ -971,18 +971,17 @@ handlers.GetOngoingMatch = function () {
     var currentPlayerData = server.GetUserReadOnlyData({
         PlayFabId: currentPlayerId
     });
-    var reconnectData = {}
     var ongoingMatch = JSON.parse(currentPlayerData.Data.ongoingMatch.Value);
     var matchDuration = getMatchDuration(ongoingMatch[2])
     var matchEndTime = ongoingMatch[4] + matchDuration
     if (matchEndTime > ((new Date().getTime() / 1000) + 15)) {
-        reconnectData = {
+       var reconnectData = {
             "PlayerGameliftId": ongoingMatch[0],
             "Adress": ongoingMatch[3]
         }
     }
     else {
-        reconnectData = {
+        var reconnectData = {
             "PlayerGameliftId": "0",
             "Adress": "0"
         }
@@ -993,7 +992,7 @@ handlers.GetOngoingMatch = function () {
 handlers.GetCurrentEquipment = function () {
 
     var currentPlayerData = server.GetUserReadOnlyData({
-        PlayFabId: currentPlayerId,
+        PlayFabId: currentPlayerId
     });
     var itemLevel = JSON.parse(currentPlayerData.Data.itemLevel.Value);
     var equipped = JSON.parse(currentPlayerData.Data.equipped.Value);

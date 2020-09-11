@@ -11,7 +11,7 @@
 // This is the test build. Heavily under work in progress. Numbers will be changed.
 
 //
- 
+
 var RobotCount = 4;
 var WeaponCount = 16;
 var BasicBoxTime = 900;
@@ -84,7 +84,9 @@ function winCondition(winArgs) {
     var matchStats = JSON.parse(currentPlayerData.Data.matchStats.Value);
     var matchHistory = JSON.parse(currentPlayerData.Data.matchHistory.Value);
     var ongoingMatch = JSON.parse(currentPlayerData.Data.ongoingMatch.Value);
+    var accountExp = JSON.parse(currentPlayerData.Data.accountExp.Value);
     matchStats[0] += 1;
+    accountExp += 20;
     var newTrophy = trophy + 7;
     //give booster if available
     var currentPlayerInventory = server.GetUserInventory({
@@ -122,7 +124,8 @@ function winCondition(winArgs) {
             "slots": JSON.stringify(slots),
             "matchStats": JSON.stringify(matchStats),
             "matchHistory": JSON.stringify(matchHistory),
-            "ongoingMatch": JSON.stringify(ongoingMatch)
+            "ongoingMatch": JSON.stringify(ongoingMatch),
+            "accountExp": JSON.stringify(accountExp)
         }
     }
     server.UpdateUserReadOnlyData(UpdateUserReadOnlyData);
@@ -144,6 +147,8 @@ function loseCondition(loseArgs) {
     var matchStats = JSON.parse(currentPlayerData.Data.matchStats.Value);
     var ongoingMatch = JSON.parse(currentPlayerData.Data.ongoingMatch.Value);
     matchStats[1] += 1;
+    var accountExp = JSON.parse(currentPlayerData.Data.accountExp.Value);
+    accountExp += 5;
     var trophy = JSON.parse(currentPlayerTrophy.Statistics[0].Value)
     if (trophy <= 2) {
         var newTrophy = 0
@@ -173,7 +178,8 @@ function loseCondition(loseArgs) {
         Data: {
             "matchStats": JSON.stringify(matchStats),
             "matchHistory": JSON.stringify(matchHistory),
-            "ongoingMatch": JSON.stringify(ongoingMatch)
+            "ongoingMatch": JSON.stringify(ongoingMatch),
+            "accountExp": JSON.stringify(accountExp)
         }
     }
     server.UpdateUserReadOnlyData(updateUserData);
@@ -200,6 +206,8 @@ function drawCondition(drawArgs) {
     var matchHistory = JSON.parse(currentPlayerData.Data.matchHistory.Value);
     var ongoingMatch = JSON.parse(currentPlayerData.Data.ongoingMatch.Value);
     matchStats[2] += 1;
+    var accountExp = JSON.parse(currentPlayerData.Data.accountExp.Value);
+    accountExp += 10;
     var reserveBooster = JSON.parse(currentPlayerInventory.VirtualCurrency.BR);
     var oldBooster = JSON.parse(currentPlayerInventory.VirtualCurrency.TB)
     if (reserveBooster >= 10) {
@@ -219,7 +227,8 @@ function drawCondition(drawArgs) {
         Data: {
             "matchStats": JSON.stringify(matchStats),
             "matchHistory": JSON.stringify(matchHistory),
-            "ongoingMatch": JSON.stringify(ongoingMatch)
+            "ongoingMatch": JSON.stringify(ongoingMatch),
+            "accountExp": JSON.stringify(accountExp)
         }
     }
     server.UpdateUserReadOnlyData(updateUserData);
@@ -413,6 +422,7 @@ handlers.FirstLogin = function () {
         "startTime": 0,
         "endTime": 0
     }*/
+    var accountExp = 0
     var slotsBase = [
         0,
         1,
@@ -460,7 +470,8 @@ handlers.FirstLogin = function () {
             "itemLevel": JSON.stringify(itemLevel),
             "slots": JSON.stringify(slots),
             "matchStats": JSON.stringify(matchStats),
-            "matchHistory": JSON.stringify(matchHistory)
+            "matchHistory": JSON.stringify(matchHistory),
+            "accountExp": JSON.stringify(accountExp)
         }
     }
     server.UpdatePlayerStatistics({

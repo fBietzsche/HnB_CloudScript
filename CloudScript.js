@@ -85,10 +85,8 @@ function winCondition(winArgs) {
     var matchHistory = JSON.parse(currentPlayerData.Data.matchHistory.Value);
     var ongoingMatch = JSON.parse(currentPlayerData.Data.ongoingMatch.Value);
     var accountExp = JSON.parse(currentPlayerData.Data.accountExp.Value);
-    log.debug("accountExp: " + accountExp[1]);
     matchStats[0] += 1;
     accountExp[1] = accountExp[1] + 20;
-    log.debug("accountExp yeni: " + accountExp[1]);
     var newTrophy = trophy + 7;
     //give booster if available
     var currentPlayerInventory = server.GetUserInventory({
@@ -152,6 +150,7 @@ function loseCondition(loseArgs) {
     matchStats[1] += 1;
     var accountExp = JSON.parse(currentPlayerData.Data.accountExp.Value);
     accountExp += 10;
+    accountExp[1] = accountExp[1] + 10;
     var trophy = JSON.parse(currentPlayerTrophy.Statistics[0].Value)
     if (trophy <= 2) {
         var newTrophy = 0
@@ -210,7 +209,7 @@ function drawCondition(drawArgs) {
     var ongoingMatch = JSON.parse(currentPlayerData.Data.ongoingMatch.Value);
     matchStats[2] += 1;
     var accountExp = JSON.parse(currentPlayerData.Data.accountExp.Value);
-    accountExp += 15;
+    accountExp[1] = accountExp[1] + 15;
     var reserveBooster = JSON.parse(currentPlayerInventory.VirtualCurrency.BR);
     var oldBooster = JSON.parse(currentPlayerInventory.VirtualCurrency.TB)
     if (reserveBooster >= 10) {

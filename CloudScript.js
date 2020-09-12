@@ -85,10 +85,10 @@ function winCondition(winArgs) {
     var matchHistory = JSON.parse(currentPlayerData.Data.matchHistory.Value);
     var ongoingMatch = JSON.parse(currentPlayerData.Data.ongoingMatch.Value);
     var accountExp = JSON.parse(currentPlayerData.Data.accountExp.Value);
-    log.debug("accountExp + " + accountExp[1][0])
+    log.debug("accountExp: " + accountExp[1]);
     matchStats[0] += 1;
-    accountExp[1][0] = accountExp[1][0] + 20;
-    log.debug("accountExp yeni + " + accountExp[1][0])
+    accountExp[1] = accountExp[1] + 20;
+    log.debug("accountExp yeni: " + accountExp[1]);
     var newTrophy = trophy + 7;
     //give booster if available
     var currentPlayerInventory = server.GetUserInventory({
@@ -128,7 +128,7 @@ function winCondition(winArgs) {
             "matchStats": JSON.stringify(matchStats),
             "matchHistory": JSON.stringify(matchHistory),
             "ongoingMatch": JSON.stringify(ongoingMatch),
-            "accountExp": accountExp
+            "accountExp": JSON.stringify(accountExp)
         }
     }
     server.UpdateUserReadOnlyData(UpdateUserReadOnlyData);

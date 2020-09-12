@@ -84,7 +84,7 @@ function winCondition(winArgs) {
     var matchStats = JSON.parse(currentPlayerData.Data.matchStats.Value);
     var matchHistory = JSON.parse(currentPlayerData.Data.matchHistory.Value);
     var ongoingMatch = JSON.parse(currentPlayerData.Data.ongoingMatch.Value);
-    var accountExp = JSON.parse(currentPlayerData.Data.accountExp.Value);
+    var accountExp = JSON.parse(currentPlayerData.Data.accountExp[1].Value);
     log.debug("accountExp + " + accountExp[1])
     matchStats[0] += 1;
     accountExp[1] = accountExp[1] + 20;

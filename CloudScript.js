@@ -422,7 +422,7 @@ handlers.FirstLogin = function () {
         "startTime": 0,
         "endTime": 0
     }*/
-    var accountExp = 0
+    var accountExp = [1, 0]
     var slotsBase = [
         0,
         1,
@@ -987,20 +987,20 @@ handlers.GetOngoingMatch = function () {
         "PlayerGameliftId": ongoingMatch[0],
         "Adress": ongoingMatch[3]
     }
- /*   var matchDuration = getMatchDuration(ongoingMatch[2])
-    var matchEndTime = ongoingMatch[4] + matchDuration
-    if (matchEndTime > ((new Date().getTime() / 1000) + 15)) {
-       var reconnectData = {
-            "PlayerGameliftId": ongoingMatch[0],
-            "Adress": ongoingMatch[3]
-        }
-    }
-    else {
-        var reconnectData = {
-            "PlayerGameliftId": "0",
-            "Adress": "0"
-        }
-    }*/
+    /*   var matchDuration = getMatchDuration(ongoingMatch[2])
+       var matchEndTime = ongoingMatch[4] + matchDuration
+       if (matchEndTime > ((new Date().getTime() / 1000) + 15)) {
+          var reconnectData = {
+               "PlayerGameliftId": ongoingMatch[0],
+               "Adress": ongoingMatch[3]
+           }
+       }
+       else {
+           var reconnectData = {
+               "PlayerGameliftId": "0",
+               "Adress": "0"
+           }
+       }*/
     return reconnectData
 }
 
@@ -1020,4 +1020,47 @@ handlers.GetCurrentEquipment = function () {
         "itemLevel": itemLevel[equipped[2]][0]
     }
     return equipments
+}
+
+handlers.AccountLevelUpCheck = function () {
+
+    //Get data
+    var currentPlayerData = server.GetUserReadOnlyData({
+        PlayFabId: currentPlayerId
+    });
+    var titleData = server.GetTitleData({
+        PlayFabId: currentPlayerId,
+        "Keys": "accountLevel"
+    });
+
+    //Set data
+    var accountExp = JSON.parse(currentPlayerData.Data.accountExp.Value);
+    var accountLevel = JSON.parse(titleData.Data.accountLevel);
+    var isLevelUp = 0;
+    var boosterFromLevelUp = 0;
+    
+    //if OK level up and give booster
+    if ((accountExp[1] >= accountLevel[accountExp[0]])) {
+        accountExp[0] = accountExp[0] + 1
+        boosterFromLevelUp = 30
+        var accLevelUp = {
+            PlayFabId: currentPlayerId,
+            Data: { "accountExp": JSON.stringify(accountExp) }
+        }        
+        server.UpdateUserReadOnlyData(accLevelUp);
+        
+        var addBooster = {
+            PlayFabId: PlayerId,
+            VirtualCurrency: "TB",
+            Amount: boosterFromLevelUp
+        }
+        server.AddUserVirtualCurrency(addBooster);
+        isLevelUp = 1
+    }
+    return {
+        "isLevelUp": isLevelUp,
+        "boosterFromLevelUp": boosterFromLevelUp,
+        "currentAccLevel": accountExp[0],
+        "currentTotalAccExp": accountExp[1]
+    }
 }

@@ -14,11 +14,11 @@
 
 var RobotCount = 4;
 var WeaponCount = 16;
-var BasicBoxTime = 900;
+var BasicBoxTime = 3600;
 
 function getMatchDuration(matchType) {
     var matchDurations = {
-        "Deathmatch": 120
+        "Deathmatch": 150
     };
     return matchDurations[matchType]
 }
@@ -60,7 +60,7 @@ function getWeapon(weapon) {
         "itw_1": 12,
         "itw_2": 13,
         "itw_3": 14,
-        "itw_4": 15,
+        "itw_4": 15
     };
     return weapons[weapon]
 }
@@ -148,7 +148,7 @@ function loseCondition(loseArgs) {
     var ongoingMatch = JSON.parse(currentPlayerData.Data.ongoingMatch.Value);
     matchStats[1] += 1;
     var accountExp = JSON.parse(currentPlayerData.Data.accountExp.Value);
-    accountExp += 5;
+    accountExp += 10;
     var trophy = JSON.parse(currentPlayerTrophy.Statistics[0].Value)
     if (trophy <= 2) {
         var newTrophy = 0
@@ -207,7 +207,7 @@ function drawCondition(drawArgs) {
     var ongoingMatch = JSON.parse(currentPlayerData.Data.ongoingMatch.Value);
     matchStats[2] += 1;
     var accountExp = JSON.parse(currentPlayerData.Data.accountExp.Value);
-    accountExp += 10;
+    accountExp += 15;
     var reserveBooster = JSON.parse(currentPlayerInventory.VirtualCurrency.BR);
     var oldBooster = JSON.parse(currentPlayerInventory.VirtualCurrency.TB)
     if (reserveBooster >= 10) {

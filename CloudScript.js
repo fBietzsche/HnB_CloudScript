@@ -251,8 +251,8 @@ function winConditionUpdate(winArgs) {
             doubleBattery = 0;
         }
         else {
-            tradedBooster = 2 * tradedBooster;
             doubleBattery = doubleBattery - tradedBooster;
+            tradedBooster = 2 * tradedBooster;            
         }
         var subBooster = {
             PlayFabId: PlayerId,
@@ -302,6 +302,7 @@ function loseConditionUpdate(loseArgs) {
             tradedBooster = doubleBattery + tradedBooster;
         }
         else {
+            doubleBattery = doubleBattery - tradedBooster;
             tradedBooster = 2 * tradedBooster;
         }
 
@@ -337,8 +338,6 @@ function loseConditionUpdate(loseArgs) {
             }
         ]
     })
-
-
 }
 
 function drawConditionUpdate(drawArgs) {
@@ -355,6 +354,7 @@ function drawConditionUpdate(drawArgs) {
             tradedBooster = doubleBattery + tradedBooster;
         }
         else {
+            doubleBattery = doubleBattery - tradedBooster;
             tradedBooster = 2 * tradedBooster;
         }
 

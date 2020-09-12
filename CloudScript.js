@@ -128,7 +128,7 @@ function winCondition(winArgs) {
             "matchStats": JSON.stringify(matchStats),
             "matchHistory": JSON.stringify(matchHistory),
             "ongoingMatch": JSON.stringify(ongoingMatch),
-            "accountExp": JSON.stringify(accountExp)
+            "accountExp": accountExp
         }
     }
     server.UpdateUserReadOnlyData(UpdateUserReadOnlyData);

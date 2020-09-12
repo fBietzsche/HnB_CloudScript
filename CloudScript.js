@@ -94,6 +94,7 @@ function winCondition(winArgs) {
     });
     var reserveBooster = JSON.parse(currentPlayerInventory.VirtualCurrency.BR);
     var oldBooster = JSON.parse(currentPlayerInventory.VirtualCurrency.TB)
+
     if (reserveBooster >= 15) {
         var tradedBooster = 15;
     }
@@ -240,9 +241,18 @@ function winConditionUpdate(winArgs) {
         PlayFabId: PlayerId
     });
     var matchHistory = JSON.parse(currentPlayerData.Data.matchHistory.Value);
+    var doubleBattery = JSON.parse(currentPlayerData.Data.doubleBattery.Value);
     //give booster if available   
     var tradedBooster = matchHistory[0][5];
     if (tradedBooster >= 1) {
+        if (doubleBattery <= tradedBooster) {
+            tradedBooster = doubleBattery + tradedBooster;
+            doubleBattery = 0;
+        }
+        else {
+            tradedBooster = 2 * tradedBooster;
+            doubleBattery = doubleBattery - tradedBooster;
+        }
         var subBooster = {
             PlayFabId: PlayerId,
             VirtualCurrency: "BR",
@@ -256,6 +266,13 @@ function winConditionUpdate(winArgs) {
 
         server.SubtractUserVirtualCurrency(subBooster);
         server.AddUserVirtualCurrency(addBooster);
+        var UpdateUserReadOnlyData = {
+            PlayFabId: PlayerId,
+            Data: {
+                "doubleBattery": JSON.stringify(doubleBattery),
+            }
+        }
+        server.UpdateUserReadOnlyData(UpdateUserReadOnlyData);
     }
     //new trophy update
     var newTrophy = matchHistory[0][8];
@@ -268,7 +285,6 @@ function winConditionUpdate(winArgs) {
             }
         ]
     })
-
 }
 
 function loseConditionUpdate(loseArgs) {
@@ -277,9 +293,17 @@ function loseConditionUpdate(loseArgs) {
         PlayFabId: PlayerId
     });
     var matchHistory = JSON.parse(currentPlayerData.Data.matchHistory.Value);
-    //give booster if available       
+    var doubleBattery = JSON.parse(currentPlayerData.Data.doubleBattery.Value);
+    //give booster if available   
     var tradedBooster = matchHistory[0][5];
     if (tradedBooster >= 1) {
+        if (doubleBattery <= tradedBooster) {
+            tradedBooster = doubleBattery + tradedBooster;
+        }
+        else {
+            tradedBooster = 2 * tradedBooster;
+        }
+
         var subBooster = {
             PlayFabId: PlayerId,
             VirtualCurrency: "BR",
@@ -293,6 +317,13 @@ function loseConditionUpdate(loseArgs) {
 
         server.SubtractUserVirtualCurrency(subBooster);
         server.AddUserVirtualCurrency(addBooster);
+        var UpdateUserReadOnlyData = {
+            PlayFabId: PlayerId,
+            Data: {
+                "doubleBattery": JSON.stringify(doubleBattery),
+            }
+        }
+        server.UpdateUserReadOnlyData(UpdateUserReadOnlyData);
     }
     //new trophy update
     var newTrophy = matchHistory[0][8];
@@ -305,6 +336,7 @@ function loseConditionUpdate(loseArgs) {
             }
         ]
     })
+
 
 }
 
@@ -314,8 +346,17 @@ function drawConditionUpdate(drawArgs) {
         PlayFabId: PlayerId
     });
     var matchHistory = JSON.parse(currentPlayerData.Data.matchHistory.Value);
+    var doubleBattery = JSON.parse(currentPlayerData.Data.doubleBattery.Value);
+    //give booster if available   
     var tradedBooster = matchHistory[0][5];
     if (tradedBooster >= 1) {
+        if (doubleBattery <= tradedBooster) {
+            tradedBooster = doubleBattery + tradedBooster;
+        }
+        else {
+            tradedBooster = 2 * tradedBooster;
+        }
+
         var subBooster = {
             PlayFabId: PlayerId,
             VirtualCurrency: "BR",
@@ -326,9 +367,15 @@ function drawConditionUpdate(drawArgs) {
             VirtualCurrency: "TB",
             Amount: tradedBooster
         }
-
         server.SubtractUserVirtualCurrency(subBooster);
         server.AddUserVirtualCurrency(addBooster);
+        var UpdateUserReadOnlyData = {
+            PlayFabId: PlayerId,
+            Data: {
+                "doubleBattery": JSON.stringify(doubleBattery),
+            }
+        }
+        server.UpdateUserReadOnlyData(UpdateUserReadOnlyData);
     }
 }
 
@@ -423,6 +470,7 @@ handlers.FirstLogin = function () {
         "endTime": 0
     }*/
     var accountExp = [1, 0]
+    var doubleBattery = 0
     var slotsBase = [
         0,
         1,
@@ -471,7 +519,8 @@ handlers.FirstLogin = function () {
             "slots": JSON.stringify(slots),
             "matchStats": JSON.stringify(matchStats),
             "matchHistory": JSON.stringify(matchHistory),
-            "accountExp": JSON.stringify(accountExp)
+            "accountExp": JSON.stringify(accountExp),
+            "doubleBattery": JSON.stringify(doubleBattery)
         }
     }
     server.UpdatePlayerStatistics({
@@ -1034,33 +1083,33 @@ handlers.AccountLevelUpCheck = function () {
     });
 
     //Set data
+    var doubleBattery = JSON.parse(currentPlayerData.Data.doubleBattery.Value);
     var accountExp = JSON.parse(currentPlayerData.Data.accountExp.Value);
     var accountLevel = JSON.parse(titleData.Data.accountLevel);
     var isLevelUp = 0;
-    var boosterFromLevelUp = 0;
-    
-    //if OK level up and give booster
+    var doubleBatteryFromLevelUp = 0;
+
+    //if OK level up and give double battery
     if ((accountExp[1] >= accountLevel[accountExp[0]])) {
         accountExp[0] = accountExp[0] + 1
-        boosterFromLevelUp = 30
+        doubleBatteryFromLevelUp = accountExp[0] * 50
+        doubleBattery += doubleBatteryFromLevelUp;
         var accLevelUp = {
             PlayFabId: currentPlayerId,
-            Data: { "accountExp": JSON.stringify(accountExp) }
-        }        
-        server.UpdateUserReadOnlyData(accLevelUp);
-        
-        var addBooster = {
-            PlayFabId: PlayerId,
-            VirtualCurrency: "TB",
-            Amount: boosterFromLevelUp
+            Data: {
+                "accountExp": JSON.stringify(accountExp),
+                "doubleBattery": JSON.stringify(doubleBattery)
+            }
         }
-        server.AddUserVirtualCurrency(addBooster);
+        server.UpdateUserReadOnlyData(accLevelUp);
         isLevelUp = 1
     }
     return {
         "isLevelUp": isLevelUp,
-        "boosterFromLevelUp": boosterFromLevelUp,
+        "doubleBatteryFromLevelUp": doubleBatteryFromLevelUp,
+        "doubleBatteryTotal": doubleBattery,
         "currentAccLevel": accountExp[0],
         "currentTotalAccExp": accountExp[1]
     }
 }
+

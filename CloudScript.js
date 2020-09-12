@@ -84,11 +84,11 @@ function winCondition(winArgs) {
     var matchStats = JSON.parse(currentPlayerData.Data.matchStats.Value);
     var matchHistory = JSON.parse(currentPlayerData.Data.matchHistory.Value);
     var ongoingMatch = JSON.parse(currentPlayerData.Data.ongoingMatch.Value);
-    var accountExp = JSON.parse(currentPlayerData.Data.accountExp[1].Value);
-    log.debug("accountExp + " + accountExp[1])
+    var accountExp = JSON.parse(currentPlayerData.Data.accountExp.Value);
+    log.debug("accountExp + " + accountExp[0][1])
     matchStats[0] += 1;
-    accountExp[1] = accountExp[1] + 20;
-    log.debug("accountExp yeni + " + accountExp[1])
+    accountExp[0][1] = accountExp[0][1] + 20;
+    log.debug("accountExp yeni + " + accountExp[0][1])
     var newTrophy = trophy + 7;
     //give booster if available
     var currentPlayerInventory = server.GetUserInventory({

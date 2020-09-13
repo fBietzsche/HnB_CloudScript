@@ -253,7 +253,7 @@ function winConditionUpdate(winArgs) {
         }
         else {
             doubleBattery = doubleBattery - tradedBooster;
-            tradedBooster = 2 * tradedBooster;            
+            tradedBooster = 2 * tradedBooster;
         }
         var subBooster = {
             PlayFabId: PlayerId,
@@ -982,22 +982,32 @@ handlers.UpgradeWeapon = function (args) {
     var currentExp = itemLevel[whichWeapon][1];
     var requiredExp = levelRamp[itemLevel[whichWeapon][0] - 1]
     var requiredCoin = levelCoin[itemLevel[whichWeapon][0] - 1]
+    var isUpgraded = 0
 
     //if OK level up
-    if ((playerCoin >= requiredCoin) && (currentExp >= requiredExp)) {
-        itemLevel[whichWeapon][1] -= requiredExp
-        itemLevel[whichWeapon][0] += 1;
-        var upgradeItem = {
-            PlayFabId: currentPlayerId,
-            Data: { "itemLevel": JSON.stringify(itemLevel) }
+    if (itemLevel[whichWeapon][0] <= 9) {
+        if ((playerCoin >= requiredCoin) && (currentExp >= requiredExp)) {
+            itemLevel[whichWeapon][1] -= requiredExp
+            itemLevel[whichWeapon][0] += 1;
+            currentExp = itemLevel[whichWeapon][1]
+            var upgradeItem = {
+                PlayFabId: currentPlayerId,
+                Data: { "itemLevel": JSON.stringify(itemLevel) }
+            }
+            server.UpdateUserReadOnlyData(upgradeItem);
+            var subCoin = {
+                PlayFabId: currentPlayerId,
+                VirtualCurrency: "CN",
+                Amount: requiredCoin
+            }
+            server.SubtractUserVirtualCurrency(subCoin);
+            isUpgraded = 1
         }
-        server.UpdateUserReadOnlyData(upgradeItem);
-        var subCoin = {
-            PlayFabId: currentPlayerId,
-            VirtualCurrency: "CN",
-            Amount: requiredCoin
-        }
-        server.SubtractUserVirtualCurrency(subCoin);
+
+    }
+    return {
+        "isUpgraded": isUpgraded,
+        "currentExp": currentExp
     }
 }
 

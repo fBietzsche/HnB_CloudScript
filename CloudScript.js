@@ -164,7 +164,7 @@ function loseCondition(loseArgs) {
     var accountExp = JSON.parse(currentPlayerData.Data.accountExp.Value);
     var doubleBattery = JSON.parse(currentPlayerData.Data.doubleBattery.Value);
     var accountExpGained = 10
-    var trophyChange = 3
+    var trophyChange = -3
     var tradedBattery = 0
     matchStats[1] += 1;
     accountExp[1] = accountExp[1] + accountExpGained;
@@ -172,7 +172,7 @@ function loseCondition(loseArgs) {
         var newTrophy = 0
     }
     else {
-        var newTrophy = trophy - trophyChange;
+        var newTrophy = trophy + trophyChange;
     }
     var currentPlayerInventory = server.GetUserInventory({
         PlayFabId: PlayerId

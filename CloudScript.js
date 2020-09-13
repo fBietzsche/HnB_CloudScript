@@ -246,19 +246,14 @@ function winConditionUpdate(winArgs) {
     var doubleBattery = JSON.parse(currentPlayerData.Data.doubleBattery.Value);
     //give booster if available   
     var tradedBooster = matchHistory[0][5];
-    log.debug("tradedBooster_1: " + tradedBooster)
     if (tradedBooster >= 1) {
         if (doubleBattery <= tradedBooster) {
-            log.debug("doubleBattery: " + doubleBattery)
             tradedBooster = doubleBattery + tradedBooster;
             doubleBattery = 0;
-            log.debug("tradedBooster_2: " + tradedBooster)
         }
         else {
-            log.debug("doubleBattery: " + doubleBattery)
             doubleBattery = doubleBattery - tradedBooster;
-            tradedBooster = 2 * tradedBooster; 
-            log.debug("tradedBooster_2: " + tradedBooster)           
+            tradedBooster = 2 * tradedBooster;            
         }
         var subBooster = {
             PlayFabId: PlayerId,

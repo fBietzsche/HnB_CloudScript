@@ -1120,6 +1120,3 @@ handlers.GetCurrentEquipment = function () {
     }
     return equipments
 }
-
-
-

@@ -314,7 +314,7 @@ function winConditionUpdate(winArgs) {
 }
 
 function loseConditionUpdate(loseArgs) {
-    var PlayerId = loseArgs[0];
+    var PlayerId = loseArgs;
     var currentPlayerData = server.GetUserReadOnlyData({
         PlayFabId: PlayerId
     });

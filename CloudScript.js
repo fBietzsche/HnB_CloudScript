@@ -715,7 +715,7 @@ handlers.SpendBoosterSlot = function (args) {
     var isUsed = 0;
     var playerBooster = JSON.parse(currentPlayerInventory.VirtualCurrency.TB);
     var slots = JSON.parse(currentPlayerData.Data.slots.Value);
-    var reqBooster = Math.ceil((slots[whichSlot][3] - slots[whichSlot][2]) / 60);
+    var reqBooster = Math.ceil((slots[whichSlot][3] - (new Date().getTime() / 1000)) / 60);
     if (playerBooster >= reqBooster && slots[whichSlot][1] == 0 && reqBooster >= 1) {
         slots[whichSlot][3] = (new Date().getTime() / 1000);
         var subBooster = {

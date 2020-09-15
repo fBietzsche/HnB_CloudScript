@@ -284,12 +284,13 @@ function winConditionUpdate(winArgs) {
     var matchHistory = JSON.parse(currentPlayerData.Data.matchHistory.Value);
     //give booster if available   
     var tradedBattery = matchHistory[0][5];
+    var batteryGained = matchHistory[0][12];
     if (tradedBattery >= 1) {
 
         var subBooster = {
             PlayFabId: PlayerId,
             VirtualCurrency: "BR",
-            Amount: tradedBattery
+            Amount: batteryGained
         }
         var addBooster = {
             PlayFabId: PlayerId,
@@ -321,11 +322,12 @@ function loseConditionUpdate(loseArgs) {
     var matchHistory = JSON.parse(currentPlayerData.Data.matchHistory.Value);
     //give booster if available   
     var tradedBattery = matchHistory[0][5];
+    var batteryGained = matchHistory[0][12];
     if (tradedBattery >= 1) {
         var subBooster = {
             PlayFabId: PlayerId,
             VirtualCurrency: "BR",
-            Amount: tradedBattery
+            Amount: batteryGained
         }
         var addBooster = {
             PlayFabId: PlayerId,
@@ -357,11 +359,12 @@ function drawConditionUpdate(drawArgs) {
     var matchHistory = JSON.parse(currentPlayerData.Data.matchHistory.Value);
     //give booster if available   
     var tradedBattery = matchHistory[0][5];
+    var batteryGained = matchHistory[0][12];
     if (tradedBattery >= 1) {
         var subBooster = {
             PlayFabId: PlayerId,
             VirtualCurrency: "BR",
-            Amount: tradedBattery
+            Amount: batteryGained
         }
         var addBooster = {
             PlayFabId: PlayerId,

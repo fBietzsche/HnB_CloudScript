@@ -18,6 +18,10 @@ var BasicBoxTime = 3600;
 
 handlers.finishTutorial = function(args)
 {
+  //we dont want to set other indexes than 3 for now
+  if (args > 2 || args < 0) {
+    return
+  }
 var currentPlayerData = server.GetUserReadOnlyData({PlayFabId: currentPlayerId});
 var currentTutorialProgress = JSON.parse(currentPlayerData.Data.tutorialProgress.Value);
 currentTutorialProgress[args] = 1;

@@ -16,11 +16,11 @@ var RobotCount = 4;
 var WeaponCount = 16;
 var BasicBoxTime = 3600;
 
-function finishTutorial(tutorialIdx)
+handlers.finishTutorial = function(args)
 {
 var currentPlayerData = server.GetUserReadOnlyData({PlayFabId: currentPlayerId});
 var currentTutorialProgress = JSON.parse(currentPlayerData.Data.tutorialProgress.Value);
-currentTutorialProgress[tutorialIdx] = 1;
+currentTutorialProgress[args] = 1;
 var UpdateUserReadOnlyData =
     {
     PlayFabId: currentPlayerId,
@@ -31,7 +31,7 @@ var UpdateUserReadOnlyData =
 server.UpdateUserReadOnlyData(UpdateUserReadOnlyData);
 }
 
-function getTutorialProgress()
+handlers.getTutorialProgress = function()
 {
   var currentPlayerData = server.GetUserReadOnlyData({PlayFabId: currentPlayerId});
   var currentTutorialProgress = JSON.parse(currentPlayerData.Data.tutorialProgress.Value);

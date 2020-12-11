@@ -568,7 +568,7 @@ handlers.FirstLogin = function () {
         0, 0, 0
     ]
 
-    var tutorialProgress = [0,0,0];
+    var tutorialProgress = [0,0,0]
     var matchHistory = []
     var updateUserReadOnly = {
         PlayFabId: currentPlayerId,
@@ -580,7 +580,7 @@ handlers.FirstLogin = function () {
             "matchStats": JSON.stringify(matchStats),
             "matchHistory": JSON.stringify(matchHistory),
             "accountExp": JSON.stringify(accountExp),
-            "doubleBattery": JSON.stringify(doubleBattery)
+            "doubleBattery": JSON.stringify(doubleBattery),
             "tutorialProgress": JSON.stringify(tutorialProgress)
         }
     }

@@ -16,7 +16,7 @@ var RobotCount = 4;
 var WeaponCount = 16;
 var BasicBoxTime = 3600;
 
-handlers.finishTutorial = function(args)
+handlers.FinishTutorial = function(args)
 {
   //we dont want to set other indexes than 3 for now
   if (args > 2 || args < 0) {
@@ -35,7 +35,7 @@ var UpdateUserReadOnlyData =
 server.UpdateUserReadOnlyData(UpdateUserReadOnlyData);
 }
 
-handlers.getTutorialProgress = function()
+handlers.GetTutorialProgress = function()
 {
   var currentPlayerData = server.GetUserReadOnlyData({PlayFabId: currentPlayerId});
   var currentTutorialProgress = JSON.parse(currentPlayerData.Data.tutorialProgress.Value);

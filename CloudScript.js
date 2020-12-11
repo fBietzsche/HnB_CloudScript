@@ -38,7 +38,7 @@ server.UpdateUserReadOnlyData(UpdateUserReadOnlyData);
 handlers.GetTutorialProgress = function()
 {
   var currentPlayerData = server.GetUserReadOnlyData({PlayFabId: currentPlayerId});
-  var currentTutorialProgress = JSON.parse(currentPlayerData.Data.tutorialProgress.Value);
+  var currentTutorialProgress = JSON.parse(currentPlayerData.Data.tutorialProgress);
   return currentTutorialProgress;
 }
 

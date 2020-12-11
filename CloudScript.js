@@ -1,11 +1,11 @@
 // #######################################################################################################################
-/*   
- _____ _   _    _____         _____  _____   ____  _____   __          ________   _______ _____  _    _  _____ _______ 
+/*
+ _____ _   _    _____         _____  _____   ____  _____   __          ________   _______ _____  _    _  _____ _______
 |_   _| \ | |  / ____|  /\   |  __ \|  __ \ / __ \|  __ \  \ \        / /  ____| |__   __|  __ \| |  | |/ ____|__   __|
-  | | |  \| | | (___   /  \  | |__) | |  | | |  | | |__) |  \ \  /\  / /| |__       | |  | |__) | |  | | (___    | |   
-  | | | . ` |  \___ \ / /\ \ |  _  /| |  | | |  | |  _  /    \ \/  \/ / |  __|      | |  |  _  /| |  | |\___ \   | |   
- _| |_| |\  |  ____) / ____ \| | \ \| |__| | |__| | | \ \     \  /\  /  | |____     | |  | | \ \| |__| |____) |  | |   
-|_____|_| \_| |_____/_/    \_\_|  \_\_____/ \____/|_|  \_\     \/  \/   |______|    |_|  |_|  \_\\____/|_____/   |_|   
+  | | |  \| | | (___   /  \  | |__) | |  | | |  | | |__) |  \ \  /\  / /| |__       | |  | |__) | |  | | (___    | |
+  | | | . ` |  \___ \ / /\ \ |  _  /| |  | | |  | |  _  /    \ \/  \/ / |  __|      | |  |  _  /| |  | |\___ \   | |
+ _| |_| |\  |  ____) / ____ \| | \ \| |__| | |__| | | \ \     \  /\  /  | |____     | |  | | \ \| |__| |____) |  | |
+|_____|_| \_| |_____/_/    \_\_|  \_\_____/ \____/|_|  \_\     \/  \/   |______|    |_|  |_|  \_\\____/|_____/   |_|
 */
 // #######################################################################################################################
 // This is the test build. Heavily under work in progress. Numbers will be changed.
@@ -15,6 +15,28 @@
 var RobotCount = 4;
 var WeaponCount = 16;
 var BasicBoxTime = 3600;
+
+function finishTutorial(tutorialIdx)
+{
+var currentPlayerData = server.GetUserReadOnlyData({PlayFabId: currentPlayerId});
+var currentTutorialProgress = JSON.parse(currentPlayerData.Data.tutorialProgress.Value);
+currentTutorialProgress[tutorialIdx] = 1;
+var UpdateUserReadOnlyData =
+    {
+    PlayFabId: currentPlayerId,
+    Data: {
+        "tutorialProgress": JSON.stringify(currentTutorialProgress)
+          }
+    }
+server.UpdateUserReadOnlyData(UpdateUserReadOnlyData);
+}
+
+function getTutorialProgress()
+{
+  var currentPlayerData = server.GetUserReadOnlyData({PlayFabId: currentPlayerId});
+  var currentTutorialProgress = JSON.parse(currentPlayerData.Data.tutorialProgress.Value);
+  return currentTutorialProgress;
+}
 
 function getMatchDuration(matchType) {
     var matchDurations = {
@@ -67,7 +89,7 @@ function getWeapon(weapon) {
 
 function winCondition(winArgs) {
     //After win match
-    //get player info 
+    //get player info
     var PlayerId = winArgs[0];
     var winnerPlayers = winArgs[1];
     var loserPlayers = winArgs[2];
@@ -103,7 +125,7 @@ function winCondition(winArgs) {
         var batteryGained = 15;
     }
     else { var batteryGained = reserveBooster }
-    //check for slot availability, start timer  
+    //check for slot availability, start timer
     for (i = 0; i < slots.length; i++) {
         if (slots[i][1] == 1) {
             var startTime = new Date().getTime() / 1000;
@@ -282,7 +304,7 @@ function winConditionUpdate(winArgs) {
         PlayFabId: PlayerId
     });
     var matchHistory = JSON.parse(currentPlayerData.Data.matchHistory.Value);
-    //give booster if available   
+    //give booster if available
     var tradedBattery = matchHistory[0][5];
     var batteryGained = matchHistory[0][12];
     if (tradedBattery >= 1) {
@@ -320,7 +342,7 @@ function loseConditionUpdate(loseArgs) {
         PlayFabId: PlayerId
     });
     var matchHistory = JSON.parse(currentPlayerData.Data.matchHistory.Value);
-    //give booster if available   
+    //give booster if available
     var tradedBattery = matchHistory[0][5];
     var batteryGained = matchHistory[0][12];
     if (tradedBattery >= 1) {
@@ -357,7 +379,7 @@ function drawConditionUpdate(drawArgs) {
         PlayFabId: PlayerId
     });
     var matchHistory = JSON.parse(currentPlayerData.Data.matchHistory.Value);
-    //give booster if available   
+    //give booster if available
     var tradedBattery = matchHistory[0][5];
     var batteryGained = matchHistory[0][12];
     if (tradedBattery >= 1) {
@@ -545,6 +567,8 @@ handlers.FirstLogin = function () {
     var matchStats = [
         0, 0, 0
     ]
+
+    var tutorialProgress = [0,0,0];
     var matchHistory = []
     var updateUserReadOnly = {
         PlayFabId: currentPlayerId,
@@ -557,6 +581,7 @@ handlers.FirstLogin = function () {
             "matchHistory": JSON.stringify(matchHistory),
             "accountExp": JSON.stringify(accountExp),
             "doubleBattery": JSON.stringify(doubleBattery)
+            "tutorialProgress": JSON.stringify(tutorialProgress)
         }
     }
     server.UpdatePlayerStatistics({
@@ -616,8 +641,8 @@ handlers.CheckSlots = function () {
 
 handlers.EndMatch = function (args) {
     //End match functions handler
-    /*args must be in this format:    
-        {   
+    /*args must be in this format:
+        {
             "winnerPlayers":["x", "y", "z"],
             "loserPlayers":["x", "y", "z"],
             "drawPlayers":["x", "y", "z"]
@@ -653,8 +678,8 @@ handlers.EndMatch = function (args) {
 
 handlers.EndMatchUpdate = function (args) {
     //End match functions handler
-    /*args must be in this format:    
-        {   
+    /*args must be in this format:
+        {
             "winnerPlayers":["x", "y", "z"],
             "loserPlayers":["x", "y", "z"],
             "drawPlayers":["x", "y", "z"]
@@ -743,8 +768,8 @@ handlers.SpendRubySlot = function (args) {
 }
 
 handlers.OpenBox = function () {
-    //when box ready, click to open function    
-    //get player info 
+    //when box ready, click to open function
+    //get player info
     var openBox = {
         PlayFabId: currentPlayerId,
         ContainerItemId: "BasicBox"
@@ -827,8 +852,8 @@ handlers.OpenBox = function () {
 
 handlers.EquipItem = function (args) {
     //Garage equip item function
-    /*args must be in this format:    
-        {   
+    /*args must be in this format:
+        {
             "boombot":"BoomBot",
             "cos":1,
             "wpn":1,
@@ -846,7 +871,7 @@ handlers.EquipItem = function (args) {
     });
     var boomBotId = getBoombot(args.boombot)
     var weaponId = (4 * boomBotId) + args.wpn - 1
-    //select boombot values    
+    //select boombot values
     var equipped = JSON.parse(currentPlayerData.Data.equipped.Value);
     var configs = JSON.parse(currentPlayerData.Data.configs.Value);
     var itemLevel = JSON.parse(currentPlayerData.Data.itemLevel.Value);
@@ -1003,7 +1028,7 @@ handlers.UpgradeWeapon = function (args) {
     //usable when an boombot can be upgraded
     args.whichWeapon = !args.whichWeapon ? {} : args.whichWeapon;
     var whichWeapon = args.whichWeapon;
-    //get user item info and VC    
+    //get user item info and VC
     var currentPlayerData = server.GetUserReadOnlyData({
         PlayFabId: currentPlayerId
     });

@@ -767,7 +767,34 @@ handlers.SpendBoosterSlot = function (args) {
 }
 
 handlers.SpendRubySlot = function (args) {
-    //TODO open instantly with ruby TBA
+  args.Slot = !args.Slot ? {} : args.Slot;
+  var whichSlot = args.Slot;
+  var currentPlayerData = server.GetUserReadOnlyData({
+      PlayFabId: currentPlayerId
+  });
+  var currentPlayerInventory = server.GetUserInventory({
+      PlayFabId: currentPlayerId
+  });
+  var isUsed = 0;
+  var playerRuby = JSON.parse(currentPlayerInventory.VirtualCurrency.RB);
+  var slots = JSON.parse(currentPlayerData.Data.slots.Value);
+  var reqRuby = Math.ceil((slots[whichSlot][3] - (new Date().getTime() / 1000)) / 60);
+  if (playerRuby >= reqRuby && slots[whichSlot][1] == 0 && reqRuby >= 1) {
+      slots[whichSlot][3] = (new Date().getTime() / 1000);
+      var subBooster = {
+          PlayFabId: currentPlayerId,
+          VirtualCurrency: "RB",
+          Amount: reqRuby
+      }
+      server.SubtractUserVirtualCurrency(subBooster);
+      var updateSlotTimer = {
+          PlayFabId: currentPlayerId,
+          Data: { "slots": JSON.stringify(slots) }
+      }
+      server.UpdateUserReadOnlyData(updateSlotTimer);
+      isUsed = 1
+  }
+  return { "isUsed": isUsed }
 
 }
 

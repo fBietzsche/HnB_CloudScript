@@ -47,7 +47,7 @@ handlers.KickOffSlotTimer = function(args)
   // { Seconds = 123 }
 var secondsToAdd = args.Seconds;
 var currentPlayerData = server.GetUserReadOnlyData({
-    PlayFabId: PlayerId
+    PlayFabId: currentPlayerId
 });
 var slots = JSON.parse(currentPlayerData.Data.slots.Value);
 var isBoxGiven = 0;

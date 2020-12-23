@@ -42,6 +42,35 @@ handlers.GetTutorialProgress = function()
   return currentTutorialProgress;
 }
 
+handlers.KickOffSlotTimer = function(args)
+{
+  // { Seconds = 123 }
+var secondsToAdd = args.Seconds;
+var currentPlayerData = server.GetUserReadOnlyData({
+    PlayFabId: PlayerId
+});
+var slots = JSON.parse(currentPlayerData.Data.slots.Value);
+var isBoxGiven = 0;
+for (i = 0; i < slots.length; i++) {
+    if (slots[i][1] == 1)
+    {
+        var startTime = new Date().getTime() / 1000;
+        var endTime = startTime + secondsToAdd;
+        slots[i][1] = 0;
+        slots[i][2] = startTime;
+        slots[i][3] = endTime;
+        isBoxGiven = 1;
+      }
+}
+var UpdateUserReadOnlyData = {
+    PlayFabId: PlayerId,
+    Data:
+    { "slots": JSON.stringify(slots) }
+}
+server.UpdateUserReadOnlyData(UpdateUserReadOnlyData);
+
+return isBoxGiven;
+}
 function getMatchDuration(matchType) {
     var matchDurations = {
         "Deathmatch": 150
@@ -423,7 +452,7 @@ function accountLevelUpCheck() {
     //if OK level up and give double battery
     if ((accountExp[1] >= accountLevel[accountExp[0]])) {
         accountExp[0] = accountExp[0] + 1
-        doubleBatteryFromLevelUp = accountExp[0] * 50
+        doubleBatteryFromLevelUp = 40
         doubleBatteryTotal += doubleBatteryFromLevelUp;
         var accLevelUp = {
             PlayFabId: currentPlayerId,

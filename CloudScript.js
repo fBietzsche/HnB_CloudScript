@@ -610,7 +610,7 @@ handlers.CheckSlots = function (args) {
     var slots = JSON.parse(currentPlayerData.Data.slots.Value);
     var grantBasicKeyAndBox = {
         PlayFabId: currentPlayerId,
-        ItemIds: ["BasicBoxKey", JSON.stringify(BoxType)]
+        ItemIds: ["BasicBoxKey", BoxType]
     }
     //check for remaining time and give key
     for (i = 0; i < 3; i++) {

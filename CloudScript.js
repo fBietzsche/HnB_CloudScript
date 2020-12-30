@@ -597,9 +597,11 @@ handlers.FirstLogin = function () {
     server.UpdateUserReadOnlyData(updateUserReadOnly);
 }
 
-handlers.CheckSlots = function () {
+handlers.CheckSlots = function (args) {
+    //{Box : boxId}
     //Every time main screen loaded or booster used for accelerate box opening
     //get player info
+    var BoxType = args.Box
     var timer = [0, 0, 0]
     var isAvailable = [0, 0, 0]
     var currentPlayerData = server.GetUserReadOnlyData({
@@ -608,7 +610,7 @@ handlers.CheckSlots = function () {
     var slots = JSON.parse(currentPlayerData.Data.slots.Value);
     var grantBasicKeyAndBox = {
         PlayFabId: currentPlayerId,
-        ItemIds: ["BasicBoxKey"]
+        ItemIds: ["BasicBoxKey", JSON.stringify(BoxType)]
     }
     //check for remaining time and give key
     for (i = 0; i < 3; i++) {
@@ -795,103 +797,15 @@ handlers.SpendRubySlot = function (args) {
 
 }
 
-handlers.OpenBox = function () {
+handlers.OpenBox = function (args) {
+    //{Box : boxId}
     //when box ready, click to open function
     //get player info
+    var boxType = args.Box;
     var openBox = {
         PlayFabId: currentPlayerId,
-        ContainerItemId: "BasicBox"
+        ContainerItemId: boxType
     }
-    var result = server.UnlockContainerItem(openBox);
-    var currentPlayerData = server.GetUserReadOnlyData({
-        PlayFabId: currentPlayerId
-    });
-    var configs = JSON.parse(currentPlayerData.Data.configs.Value);
-    var itemLevel = JSON.parse(currentPlayerData.Data.itemLevel.Value);
-    var grantedItemIds = []
-    var grantedCoin = 0
-    var isWeaponGranted = 0
-    var isBoombotGranted = 0
-    for (i = 0; i < result.GrantedItems.length; i++) {
-        grantedItemIds.push(0)
-        grantedItemIds[i] = result.GrantedItems[i].ItemId
-        var itemClass = result.GrantedItems[i].ItemClass
-        if (itemClass == "coinPack") {
-            grantedCoin = grantedItemIds[i]
-            grantedCoin = grantedCoin.slice(4, 20)
-        }
-        else if (itemClass == "exp") {
-            var weaponName = grantedItemIds[i].slice(0, -4)
-            var weaponId = getWeapon(weaponName)
-            var boombotId = Math.floor(weaponId / 4)
-            var boombotName = getBoombotName(boombotId)
-            // player got weapon?
-            if (itemLevel[weaponId][0] == 0) {
-                var isWeaponGranted = 1
-                var grantItemsIds = [weaponName]
-                //player got boombot?
-                if (configs[boombotId][3] == 0) {
-                    configs[boombotId][3] = 1
-                    grantItemsIds.push(boombotName)
-                    var isBoombotGranted = 1
-                }
-                itemLevel[weaponId][0] = 1
-                var updateUserReadOnly = {
-                    PlayFabId: currentPlayerId,
-                    Data: {
-                        "configs": JSON.stringify(configs),
-                        "itemLevel": JSON.stringify(itemLevel)
-                    }
-                }
-                server.UpdateUserReadOnlyData(updateUserReadOnly);
-                var grantItems = {
-                    PlayFabId: currentPlayerId,
-                    ItemIds: grantItemsIds
-                }
-                server.GrantItemsToUser(grantItems);
-                var expAmount = 0
-                var currentExp = 0
-            }
-            else {
-                //Math.floor(Math.random() * (max - min + 1) ) + min;
-                var expAmount = Math.floor(Math.random() * (36 - 24 + 1)) + 24;
-                itemLevel[weaponId][1] += expAmount;
-                var updateUserReadOnly = {
-                    PlayFabId: currentPlayerId,
-                    Data: {
-                        "itemLevel": JSON.stringify(itemLevel)
-                    }
-                }
-                server.UpdateUserReadOnlyData(updateUserReadOnly);
-                var currentExp = itemLevel[weaponId][1]
-            }
-        }
-    }
-    return {
-        "isBoombotGranted": isBoombotGranted,
-        "isWeaponGranted": isWeaponGranted,
-        "whichBoombot": boombotId,
-        "whichWeapon": weaponId,
-        "grantedCoin": grantedCoin,
-        "expAmount": expAmount,
-        "currentExp": currentExp
-    }
-}
-
-handlers.OpenTutorialBox = function () {
-    //when box ready, click to open function
-    //get player info
-    var openBox = {
-        PlayFabId: currentPlayerId,
-        ContainerItemId: "StarterBox"
-    }
-
-      var grantBasicBox = {
-          PlayFabId: currentPlayerId,
-          ItemIds: ["StarterBox"]
-      }
-      server.GrantItemsToUser(grantBasicBox);
-
     var result = server.UnlockContainerItem(openBox);
     var currentPlayerData = server.GetUserReadOnlyData({
         PlayFabId: currentPlayerId

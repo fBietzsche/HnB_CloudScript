@@ -890,8 +890,8 @@ handlers.OpenTutorialBox = function () {
           PlayFabId: currentPlayerId,
           ItemIds: ["StarterBox"]
       }
-      server.GrantItemsToUser(grantBasicKeyAndBox);
-    
+      server.GrantItemsToUser(grantBasicBox);
+
     var result = server.UnlockContainerItem(openBox);
     var currentPlayerData = server.GetUserReadOnlyData({
         PlayFabId: currentPlayerId

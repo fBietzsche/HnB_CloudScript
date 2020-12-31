@@ -21,7 +21,7 @@ handlers.FinishTutorial = function(args)
 
 var currentPlayerData = server.GetUserReadOnlyData({PlayFabId: currentPlayerId});
 var currentTutorialProgress = JSON.parse(currentPlayerData.Data.tutorialProgress.Value);
-currentTutorialProgress = args;
+currentTutorialProgress = args.Value;
 var UpdateUserReadOnlyData =
     {
     PlayFabId: currentPlayerId,

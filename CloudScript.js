@@ -568,6 +568,8 @@ handlers.FirstLogin = function () {
     }
     itemLevel[0][0] = 1;
     configs[0][3] = 1;
+    log.debug("configs = " + configs)
+    log.debug("itemlevel = " + itemlevel)
     var equipped = [
         "MekaScorp",
         1,

@@ -567,8 +567,10 @@ handlers.FirstLogin = function () {
     for (var i = 0; i < WeaponCount; i++) {
         itemLevel.push(itemLevelBase)
     }
+    log.debug("configs b = " + configs)
     itemLevel[0][0] = 1;
     configs[0][3] = 1;
+    log.debug("configs a = " + configs)
     //log.debug("configs = " + configs)
     log.debug("itemlevel = " + itemLevel)
     var equipped = [

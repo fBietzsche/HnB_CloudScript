@@ -16,6 +16,7 @@ var RobotCount = 4;
 var WeaponCount = 16;
 var BasicBoxTime = 3600;
 
+
 handlers.FinishTutorial = function(args)
 {
 
@@ -30,6 +31,16 @@ var UpdateUserReadOnlyData =
           }
     }
 server.UpdateUserReadOnlyData(UpdateUserReadOnlyData);
+if (currentTutorialProgress == 5)
+  {
+    //todo add player data check if it was given before to ensure only once adding of batteries
+    var addBooster = {
+        PlayFabId: currentPlayerId,
+        VirtualCurrency: "TB",
+        Amount: 30
+    }
+    server.AddUserVirtualCurrency(addBooster);
+  }
 }
 
 handlers.GetTutorialProgress = function()

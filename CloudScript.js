@@ -561,17 +561,33 @@ handlers.FirstLogin = function () {
     var itemLevel = []
     var configs = []
     for (var k = 0; k < RobotCount; k++) {
-        log.debug("configs = " + configs)
-        configs.push(configsBase)
+        if (k == 0) {
+            configs[0] = [
+                1,
+                1,
+                1,
+                1
+            ]
+        }
+        else {
+            configs.push(configsBase)
+        }
     }
     for (var i = 0; i < WeaponCount; i++) {
-        itemLevel.push(itemLevelBase)
+        if (i == 0) {
+            itemLevel[0] = [
+                1,
+                0
+            ]
+        }
+        else {
+            itemLevel.push(itemLevelBase)
+        }
     }
-    log.debug("configs b = " + configs)
-    itemLevel[0][0] = 1;
-    configs[0][3] = 1;
+    //log.debug("configs b = " + configs)
+    //itemLevel[0][0] = 1;
+    //configs[0][3] = 1;
     log.debug("configs a = " + configs)
-    //log.debug("configs = " + configs)
     log.debug("itemlevel = " + itemLevel)
     var equipped = [
         "MekaScorp",

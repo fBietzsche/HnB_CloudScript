@@ -17,37 +17,34 @@ var WeaponCount = 16;
 var BasicBoxTime = 3600;
 
 
-handlers.FinishTutorial = function(args)
-{
+handlers.FinishTutorial = function (args) {
 
-var currentPlayerData = server.GetUserReadOnlyData({PlayFabId: currentPlayerId});
-var currentTutorialProgress = JSON.parse(currentPlayerData.Data.tutorialProgress.Value);
-currentTutorialProgress = args.Value;
-var UpdateUserReadOnlyData =
+    var currentPlayerData = server.GetUserReadOnlyData({ PlayFabId: currentPlayerId });
+    var currentTutorialProgress = JSON.parse(currentPlayerData.Data.tutorialProgress.Value);
+    currentTutorialProgress = args.Value;
+    var UpdateUserReadOnlyData =
     {
-    PlayFabId: currentPlayerId,
-    Data: {
-        "tutorialProgress": JSON.stringify(currentTutorialProgress)
-          }
-    }
-server.UpdateUserReadOnlyData(UpdateUserReadOnlyData);
-if (currentTutorialProgress == 5)
-  {
-    //todo add player data check if it was given before to ensure only once adding of batteries
-    var addBooster = {
         PlayFabId: currentPlayerId,
-        VirtualCurrency: "TB",
-        Amount: 30
+        Data: {
+            "tutorialProgress": JSON.stringify(currentTutorialProgress)
+        }
     }
-    server.AddUserVirtualCurrency(addBooster);
-  }
+    server.UpdateUserReadOnlyData(UpdateUserReadOnlyData);
+    if (currentTutorialProgress == 5) {
+        //todo add player data check if it was given before to ensure only once adding of batteries
+        var addBooster = {
+            PlayFabId: currentPlayerId,
+            VirtualCurrency: "TB",
+            Amount: 30
+        }
+        server.AddUserVirtualCurrency(addBooster);
+    }
 }
 
-handlers.GetTutorialProgress = function()
-{
-var currentPlayerData = server.GetUserReadOnlyData({PlayFabId: currentPlayerId});
-  var currentTutorialProgress = currentPlayerData.Data.tutorialProgress;
-  return currentTutorialProgress;
+handlers.GetTutorialProgress = function () {
+    var currentPlayerData = server.GetUserReadOnlyData({ PlayFabId: currentPlayerId });
+    var currentTutorialProgress = currentPlayerData.Data.tutorialProgress;
+    return currentTutorialProgress;
 }
 
 function getMatchDuration(matchType) {
@@ -552,14 +549,14 @@ handlers.FirstLogin = function () {
         slots.push(slotsBase)
     }
     var itemLevelBase = [
-        1,
+        0,
         0
     ]
     var configsBase = [
         1,
         1,
         1,
-        1
+        0
     ]
     var itemLevel = []
     var configs = []
@@ -569,6 +566,8 @@ handlers.FirstLogin = function () {
     for (var i = 0; i < WeaponCount; i++) {
         itemLevel.push(itemLevelBase)
     }
+    itemLevel[0][0] = 1;
+    configs[0][3] = 1;
     var equipped = [
         "MekaScorp",
         1,
@@ -777,34 +776,34 @@ handlers.SpendBoosterSlot = function (args) {
 }
 
 handlers.SpendRubySlot = function (args) {
-  args.Slot = !args.Slot ? {} : args.Slot;
-  var whichSlot = args.Slot;
-  var currentPlayerData = server.GetUserReadOnlyData({
-      PlayFabId: currentPlayerId
-  });
-  var currentPlayerInventory = server.GetUserInventory({
-      PlayFabId: currentPlayerId
-  });
-  var isUsed = 0;
-  var playerRuby = JSON.parse(currentPlayerInventory.VirtualCurrency.RB);
-  var slots = JSON.parse(currentPlayerData.Data.slots.Value);
-  var reqRuby = Math.ceil((slots[whichSlot][3] - (new Date().getTime() / 1000)) / 60);
-  if (playerRuby >= reqRuby && slots[whichSlot][1] == 0 && reqRuby >= 1) {
-      slots[whichSlot][3] = (new Date().getTime() / 1000);
-      var subBooster = {
-          PlayFabId: currentPlayerId,
-          VirtualCurrency: "RB",
-          Amount: reqRuby
-      }
-      server.SubtractUserVirtualCurrency(subBooster);
-      var updateSlotTimer = {
-          PlayFabId: currentPlayerId,
-          Data: { "slots": JSON.stringify(slots) }
-      }
-      server.UpdateUserReadOnlyData(updateSlotTimer);
-      isUsed = 1
-  }
-  return { "isUsed": isUsed }
+    args.Slot = !args.Slot ? {} : args.Slot;
+    var whichSlot = args.Slot;
+    var currentPlayerData = server.GetUserReadOnlyData({
+        PlayFabId: currentPlayerId
+    });
+    var currentPlayerInventory = server.GetUserInventory({
+        PlayFabId: currentPlayerId
+    });
+    var isUsed = 0;
+    var playerRuby = JSON.parse(currentPlayerInventory.VirtualCurrency.RB);
+    var slots = JSON.parse(currentPlayerData.Data.slots.Value);
+    var reqRuby = Math.ceil((slots[whichSlot][3] - (new Date().getTime() / 1000)) / 60);
+    if (playerRuby >= reqRuby && slots[whichSlot][1] == 0 && reqRuby >= 1) {
+        slots[whichSlot][3] = (new Date().getTime() / 1000);
+        var subBooster = {
+            PlayFabId: currentPlayerId,
+            VirtualCurrency: "RB",
+            Amount: reqRuby
+        }
+        server.SubtractUserVirtualCurrency(subBooster);
+        var updateSlotTimer = {
+            PlayFabId: currentPlayerId,
+            Data: { "slots": JSON.stringify(slots) }
+        }
+        server.UpdateUserReadOnlyData(updateSlotTimer);
+        isUsed = 1
+    }
+    return { "isUsed": isUsed }
 
 }
 

@@ -508,25 +508,28 @@ handlers.SlotTester = function (args) {
         PlayFabId: currentPlayerId
     });
     var starterBoxProgress = JSON.parse(currentPlayerData.Data.starterBoxProgress.Value);
-    if (starterBoxProgress <= 1) {
-        var slots = JSON.parse(currentPlayerData.Data.slots.Value);
-        var whichSlot = args.slot
-        var timer = args.timer
-        slots[whichSlot] = [
-            0,
-            0,
-            (new Date().getTime() / 1000),
-            (new Date().getTime() / 1000) + timer
-        ]
-        starterBoxProgress = starterBoxProgress + 1;
-        var updateUserReadOnly = {
-            PlayFabId: currentPlayerId,
-            Data: {
-                "slots": JSON.stringify(slots),
-                "starterBoxProgress": JSON.stringify(starterBoxProgress)
+    var currentTutorialProgress = JSON.parse(currentPlayerData.Data.tutorialProgress.Value);
+    if (currentTutorialProgress == 2 || currentTutorialProgress == 6) {
+        if (starterBoxProgress <= 1) {
+            var slots = JSON.parse(currentPlayerData.Data.slots.Value);
+            var whichSlot = args.slot
+            var timer = args.timer
+            slots[whichSlot] = [
+                0,
+                0,
+                (new Date().getTime() / 1000),
+                (new Date().getTime() / 1000) + timer
+            ]
+            starterBoxProgress = starterBoxProgress + 1;
+            var updateUserReadOnly = {
+                PlayFabId: currentPlayerId,
+                Data: {
+                    "slots": JSON.stringify(slots),
+                    "starterBoxProgress": JSON.stringify(starterBoxProgress)
+                }
             }
+            server.UpdateUserReadOnlyData(updateUserReadOnly);
         }
-        server.UpdateUserReadOnlyData(updateUserReadOnly);
     }
 }
 

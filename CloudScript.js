@@ -507,25 +507,27 @@ handlers.SlotTester = function (args) {
     var currentPlayerData = server.GetUserReadOnlyData({
         PlayFabId: currentPlayerId
     });
-    var slots = JSON.parse(currentPlayerData.Data.slots.Value);
-    var whichSlot = args.slot
-    var timer = args.timer
-    log.debug("choosen slot before = " + slots[whichSlot])
-    slots[whichSlot] = [
-        0,
-        0,
-        (new Date().getTime() / 1000),
-        (new Date().getTime() / 1000) + timer
-    ]
-    log.debug("slots = " + slots)
-    log.debug("choosen slot = " + slots[whichSlot])
-    var updateUserReadOnly = {
-        PlayFabId: currentPlayerId,
-        Data: {
-            "slots": JSON.stringify(slots)
+    var starterBoxProgress = JSON.parse(currentPlayerData.Data.starterBoxProgress.Value);
+    if (starterBoxProgress <= 1) {
+        var slots = JSON.parse(currentPlayerData.Data.slots.Value);
+        var whichSlot = args.slot
+        var timer = args.timer
+        slots[whichSlot] = [
+            0,
+            0,
+            (new Date().getTime() / 1000),
+            (new Date().getTime() / 1000) + timer
+        ]
+        starterBoxProgress = starterBoxProgress + 1;
+        var updateUserReadOnly = {
+            PlayFabId: currentPlayerId,
+            Data: {
+                "slots": JSON.stringify(slots),
+                "starterBoxProgress": JSON.stringify(starterBoxProgress)
+            }
         }
+        server.UpdateUserReadOnlyData(updateUserReadOnly);
     }
-    server.UpdateUserReadOnlyData(updateUserReadOnly);
 }
 
 handlers.FirstLogin = function () {
@@ -536,6 +538,7 @@ handlers.FirstLogin = function () {
         "startTime": 0,
         "endTime": 0
     }*/
+    var starterBoxProgress = 0
     var accountExp = [1, 0]
     var doubleBattery = 0
     var slotsBase = [
@@ -613,7 +616,8 @@ handlers.FirstLogin = function () {
             "matchHistory": JSON.stringify(matchHistory),
             "accountExp": JSON.stringify(accountExp),
             "doubleBattery": JSON.stringify(doubleBattery),
-            "tutorialProgress": JSON.stringify(tutorialProgress)
+            "tutorialProgress": JSON.stringify(tutorialProgress),
+            "starterBoxProgress": JSON.stringify(starterBoxProgress)
         }
     }
     server.UpdatePlayerStatistics({

@@ -507,11 +507,11 @@ handlers.SlotTester = function (args) {
     var currentPlayerData = server.GetUserReadOnlyData({
         PlayFabId: currentPlayerId
     });
-    
+
     var starterBoxProgress = JSON.parse(currentPlayerData.Data.starterBoxProgress.Value);
     var currentTutorialProgress = JSON.parse(currentPlayerData.Data.tutorialProgress.Value);
     if (currentTutorialProgress == 2 || currentTutorialProgress == 6) {
-        if (starterBoxProgress <= 1) {
+   {
             var slots = JSON.parse(currentPlayerData.Data.slots.Value);
             var whichSlot = args.slot
             var timer = args.timer
@@ -521,7 +521,7 @@ handlers.SlotTester = function (args) {
                 (new Date().getTime() / 1000),
                 (new Date().getTime() / 1000) + timer
             ]
-            starterBoxProgress = starterBoxProgress + 1;
+            starterBoxProgress = currentTutorialProgress == 2 ? 1 : 2;
             var updateUserReadOnly = {
                 PlayFabId: currentPlayerId,
                 Data: {

@@ -507,6 +507,7 @@ handlers.SlotTester = function (args) {
     var currentPlayerData = server.GetUserReadOnlyData({
         PlayFabId: currentPlayerId
     });
+    
     var starterBoxProgress = JSON.parse(currentPlayerData.Data.starterBoxProgress.Value);
     var currentTutorialProgress = JSON.parse(currentPlayerData.Data.tutorialProgress.Value);
     if (currentTutorialProgress == 2 || currentTutorialProgress == 6) {

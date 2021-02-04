@@ -877,6 +877,10 @@ handlers.OpenBox = function (args) {
                     configs[boombotId][3] = 1
                     grantItemsIds.push(boombotName)
                     var isBoombotGranted = 1
+                    configs[boombotId][0] = 1
+                    configs[boombotId][1] = weaponId % 4
+                    configs[boombotId][2] = 1 
+                    log.debug("weaponid " + configs[boombotId][1])
                 }
                 itemLevel[weaponId][0] = 1
                 var updateUserReadOnly = {

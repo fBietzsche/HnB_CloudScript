@@ -878,7 +878,7 @@ handlers.OpenBox = function (args) {
                     grantItemsIds.push(boombotName)
                     var isBoombotGranted = 1
                     configs[boombotId][0] = 1
-                    configs[boombotId][1] = weaponId % 4
+                    configs[boombotId][1] = weaponId % 4 + 1
                     configs[boombotId][2] = 1 
                     log.debug("weaponid " + configs[boombotId][1])
                 }

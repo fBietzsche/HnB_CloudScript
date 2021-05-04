@@ -16,37 +16,6 @@ var RobotCount = 4;
 var WeaponCount = 16;
 var BasicBoxTime = 3600;
 
-
-handlers.FinishTutorial = function (args) {
-
-    var currentPlayerData = server.GetUserReadOnlyData({ PlayFabId: currentPlayerId });
-    var currentTutorialProgress = JSON.parse(currentPlayerData.Data.tutorialProgress.Value);
-    currentTutorialProgress = args.Value;
-    var UpdateUserReadOnlyData =
-    {
-        PlayFabId: currentPlayerId,
-        Data: {
-            "tutorialProgress": JSON.stringify(currentTutorialProgress)
-        }
-    }
-    server.UpdateUserReadOnlyData(UpdateUserReadOnlyData);
-    if (currentTutorialProgress == 5) {
-        //todo add player data check if it was given before to ensure only once adding of batteries
-        var addBooster = {
-            PlayFabId: currentPlayerId,
-            VirtualCurrency: "TB",
-            Amount: 30
-        }
-        server.AddUserVirtualCurrency(addBooster);
-    }
-}
-
-handlers.GetTutorialProgress = function () {
-    var currentPlayerData = server.GetUserReadOnlyData({ PlayFabId: currentPlayerId });
-    var currentTutorialProgress = currentPlayerData.Data.tutorialProgress;
-    return currentTutorialProgress;
-}
-
 function getMatchDuration(matchType) {
     var matchDurations = {
         "Deathmatch": 150
@@ -132,8 +101,9 @@ function winCondition(winArgs) {
 
     if (reserveBooster >= 15) {
         var batteryGained = 15;
+    } else {
+        var batteryGained = reserveBooster
     }
-    else { var batteryGained = reserveBooster }
     //check for slot availability, start timer
     for (i = 0; i < slots.length; i++) {
         if (slots[i][1] == 1) {
@@ -144,15 +114,15 @@ function winCondition(winArgs) {
             slots[i][3] = endTime;
             var isBoxGiven = 1;
             break;
+        } else {
+            var isBoxGiven = 0
         }
-        else { var isBoxGiven = 0 }
     }
     //double battery checker
     if (doubleBattery <= batteryGained) {
         tradedBattery = doubleBattery + batteryGained;
         doubleBattery = 0;
-    }
-    else {
+    } else {
         doubleBattery = doubleBattery - batteryGained;
         tradedBattery = 2 * batteryGained;
     }
@@ -201,8 +171,7 @@ function loseCondition(loseArgs) {
     accountExp[1] = accountExp[1] + accountExpGained;
     if (trophy <= 2) {
         var newTrophy = 0
-    }
-    else {
+    } else {
         var newTrophy = trophy + trophyChange;
     }
     var currentPlayerInventory = server.GetUserInventory({
@@ -212,14 +181,14 @@ function loseCondition(loseArgs) {
     var oldBooster = JSON.parse(currentPlayerInventory.VirtualCurrency.TB)
     if (reserveBooster >= 5) {
         var batteryGained = 5;
+    } else {
+        var batteryGained = reserveBooster
     }
-    else { var batteryGained = reserveBooster }
     //double battery checker
     if (doubleBattery <= batteryGained) {
         tradedBattery = doubleBattery + batteryGained;
         doubleBattery = 0;
-    }
-    else {
+    } else {
         doubleBattery = doubleBattery - batteryGained;
         tradedBattery = 2 * batteryGained;
     }
@@ -274,14 +243,14 @@ function drawCondition(drawArgs) {
     matchStats[2] += 1;
     if (reserveBooster >= 10) {
         var batteryGained = 10;
+    } else {
+        var batteryGained = reserveBooster
     }
-    else { var batteryGained = reserveBooster }
     //double battery checker
     if (doubleBattery <= batteryGained) {
         tradedBattery = doubleBattery + batteryGained;
         doubleBattery = 0;
-    }
-    else {
+    } else {
         doubleBattery = doubleBattery - batteryGained;
         tradedBattery = 2 * batteryGained;
     }
@@ -511,7 +480,7 @@ handlers.SlotTester = function (args) {
     var starterBoxProgress = JSON.parse(currentPlayerData.Data.starterBoxProgress.Value);
     var currentTutorialProgress = JSON.parse(currentPlayerData.Data.tutorialProgress.Value);
     if (currentTutorialProgress == 2 || currentTutorialProgress == 6) {
-   {
+        {
             var slots = JSON.parse(currentPlayerData.Data.slots.Value);
             var whichSlot = args.slot
             var timer = args.timer
@@ -575,8 +544,7 @@ handlers.FirstLogin = function () {
                 1,
                 1
             ]
-        }
-        else {
+        } else {
             configs.push(configsBase)
         }
     }
@@ -586,8 +554,7 @@ handlers.FirstLogin = function () {
                 1,
                 0
             ]
-        }
-        else {
+        } else {
             itemLevel.push(itemLevelBase)
         }
     }
@@ -663,16 +630,14 @@ handlers.CheckSlots = function (args) {
             slots[i][3] = 0;
             var updateSlotTimer = {
                 PlayFabId: currentPlayerId,
-                Data: { "slots": JSON.stringify(slots) }
+                Data: {"slots": JSON.stringify(slots)}
             }
             server.UpdateUserReadOnlyData(updateSlotTimer);
             server.GrantItemsToUser(grantBasicKeyAndBox);
             timer[i] = 0
-        }
-        else if ((isAvailable[i] == 1)) {
+        } else if ((isAvailable[i] == 1)) {
             timer[i] = -1;
-        }
-        else
+        } else
             timer[i] = remainingTime;
     }
     return {
@@ -796,12 +761,12 @@ handlers.SpendBoosterSlot = function (args) {
         server.SubtractUserVirtualCurrency(subBooster);
         var updateSlotTimer = {
             PlayFabId: currentPlayerId,
-            Data: { "slots": JSON.stringify(slots) }
+            Data: {"slots": JSON.stringify(slots)}
         }
         server.UpdateUserReadOnlyData(updateSlotTimer);
         isUsed = 1
     }
-    return { "isUsed": isUsed }
+    return {"isUsed": isUsed}
 }
 
 handlers.SpendRubySlot = function (args) {
@@ -827,12 +792,12 @@ handlers.SpendRubySlot = function (args) {
         server.SubtractUserVirtualCurrency(subBooster);
         var updateSlotTimer = {
             PlayFabId: currentPlayerId,
-            Data: { "slots": JSON.stringify(slots) }
+            Data: {"slots": JSON.stringify(slots)}
         }
         server.UpdateUserReadOnlyData(updateSlotTimer);
         isUsed = 1
     }
-    return { "isUsed": isUsed }
+    return {"isUsed": isUsed}
 
 }
 
@@ -862,8 +827,7 @@ handlers.OpenBox = function (args) {
         if (itemClass == "coinPack") {
             grantedCoin = grantedItemIds[i]
             grantedCoin = grantedCoin.slice(4, 20)
-        }
-        else if (itemClass == "exp") {
+        } else if (itemClass == "exp") {
             var weaponName = grantedItemIds[i].slice(0, -4)
             var weaponId = getWeapon(weaponName)
             var boombotId = Math.floor(weaponId / 4)
@@ -879,7 +843,7 @@ handlers.OpenBox = function (args) {
                     var isBoombotGranted = 1
                     configs[boombotId][0] = 1
                     configs[boombotId][1] = weaponId % 4 + 1
-                    configs[boombotId][2] = 1 
+                    configs[boombotId][2] = 1
                     log.debug("weaponid " + configs[boombotId][1])
                 }
                 itemLevel[weaponId][0] = 1
@@ -898,8 +862,7 @@ handlers.OpenBox = function (args) {
                 server.GrantItemsToUser(grantItems);
                 var expAmount = 0
                 var currentExp = 0
-            }
-            else {
+            } else {
                 //Math.floor(Math.random() * (max - min + 1) ) + min;
                 var expAmount = Math.floor(Math.random() * (36 - 24 + 1)) + 24;
                 itemLevel[weaponId][1] += expAmount;
@@ -1081,8 +1044,7 @@ handlers.CheckUpgrade = function () {
             currentExp[i] = "max"
             requiredExp[i] = "max"
             requiredCoin[i] = "max"
-        }
-        else {
+        } else {
             currentExp[i] = itemLevel[i][1];
             requiredExp[i] = levelRamp[itemLevel[i][0] - 1]
             requiredCoin[i] = levelCoin[itemLevel[i][0] - 1]
@@ -1133,7 +1095,7 @@ handlers.UpgradeWeapon = function (args) {
             currentExp = itemLevel[whichWeapon][1]
             var upgradeItem = {
                 PlayFabId: currentPlayerId,
-                Data: { "itemLevel": JSON.stringify(itemLevel) }
+                Data: {"itemLevel": JSON.stringify(itemLevel)}
             }
             server.UpdateUserReadOnlyData(upgradeItem);
             var subCoin = {
@@ -1222,4 +1184,34 @@ handlers.GetCurrentEquipment = function () {
         "itemLevel": itemLevel[equipped[2]][0]
     }
     return equipments
+}
+
+handlers.FinishTutorial = function (args) {
+
+    var currentPlayerData = server.GetUserReadOnlyData({PlayFabId: currentPlayerId});
+    var currentTutorialProgress = JSON.parse(currentPlayerData.Data.tutorialProgress.Value);
+    currentTutorialProgress = args.Value;
+    var UpdateUserReadOnlyData =
+        {
+            PlayFabId: currentPlayerId,
+            Data: {
+                "tutorialProgress": JSON.stringify(currentTutorialProgress)
+            }
+        }
+    server.UpdateUserReadOnlyData(UpdateUserReadOnlyData);
+    if (currentTutorialProgress == 5) {
+        //todo add player data check if it was given before to ensure only once adding of batteries
+        var addBooster = {
+            PlayFabId: currentPlayerId,
+            VirtualCurrency: "TB",
+            Amount: 30
+        }
+        server.AddUserVirtualCurrency(addBooster);
+    }
+}
+
+handlers.GetTutorialProgress = function () {
+    var currentPlayerData = server.GetUserReadOnlyData({PlayFabId: currentPlayerId});
+    var currentTutorialProgress = currentPlayerData.Data.tutorialProgress;
+    return currentTutorialProgress;
 }

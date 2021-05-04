@@ -444,7 +444,7 @@ handlers.UnlockReward = function (args) {
 
     log.debug("titleData  =  " + titleData);
 
-    const MaxTrophy = JSON.parse(currentPlayerData.Data.MaxTrophy);
+    const MaxTrophy = JSON.parse(currentPlayerData.Data.MaxTrophy.Value);
 
     log.debug("MaxTrophy  =  " + MaxTrophy)
 

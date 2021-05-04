@@ -711,12 +711,12 @@ handlers.CheckSlots = function (args) {
     var timer = [0, 0, 0]
     var isAvailable = [0, 0, 0]
     var currentPlayerData = server.GetUserReadOnlyData({
-        PlayFabId: currentPlayerId
+        "PlayFabId": currentPlayerId
     });
     var slots = JSON.parse(currentPlayerData.Data.slots.Value);
     var grantBasicKeyAndBox = {
-        PlayFabId: currentPlayerId,
-        ItemIds: ["BasicBoxKey", BoxType]
+        "PlayFabId": currentPlayerId,
+        "ItemIds": ["BasicBoxKey", BoxType]
     }
     //check for remaining time and give key
     for (i = 0; i < 3; i++) {

@@ -154,7 +154,7 @@ function winCondition(winArgs) {
             "maxTrophy": maxTrophy
         }
     }
-    log.debug("UpdateUserReadOnlyData = " + UpdateUserReadOnlyData)
+    
     server.UpdateUserReadOnlyData(UpdateUserReadOnlyData);
 }
 
@@ -699,6 +699,7 @@ handlers.FirstLogin = function () {
             }
         ]
     })
+    log.debug("updateUserReadOnly = " + updateUserReadOnly)
     server.UpdateUserReadOnlyData(updateUserReadOnly);
 }
 

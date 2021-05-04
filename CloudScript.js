@@ -452,6 +452,8 @@ handlers.UnlockReward = function (args) {
 
     log.debug("LastRewardedProgressIndex  =  " + LastRewardedProgressIndex)
 
+    return {"isTest": 1}
+
     //   6 > 5
     if (RewardIndex > LastRewardedProgressIndex) {
 

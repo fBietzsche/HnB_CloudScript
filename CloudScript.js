@@ -86,12 +86,22 @@ function winCondition(winArgs) {
     var ongoingMatch = JSON.parse(currentPlayerData.Data.ongoingMatch.Value);
     var accountExp = JSON.parse(currentPlayerData.Data.accountExp.Value);
     var doubleBattery = JSON.parse(currentPlayerData.Data.doubleBattery.Value);
+
+    // TODO MAX Trophy
+    let maxTrophy = currentPlayerData.Data.MaxTrophy.Value;
+
     var accountExpGained = 20
     var trophyChange = 7
     var tradedBattery = 0
     matchStats[0] += 1;
     accountExp[1] = accountExp[1] + accountExpGained;
+
     var newTrophy = trophy + trophyChange;
+
+    if (newTrophy > maxTrophy) {
+        maxTrophy = newTrophy
+    }
+
     //give booster if available
     var currentPlayerInventory = server.GetUserInventory({
         PlayFabId: PlayerId
@@ -140,7 +150,10 @@ function winCondition(winArgs) {
             "matchStats": JSON.stringify(matchStats),
             "matchHistory": JSON.stringify(matchHistory),
             "ongoingMatch": JSON.stringify(ongoingMatch),
-            "accountExp": JSON.stringify(accountExp)
+            "accountExp": JSON.stringify(accountExp),
+
+            // TODO MAX Trophy
+            "maxTrophy": maxTrophy
         }
     }
     server.UpdateUserReadOnlyData(UpdateUserReadOnlyData);

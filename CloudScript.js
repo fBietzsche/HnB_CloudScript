@@ -416,9 +416,7 @@ function accountLevelUpCheck() {
 }
 
 handlers.wtf = function () {
-    return {
-        stat: 1
-    };
+    return true
 }
 
 
@@ -691,10 +689,45 @@ handlers.FirstLogin = function () {
 }
 
 handlers.CheckSlots = function (args) {
-
+    //{Box : boxId}
+    //Every time main screen loaded or booster used for accelerate box opening
+    //get player info
+    var BoxType = args.Box
+    var timer = [0, 0, 0]
+    var isAvailable = [0, 0, 0]
+    var currentPlayerData = server.GetUserReadOnlyData({
+        PlayFabId: currentPlayerId
+    });
+    var slots = JSON.parse(currentPlayerData.Data.slots.Value);
+    var grantBasicKeyAndBox = {
+        PlayFabId: currentPlayerId,
+        ItemIds: ["BasicBoxKey", BoxType]
+    }
+    //check for remaining time and give key
+    for (i = 0; i < 3; i++) {
+        var remainingTime = slots[i][3] - (new Date().getTime() / 1000);
+        isAvailable[i] = slots[i][1];
+        if ((remainingTime <= 0) && (isAvailable[i] == 0)) {
+            //reset slot
+            slots[i][0] = 0;
+            slots[i][1] = 1;
+            slots[i][2] = 0;
+            slots[i][3] = 0;
+            var updateSlotTimer = {
+                PlayFabId: currentPlayerId,
+                Data: {"slots": JSON.stringify(slots)}
+            }
+            server.UpdateUserReadOnlyData(updateSlotTimer);
+            server.GrantItemsToUser(grantBasicKeyAndBox);
+            timer[i] = 0
+        } else if ((isAvailable[i] == 1)) {
+            timer[i] = -1;
+        } else
+            timer[i] = remainingTime;
+    }
     return {
-        "timer": "1",
-        "isAvailable": "0"
+        "timer": timer,
+        "isAvailable": isAvailable
     }
 }
 

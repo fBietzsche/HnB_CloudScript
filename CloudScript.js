@@ -415,6 +415,84 @@ function accountLevelUpCheck() {
     return [isLevelUp, doubleBatteryFromLevelUp, doubleBatteryTotal, currentAccLevel, currentAccExp, requiredAccExp]
 }
 
+
+// TODO wtf
+
+handlers.UnlockReward = function (args) {
+
+    /*
+     {
+       "RewardIndex": "0",
+     }
+     */
+
+    /** RewardIndex **/
+    const RewardIndex = args?.RewardIndex ? args.RewardIndex : null;
+
+    /** currentPlayerData **/
+    const currentPlayerData = server.GetUserReadOnlyData({
+        PlayFabId: currentPlayerId
+    });
+
+    log.debug("currentPlayerData  =  " + currentPlayerData);
+
+    /** titleData **/
+    const titleData = server.GetTitleData({
+        PlayFabId: currentPlayerId,
+        "Keys": ["progressRewards"]
+    });
+
+    log.debug("titleData  =  " + titleData);
+
+    const MaxTrophy = JSON.parse(currentPlayerData.Data.MaxTrophy);
+
+    log.debug("MaxTrophy  =  " + MaxTrophy)
+
+
+    // TODO check if user can unlock this reward.
+
+    // TODO check last reward index greater than now?
+
+    // TODO grant reward to user
+
+
+    /**
+
+     var levelData = JSON.parse(titleData.Data.levelData)
+     log.debug("levelData  =  " + levelData)
+     var weaponData = titleData.Data.weaponValues;
+     log.debug("weaponData  =  " + weaponData)
+
+
+     var starterBoxProgress = JSON.parse(currentPlayerData.Data.starterBoxProgress.Value);
+     var currentTutorialProgress = JSON.parse(currentPlayerData.Data.tutorialProgress.Value);
+     if (currentTutorialProgress == 2 || currentTutorialProgress == 6) {
+        {
+            var slots = JSON.parse(currentPlayerData.Data.slots.Value);
+            var whichSlot = args.slot
+            var timer = args.timer
+            slots[whichSlot] = [
+                0,
+                0,
+                (new Date().getTime() / 1000),
+                (new Date().getTime() / 1000) + timer
+            ]
+            starterBoxProgress = currentTutorialProgress == 2 ? 1 : 2;
+            var updateUserReadOnly = {
+                PlayFabId: currentPlayerId,
+                Data: {
+                    "slots": JSON.stringify(slots),
+                    "starterBoxProgress": JSON.stringify(starterBoxProgress)
+                }
+            }
+            server.UpdateUserReadOnlyData(updateUserReadOnly);
+        }
+    }
+
+     **/
+
+}
+
 handlers.Debug = function () {
     var userData = server.GetUserReadOnlyData({
         PlayFabId: currentPlayerId

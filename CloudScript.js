@@ -426,7 +426,7 @@ handlers.UnlockReward = function (args) {
      }
      */
 
-    return {"status": true}
+    return {"status": true};
 
     const RewardIndex = args.RewardIndex ? args.RewardIndex : null;
 

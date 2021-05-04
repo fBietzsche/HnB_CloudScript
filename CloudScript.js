@@ -416,7 +416,7 @@ function accountLevelUpCheck() {
 }
 
 handlers.wtf = function () {
-    return JSON.stringify({achievement: "", addvalue: false});
+    return {achievement: 1, addvalue: 3};
 }
 
 

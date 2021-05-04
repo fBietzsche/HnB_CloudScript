@@ -416,7 +416,12 @@ function accountLevelUpCheck() {
 }
 
 handlers.wtf = function () {
-    return {achievement: 1, addvalue: 3};
+
+    var returnObj = {};
+    returnObj["itemId"] = 3;
+    returnObj["slot"] = 6;
+
+    return returnObj;
 }
 
 

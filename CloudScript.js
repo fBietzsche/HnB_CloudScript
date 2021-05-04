@@ -608,7 +608,7 @@ handlers.FirstLogin = function () {
     }*/
 
     // TODO Max Trophy
-    var maxTrophy = 0;
+    var maxTrophy = 0
 
     var starterBoxProgress = 0
     var accountExp = [1, 0]
@@ -688,7 +688,7 @@ handlers.FirstLogin = function () {
             "doubleBattery": JSON.stringify(doubleBattery),
             "tutorialProgress": JSON.stringify(tutorialProgress),
             "starterBoxProgress": JSON.stringify(starterBoxProgress),
-            "maxTrophy": maxTrophy
+            "maxTrophy": JSON.stringify(maxTrophy)
         }
     }
     server.UpdatePlayerStatistics({

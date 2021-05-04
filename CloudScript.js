@@ -426,17 +426,14 @@ handlers.UnlockReward = function (args) {
      }
      */
 
-    /** RewardIndex **/
     const RewardIndex = args.RewardIndex ? Number(args.RewardIndex) : null;
 
-    /** currentPlayerData **/
     const currentPlayerData = server.GetUserReadOnlyData({
         PlayFabId: currentPlayerId
     });
 
     log.debug("currentPlayerData  =  " + currentPlayerData);
 
-    /** titleData **/
     const titleData = server.GetTitleData({
         PlayFabId: currentPlayerId,
         "Keys": ["progressRewards"]
@@ -444,57 +441,15 @@ handlers.UnlockReward = function (args) {
 
     log.debug("titleData  =  " + titleData);
 
-    const MaxTrophy = JSON.parse(currentPlayerData.Data.MaxTrophy.Value);
+    const MaxTrophy = currentPlayerData.Data.MaxTrophy.Value;
 
     log.debug("MaxTrophy  =  " + MaxTrophy);
 
-    const LastRewardedProgressIndex = JSON.parse(currentPlayerData.Data.LastRewardedProgressIndex.Value);
+    const LastRewardedProgressIndex = currentPlayerData.Data.LastRewardedProgressIndex.Value;
 
     log.debug("LastRewardedProgressIndex  =  " + LastRewardedProgressIndex);
 
-    const returning = {"isTest": 1}
-
-    return returning;
-
-    if (RewardIndex && RewardIndex > LastRewardedProgressIndex) {
-
-
-        if (titleData.Data.progressRewards[RewardIndex].ReqThropy <= MaxTrophy) {
-
-            // verdik
-
-            if (titleData.Data.progressRewards[RewardIndex].Reward === "BasicBox") {
-
-                const grantBasicKeyAndBox = {
-                    PlayFabId: currentPlayerId,
-                    ItemIds: [titleData.Data.progressRewards[RewardIndex].Reward, "BasicBoxKey"]
-                }
-
-                server.GrantItemsToUser(grantBasicKeyAndBox);
-
-            } else {
-
-                const grantReward = {
-                    PlayFabId: currentPlayerId,
-                    ItemIds: [titleData.Data.progressRewards[RewardIndex].Reward]
-                }
-
-                server.GrantItemsToUser(grantReward);
-            }
-
-            var updateUserReadOnly = {
-                PlayFabId: currentPlayerId,
-                Data: {
-                    "LastRewardedProgressIndex": RewardIndex,
-                }
-            }
-            server.UpdateUserReadOnlyData(updateUserReadOnly);
-
-            return {"isRewarded": 1}
-
-
-        }
-    }
+    return {"isTest": 1};
 
     // return {"isRewarded": 0}
 

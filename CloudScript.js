@@ -427,7 +427,7 @@ handlers.UnlockReward = function (args) {
      */
 
     /** RewardIndex **/
-    const RewardIndex = args?.RewardIndex ? args.RewardIndex : null;
+    const RewardIndex = args.RewardIndex ? args.RewardIndex : null;
 
     /** currentPlayerData **/
     const currentPlayerData = server.GetUserReadOnlyData({

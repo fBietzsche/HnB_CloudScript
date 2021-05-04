@@ -415,6 +415,12 @@ function accountLevelUpCheck() {
     return [isLevelUp, doubleBatteryFromLevelUp, doubleBatteryTotal, currentAccLevel, currentAccExp, requiredAccExp]
 }
 
+handlers.wtf = function (args) {
+    return {
+        "stat": 1
+    }
+}
+
 
 // TODO wtf
 
@@ -426,9 +432,73 @@ handlers.UnlockReward = function (args) {
      }
      */
 
-    return {"status": true};
+    const RewardIndex = args.RewardIndex ? args.RewardIndex : null;
+
+    const currentPlayerData = server.GetUserReadOnlyData({
+        PlayFabId: currentPlayerId
+    });
+
+    log.debug("currentPlayerData  =  " + currentPlayerData.Data);
+
+    const titleData = server.GetTitleData({
+        PlayFabId: currentPlayerId,
+        "Keys": ["progressRewards"]
+    });
+
+    log.debug("titleData  =  " + titleData);
+
+    const MaxTrophy = currentPlayerData.Data.MaxTrophy.Value;
+
+    log.debug("MaxTrophy  =  " + MaxTrophy.Data);
+
+    const LastRewardedProgressIndex = currentPlayerData.Data.LastRewardedProgressIndex.Value;
+
+    log.debug("LastRewardedProgressIndex  =  " + LastRewardedProgressIndex.Data);
+
+    if (RewardIndex && RewardIndex > LastRewardedProgressIndex) {
 
 
+        if (titleData.Data.progressRewards[RewardIndex].ReqThropy <= MaxTrophy) {
+
+            // verdik
+
+            if (titleData.Data.progressRewards[RewardIndex].Reward === "BasicBox") {
+
+                const grantBasicKeyAndBox = {
+                    PlayFabId: currentPlayerId,
+                    ItemIds: [titleData.Data.progressRewards[RewardIndex].Reward, "BasicBoxKey"]
+                }
+
+                server.GrantItemsToUser(grantBasicKeyAndBox);
+
+            } else {
+
+                const grantReward = {
+                    PlayFabId: currentPlayerId,
+                    ItemIds: [titleData.Data.progressRewards[RewardIndex].Reward]
+                }
+
+                server.GrantItemsToUser(grantReward);
+            }
+
+            var updateUserReadOnly = {
+                PlayFabId: currentPlayerId,
+                Data: {
+                    "LastRewardedProgressIndex": RewardIndex,
+                }
+            }
+            server.UpdateUserReadOnlyData(updateUserReadOnly);
+
+            return {"isRewarded": 1}
+
+
+        }
+    }
+
+    // +++++ TODO check last reward index greater than now?
+    // +++++ TODO check if user can unlock this reward.
+    // +++++ TODO grant reward to user
+    // +++++ TODO return { isRewarded : 1}
 
 }
 

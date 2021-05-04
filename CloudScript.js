@@ -489,9 +489,7 @@ handlers.UnlockReward = function (args) {
         }
     }
 
-    return {
-        donecek: 0
-    }
+    return true
 
     // +++++ TODO check last reward index greater than now?
     // +++++ TODO check if user can unlock this reward.

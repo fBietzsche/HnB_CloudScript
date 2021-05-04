@@ -448,48 +448,57 @@ handlers.UnlockReward = function (args) {
 
     log.debug("MaxTrophy  =  " + MaxTrophy)
 
+    const LastRewardedProgressIndex = JSON.parse(currentPlayerData.Data.LastRewardedProgressIndex.Value);
 
-    // TODO check if user can unlock this reward.
+    log.debug("LastRewardedProgressIndex  =  " + LastRewardedProgressIndex)
 
-    // TODO check last reward index greater than now?
-
-    // TODO grant reward to user
-
-
-    /**
-
-     var levelData = JSON.parse(titleData.Data.levelData)
-     log.debug("levelData  =  " + levelData)
-     var weaponData = titleData.Data.weaponValues;
-     log.debug("weaponData  =  " + weaponData)
+    //   6 > 5
+    if (RewardIndex > LastRewardedProgressIndex) {
 
 
-     var starterBoxProgress = JSON.parse(currentPlayerData.Data.starterBoxProgress.Value);
-     var currentTutorialProgress = JSON.parse(currentPlayerData.Data.tutorialProgress.Value);
-     if (currentTutorialProgress == 2 || currentTutorialProgress == 6) {
-        {
-            var slots = JSON.parse(currentPlayerData.Data.slots.Value);
-            var whichSlot = args.slot
-            var timer = args.timer
-            slots[whichSlot] = [
-                0,
-                0,
-                (new Date().getTime() / 1000),
-                (new Date().getTime() / 1000) + timer
-            ]
-            starterBoxProgress = currentTutorialProgress == 2 ? 1 : 2;
+        if (titleData.Data.progressRewards[RewardIndex].ReqThropy <= MaxTrophy) {
+
+            // verdik
+
+            if (titleData.Data.progressRewards[RewardIndex].Reward === "BasicBox") {
+
+                const grantBasicKeyAndBox = {
+                    PlayFabId: currentPlayerId,
+                    ItemIds: [titleData.Data.progressRewards[RewardIndex].Reward, "BasicBoxKey"]
+                }
+
+                server.GrantItemsToUser(grantBasicKeyAndBox);
+
+            } else {
+
+                const grantReward = {
+                    PlayFabId: currentPlayerId,
+                    ItemIds: [titleData.Data.progressRewards[RewardIndex].Reward]
+                }
+
+                server.GrantItemsToUser(grantReward);
+            }
+
             var updateUserReadOnly = {
                 PlayFabId: currentPlayerId,
                 Data: {
-                    "slots": JSON.stringify(slots),
-                    "starterBoxProgress": JSON.stringify(starterBoxProgress)
+                    "LastRewardedProgressIndex": RewardIndex,
                 }
             }
             server.UpdateUserReadOnlyData(updateUserReadOnly);
+
+            return {"isRewarded": 1}
+
+
         }
     }
 
-     **/
+    return {"isRewarded": 0}
+
+    // +++++ TODO check last reward index greater than now?
+    // +++++ TODO check if user can unlock this reward.
+    // +++++ TODO grant reward to user
+    // +++++ TODO return { isRewarded : 1}
 
 }
 

@@ -608,7 +608,7 @@ handlers.FirstLogin = function () {
     }*/
 
     // TODO Max Trophy
-    const maxTrophy = 0;
+    var maxTrophy = 0;
 
     var starterBoxProgress = 0
     var accountExp = [1, 0]

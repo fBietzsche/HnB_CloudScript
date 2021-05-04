@@ -429,6 +429,12 @@ function accountLevelUpCheck() {
 
 // TODO wtf
 
+handlers.wtf = function (){
+    return {
+        isApple: 1
+    }
+}
+
 handlers.UnlockReward = function (args) {
 
     /*

@@ -426,13 +426,13 @@ handlers.UnlockReward = function (args) {
      }
      */
 
-    const RewardIndex = args.RewardIndex ? Number(args.RewardIndex) : null;
+    const RewardIndex = args.RewardIndex ? args.RewardIndex : null;
 
     const currentPlayerData = server.GetUserReadOnlyData({
         PlayFabId: currentPlayerId
     });
 
-    log.debug("currentPlayerData  =  " + currentPlayerData);
+    log.debug("currentPlayerData  =  " + currentPlayerData.Data);
 
     const titleData = server.GetTitleData({
         PlayFabId: currentPlayerId,
@@ -443,11 +443,11 @@ handlers.UnlockReward = function (args) {
 
     const MaxTrophy = currentPlayerData.Data.MaxTrophy.Value;
 
-    log.debug("MaxTrophy  =  " + MaxTrophy);
+    log.debug("MaxTrophy  =  " + MaxTrophy.Data);
 
     const LastRewardedProgressIndex = currentPlayerData.Data.LastRewardedProgressIndex.Value;
 
-    log.debug("LastRewardedProgressIndex  =  " + LastRewardedProgressIndex);
+    log.debug("LastRewardedProgressIndex  =  " + LastRewardedProgressIndex.Data);
 
     if (RewardIndex && RewardIndex > LastRewardedProgressIndex) {
 
@@ -489,7 +489,7 @@ handlers.UnlockReward = function (args) {
         }
     }
 
-    return true
+    return {"status": true}
 
     // +++++ TODO check last reward index greater than now?
     // +++++ TODO check if user can unlock this reward.

@@ -88,7 +88,7 @@ function winCondition(winArgs) {
     var doubleBattery = JSON.parse(currentPlayerData.Data.doubleBattery.Value);
 
     // TODO MAX Trophy
-    let maxTrophy = currentPlayerData.Data.MaxTrophy.Value;
+    let maxTrophy = currentPlayerData.Data.maxTrophy.Value;
 
     var accountExpGained = 20
     var trophyChange = 7
@@ -453,9 +453,9 @@ handlers.UnlockReward = function (args) {
 
     log.debug("titleData  =  " + titleData);
 
-    const MaxTrophy = currentPlayerData.Data.MaxTrophy.Value;
+    let maxTrophy = currentPlayerData.Data.maxTrophy.Value;
 
-    log.debug("MaxTrophy  =  " + MaxTrophy.Data);
+    log.debug("MaxTrophy  =  " + maxTrophy.Data);
 
     const LastRewardedProgressIndex = currentPlayerData.Data.LastRewardedProgressIndex.Value;
 
@@ -464,7 +464,7 @@ handlers.UnlockReward = function (args) {
     if (RewardIndex && RewardIndex > LastRewardedProgressIndex) {
 
 
-        if (titleData.Data.progressRewards[RewardIndex].ReqThropy <= MaxTrophy) {
+        if (titleData.Data.progressRewards[RewardIndex].ReqThropy <= maxTrophy) {
 
             // verdik
 
@@ -608,7 +608,7 @@ handlers.FirstLogin = function () {
     }*/
 
     // TODO Max Trophy
-    var maxTrophy = 0
+    let maxTrophy = 0
 
     var starterBoxProgress = 0
     var accountExp = [1, 0]

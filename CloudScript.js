@@ -416,10 +416,7 @@ function accountLevelUpCheck() {
 }
 
 handlers.wtf = function () {
-
-    var one = 1;
-
-    return {"isUsed": one};
+    return {achievement: "", addvalue: false};
 }
 
 

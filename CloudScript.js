@@ -699,7 +699,7 @@ handlers.FirstLogin = function () {
             }
         ]
     })
-    log.debug("updateUserReadOnly = " + updateUserReadOnly)
+    log.debug("updateUserReadOnly = " + JSON.stringify(updateUserReadOnly))
     server.UpdateUserReadOnlyData(updateUserReadOnly);
 }
 

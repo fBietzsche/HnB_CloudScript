@@ -151,8 +151,6 @@ function winCondition(winArgs) {
             "matchHistory": JSON.stringify(matchHistory),
             "ongoingMatch": JSON.stringify(ongoingMatch),
             "accountExp": JSON.stringify(accountExp),
-
-            // TODO MAX Trophy
             "maxTrophy": maxTrophy
         }
     }

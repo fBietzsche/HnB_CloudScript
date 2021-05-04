@@ -688,7 +688,7 @@ handlers.FirstLogin = function () {
             "doubleBattery": JSON.stringify(doubleBattery),
             "tutorialProgress": JSON.stringify(tutorialProgress),
             "starterBoxProgress": JSON.stringify(starterBoxProgress),
-            "maxTrophy": JSON.stringify(maxTrophy)
+            "maxTrophy": maxTrophy
         }
     }
     server.UpdatePlayerStatistics({

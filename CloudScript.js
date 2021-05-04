@@ -416,7 +416,7 @@ function accountLevelUpCheck() {
 }
 
 handlers.wtf = function (args) {
-    return {isStat: 1};
+    return JSON.stringify({isSuccess: 1});
 }
 
 

@@ -415,7 +415,7 @@ function accountLevelUpCheck() {
     return [isLevelUp, doubleBatteryFromLevelUp, doubleBatteryTotal, currentAccLevel, currentAccExp, requiredAccExp]
 }
 
-handlers.wtf = function (args) {
+handlers.wtf = function () {
 
     var one = 1;
 

@@ -154,6 +154,7 @@ function winCondition(winArgs) {
             "maxTrophy": maxTrophy
         }
     }
+    log.debug("UpdateUserReadOnlyData = " + UpdateUserReadOnlyData)
     server.UpdateUserReadOnlyData(UpdateUserReadOnlyData);
 }
 

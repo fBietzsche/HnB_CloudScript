@@ -416,7 +416,7 @@ function accountLevelUpCheck() {
 }
 
 handlers.wtf = function (args) {
-    return true
+    return 1;
 }
 
 

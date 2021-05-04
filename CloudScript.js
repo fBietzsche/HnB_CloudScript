@@ -675,8 +675,8 @@ handlers.FirstLogin = function () {
     var tutorialProgress = 0;
     var matchHistory = []
     var updateUserReadOnly = {
-        PlayFabId: currentPlayerId,
-        Data: {
+        "PlayFabId": currentPlayerId,
+        "Data": {
             "equipped": JSON.stringify(equipped),
             "configs": JSON.stringify(configs),
             "itemLevel": JSON.stringify(itemLevel),

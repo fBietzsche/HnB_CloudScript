@@ -446,13 +446,15 @@ handlers.UnlockReward = function (args) {
 
     const MaxTrophy = JSON.parse(currentPlayerData.Data.MaxTrophy.Value);
 
-    log.debug("MaxTrophy  =  " + MaxTrophy)
+    log.debug("MaxTrophy  =  " + MaxTrophy);
 
     const LastRewardedProgressIndex = JSON.parse(currentPlayerData.Data.LastRewardedProgressIndex.Value);
 
-    log.debug("LastRewardedProgressIndex  =  " + LastRewardedProgressIndex)
+    log.debug("LastRewardedProgressIndex  =  " + LastRewardedProgressIndex);
 
-    return {"isTest": 1}
+    const returning = {"isTest": 1}
+
+    return returning;
 
     if (RewardIndex && RewardIndex > LastRewardedProgressIndex) {
 
@@ -494,7 +496,7 @@ handlers.UnlockReward = function (args) {
         }
     }
 
-    return {"isRewarded": 0}
+    // return {"isRewarded": 0}
 
     // +++++ TODO check last reward index greater than now?
     // +++++ TODO check if user can unlock this reward.

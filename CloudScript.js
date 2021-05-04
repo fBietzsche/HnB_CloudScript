@@ -415,16 +415,6 @@ function accountLevelUpCheck() {
     return [isLevelUp, doubleBatteryFromLevelUp, doubleBatteryTotal, currentAccLevel, currentAccExp, requiredAccExp]
 }
 
-handlers.wtf = function () {
-
-    var returnObj = {};
-    returnObj["itemId"] = 3;
-    returnObj["slot"] = 6;
-
-    return returnObj;
-}
-
-
 // TODO wtf
 
 handlers.UnlockReward = function (args) {
@@ -484,7 +474,7 @@ handlers.UnlockReward = function (args) {
                 server.GrantItemsToUser(grantReward);
             }
 
-            var updateUserReadOnly = {
+            const updateUserReadOnly = {
                 PlayFabId: currentPlayerId,
                 Data: {
                     "LastRewardedProgressIndex": RewardIndex,
@@ -497,6 +487,8 @@ handlers.UnlockReward = function (args) {
 
         }
     }
+
+    return {"isRewarded": 0}
 
     // +++++ TODO check last reward index greater than now?
     // +++++ TODO check if user can unlock this reward.

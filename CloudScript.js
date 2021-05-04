@@ -449,9 +449,49 @@ handlers.UnlockReward = function (args) {
 
     log.debug("LastRewardedProgressIndex  =  " + LastRewardedProgressIndex);
 
-    return {"isTest": 1};
+    if (RewardIndex && RewardIndex > LastRewardedProgressIndex) {
 
-    // return {"isRewarded": 0}
+
+        if (titleData.Data.progressRewards[RewardIndex].ReqThropy <= MaxTrophy) {
+
+            // verdik
+
+            if (titleData.Data.progressRewards[RewardIndex].Reward === "BasicBox") {
+
+                const grantBasicKeyAndBox = {
+                    PlayFabId: currentPlayerId,
+                    ItemIds: [titleData.Data.progressRewards[RewardIndex].Reward, "BasicBoxKey"]
+                }
+
+                server.GrantItemsToUser(grantBasicKeyAndBox);
+
+            } else {
+
+                const grantReward = {
+                    PlayFabId: currentPlayerId,
+                    ItemIds: [titleData.Data.progressRewards[RewardIndex].Reward]
+                }
+
+                server.GrantItemsToUser(grantReward);
+            }
+
+            var updateUserReadOnly = {
+                PlayFabId: currentPlayerId,
+                Data: {
+                    "LastRewardedProgressIndex": RewardIndex,
+                }
+            }
+            server.UpdateUserReadOnlyData(updateUserReadOnly);
+
+            return {"isRewarded": 1}
+
+
+        }
+    }
+
+    return {
+        donecek: 0
+    }
 
     // +++++ TODO check last reward index greater than now?
     // +++++ TODO check if user can unlock this reward.

@@ -417,7 +417,7 @@ function accountLevelUpCheck() {
 
 handlers.wtf = function () {
     return {
-        "stat": 1
+        stat: 1
     };
 }
 

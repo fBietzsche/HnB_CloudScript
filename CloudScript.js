@@ -417,7 +417,7 @@ function accountLevelUpCheck() {
 
 handlers.wtf = function (args) {
 
-    const one = 1;
+    var one = 1;
 
     return {"isUsed": one};
 }

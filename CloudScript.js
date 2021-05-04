@@ -418,7 +418,7 @@ function accountLevelUpCheck() {
 
 // TODO wtf
 
-handlers.UnlockReward = function () {
+handlers.UnlockReward = function (args) {
 
     /*
      {

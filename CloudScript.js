@@ -693,8 +693,8 @@ handlers.FirstLogin = function () {
 handlers.CheckSlots = function (args) {
 
     return {
-        "timer": 1,
-        "isAvailable": 0
+        "timer": "1",
+        "isAvailable": "0"
     }
 }
 

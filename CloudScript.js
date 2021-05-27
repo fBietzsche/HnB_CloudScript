@@ -462,11 +462,11 @@ handlers.UnlockReward = function (args) {
 
     log.debug("MaxTrophy  =  " + maxTrophy.Data);
 
-    const LastRewardedProgressIndex = currentPlayerData.Data.LastRewardedProgressIndex.Value;
+    const lastRewardedProgressIndex = currentPlayerData.Data.lastRewardedProgressIndex.Value;
 
-    log.debug("LastRewardedProgressIndex  =  " + LastRewardedProgressIndex.Data);
+    log.debug("lastRewardedProgressIndex  =  " + lastRewardedProgressIndex.Data);
 
-    if (RewardIndex && RewardIndex > LastRewardedProgressIndex) {
+    if (RewardIndex && RewardIndex > lastRewardedProgressIndex) {
 
 
         if (titleData.Data.progressRewards[RewardIndex].ReqThropy <= maxTrophy) {
@@ -614,7 +614,7 @@ handlers.FirstLogin = function () {
 
     // TODO Max Trophy
     var maxTrophy = 0
-
+    var lastRewardedProgressIndex = 0
     var starterBoxProgress = 0
     var accountExp = [1, 0]
     var doubleBattery = 0
@@ -692,8 +692,14 @@ handlers.FirstLogin = function () {
             "accountExp": JSON.stringify(accountExp),
             "doubleBattery": JSON.stringify(doubleBattery),
             "tutorialProgress": JSON.stringify(tutorialProgress),
-            "starterBoxProgress": JSON.stringify(starterBoxProgress),
-            "maxTrophy": JSON.stringify(maxTrophy)
+            "starterBoxProgress": JSON.stringify(starterBoxProgress)
+        }
+    }
+    var updateUserReadOnly2 = {
+        PlayFabId: currentPlayerId,
+        Data: {            
+            "maxTrophy": JSON.stringify(maxTrophy),
+            "lastRewardedProgressIndex": JSON.stringify(lastRewardedProgressIndex)
         }
     }
     server.UpdatePlayerStatistics({
@@ -705,12 +711,9 @@ handlers.FirstLogin = function () {
             }
         ]
     })
-    log.debug("updateUserReadOnly = " + JSON.stringify(updateUserReadOnly))
-    try {
+        
         server.UpdateUserReadOnlyData(updateUserReadOnly);
-    } catch (error) {
-        log.error("error = " + JSON.stringify(error))
-    }
+        server.UpdateUserReadOnlyData(updateUserReadOnly2);    
     
 }
 
@@ -757,7 +760,7 @@ handlers.CheckSlots = function (args) {
     }
 }
 
-handlers.EndMatch = function (args) {
+handlers.EndMatch = function  (args) {
     //End match functions handler
     /*args must be in this format:
         {

@@ -495,7 +495,7 @@ handlers.UnlockReward = function (args) {
             const updateUserReadOnly = {
                 PlayFabId: currentPlayerId,
                 Data: {
-                    "LastRewardedProgressIndex": RewardIndex,
+                    "lastRewardedProgressIndex": RewardIndex,
                 }
             }
             server.UpdateUserReadOnlyData(updateUserReadOnly);
